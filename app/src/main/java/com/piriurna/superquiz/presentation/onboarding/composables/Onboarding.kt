@@ -61,7 +61,7 @@ val firstPageMock = OnboardingPageModel(
     pageTitle = "Hmmmm, Healthy food",
     pageDescription = "A variety of healthy foods made by the best chefs, ingredients are easy to find, all delicious flavours can only be found at cookbunda",
     primaryColor = orange,
-    backgroundColor = lightPurple,
+    backgroundColor = lightOrange,
     pageIndex = 0,
     mainImage = R.drawable.ic_banana_svgrepo_com
 )
@@ -72,14 +72,14 @@ val secondPageMock = OnboardingPageModel(
     primaryColor = primaryBlue,
     backgroundColor = backgroundBlue,
     pageIndex = 1,
-    mainImage = R.drawable.ic_banana_juice
+    mainImage = R.drawable.ic_strawberries
 )
 
 val thirdPageMock = OnboardingPageModel(
     pageTitle = "Let's Cooking",
-    pageDescription = "are you ready to make a dish for your friends or family? create an account and cook",
+    pageDescription = "Are you ready to make a dish for your friends or family? create an account and cook",
     primaryColor = primaryGreen,
     backgroundColor = backgroundGreen,
     pageIndex = 2,
-    mainImage = R.drawable.ic_strawberries
+    mainImage = R.drawable.ic_lime
 )
