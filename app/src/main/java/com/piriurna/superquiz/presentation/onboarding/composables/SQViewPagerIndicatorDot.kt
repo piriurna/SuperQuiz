@@ -29,8 +29,8 @@ fun SQViewPagerIndicatorDot(
                 shape = RoundedCornerShape(15.dp),
                 color = color,
                 modifier = Modifier
-                    .width(64.dp)
-                    .height(4.dp)
+                    .width(48.dp)
+                    .height(8.dp)
             ) {
 
             }

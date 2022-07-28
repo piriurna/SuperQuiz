@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -60,6 +61,7 @@ fun OnboardingCard(
             Text(
                 text = onboardingPageModel.pageTitle,
                 fontSize = 24.sp,
+                fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(top = 16.dp)
             )
 
@@ -70,6 +72,8 @@ fun OnboardingCard(
                     text = onboardingPageModel.pageDescription,
                     textAlign = TextAlign.Center,
                     color = Color.Gray,
+                    lineHeight = 23.sp,
+                    fontWeight = FontWeight.W400,
                     modifier = Modifier
                         .padding(horizontal = 36.dp)
                         .align(Alignment.Center)
@@ -102,7 +106,7 @@ private fun OnboardingCardPreview() {
         pageDescription = "A variety of healthy foods made by the best chefs, ingredients are easy to find, all delicious flavours can only be found at cookbunda",
         primaryColor = orange,
         backgroundColor = lightPurple,
-        pageIndex = 5,
+        pageIndex = 1,
         pageCount = 6,
     )
     Box(modifier = Modifier.fillMaxSize()) {

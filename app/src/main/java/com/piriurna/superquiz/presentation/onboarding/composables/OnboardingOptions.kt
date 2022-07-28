@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -42,7 +43,8 @@ private fun OnboardingOptionsPreview() {
         pageDescription = "A variety of healthy foods made by the best chefs, ingredients are easy to find, all delicious flavours can only be found at cookbunda",
         primaryColor = orange,
         backgroundColor = lightPurple,
-        pageIndex = 5,
+        pageIndex = 0,
+        nextPage = 1,
         mainImage = R.drawable.ic_banana_svgrepo_com
     )
     OnboardingOptions(model)
@@ -56,7 +58,7 @@ fun OnboardingSkipOption(pageModel: OnboardingPageModel) {
         modifier = Modifier.fillMaxWidth()
     ) {
         TextButton(onClick = { } ) {
-            Text(text = "Skip now", color = Color.Black)
+            Text(text = "Skip now", color = Color.Black, fontWeight = FontWeight.W400)
         }
         
         SQRoundButton(
@@ -94,7 +96,7 @@ fun OnboardingStartOption(onboardingPageModel: OnboardingPageModel) {
             .fillMaxWidth()
             .height(45.dp)
     ) {
-        Text(text = "Get Started", color = Color.White)
+        Text(text = "Get Started", color = Color.White, fontWeight = FontWeight.Bold)
     }
 }
 
