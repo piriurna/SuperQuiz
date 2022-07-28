@@ -6,6 +6,7 @@ import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AccountBox
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.runtime.Composable
@@ -26,35 +27,36 @@ fun SQChip(
     text: String,
     icon: ImageVector,
     backgroundColor: Color = Color.Red,
-    foregroundColor: Color = Color.White
+    foregroundColor: Color = Color.White,
+    modifier: Modifier = Modifier
 ) {
     Surface(
 //        modifier = Modifier.padding(end = 8.dp, bottom = 8.dp),
 //        elevation = 8.dp,
         shape = RoundedCornerShape(40.dp),
-        color = backgroundColor
+        color = backgroundColor,
+        modifier = modifier
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.padding(end = 12.dp, start = 8.dp, top = 4.dp, bottom = 4.dp)
+            modifier = Modifier
+                    .padding(vertical = 4.dp)
+                    .padding(end = 12.dp, start = 8.dp)
         ) {
-            Column(
-                modifier = Modifier.padding(end = 8.dp),
-            ) {
-                Icon(
-                    imageVector = icon,
-                    tint = foregroundColor,
-                    contentDescription = "chip icon"
-                )
-            }
-            Column {
-                Text(
-                    text = text,
-                    color = foregroundColor,
-                    textAlign = TextAlign.Center,
-                )
-            }
+
+            Icon(
+                imageVector = icon,
+                tint = foregroundColor,
+                contentDescription = "chip icon"
+            )
+
+            Text(
+                text = text,
+                color = foregroundColor,
+                textAlign = TextAlign.Center,
+                modifier = Modifier.padding(start = 8.dp)
+            )
         }
     }
 
@@ -64,11 +66,12 @@ fun SQChip(
 @Composable
 private fun DefaultPreview() {
     Column(
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         SQChip(
             text = "3min 55s",
-            icon = Icons.Default.Clear,
+            icon = Icons.Default.AccountBox,
             backgroundColor = lightOrange,
             foregroundColor = orange,
         )
