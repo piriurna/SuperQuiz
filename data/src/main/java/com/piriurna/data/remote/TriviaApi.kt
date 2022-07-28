@@ -1,7 +1,9 @@
 package com.piriurna.data.remote
 
 import com.piriurna.data.remote.dto.CategoryDto
+import com.piriurna.data.remote.dto.QuizDto
 import retrofit2.http.GET
+import retrofit2.http.Query
 
 interface TriviaApi {
 
@@ -9,5 +11,11 @@ interface TriviaApi {
     suspend fun getCategories(): CategoryDto
 
 
-    //TODO: Get quiz com query params da categoria e do page size
+    @GET("api.php")
+    suspend fun getQuiz(
+        @Query("amount") amount: String,
+        @Query("category") categoryId : String
+    ) : QuizDto
+
+
 }
