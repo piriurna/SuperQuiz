@@ -26,6 +26,7 @@ fun OnboardingCard(
     Card(
         shape = RoundedCornerShape(topStartPercent = 30),
         modifier = modifier,
+        elevation = 8.dp
 
     ) {
         Column(
