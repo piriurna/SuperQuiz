@@ -12,3 +12,9 @@ val lightPurple = Color(red = 149, green = 67, blue = 255, alpha = 26)
 
 val orange = Color(red = 254, green = 177, blue = 87)
 val lightOrange = Color(red = 254, green = 177, blue = 87, alpha = 26)
+
+val primaryBlue = Color(red = 47, green = 204, blue = 237)
+val backgroundBlue = Color(red = 172, green = 232, blue = 243)
+
+val primaryGreen = Color(red = 54, green = 200, blue = 133)
+val backgroundGreen = Color(red = 50, green = 182, blue = 122, alpha = 26)
