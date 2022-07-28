@@ -20,7 +20,7 @@ fun SQViewPagerIndicator(
     modifier: Modifier = Modifier
 ) {
     LazyRow(
-        modifier = Modifier
+        modifier = modifier
             .wrapContentWidth()
             .wrapContentHeight(),
         verticalAlignment = Alignment.CenterVertically,

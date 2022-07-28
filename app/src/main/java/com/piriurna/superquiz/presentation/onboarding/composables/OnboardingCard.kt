@@ -41,18 +41,13 @@ fun OnboardingCard(
             //-----------------
             // ViewPager Indicator
             //-----------------
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                SQViewPagerIndicator(
-                    totalDots = onboardingPageModel.pageCount,
-                    selectedIndex = onboardingPageModel.pageIndex,
-                    selectedColor = onboardingPageModel.primaryColor,
-                    unSelectedColor = onboardingPageModel.backgroundColor
-
-                )
-            }
+            SQViewPagerIndicator(
+                totalDots = onboardingPageModel.pageCount,
+                selectedIndex = onboardingPageModel.pageIndex,
+                selectedColor = onboardingPageModel.primaryColor,
+                unSelectedColor = onboardingPageModel.backgroundColor,
+                modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally)
+            )
 
 
             //-----------------
