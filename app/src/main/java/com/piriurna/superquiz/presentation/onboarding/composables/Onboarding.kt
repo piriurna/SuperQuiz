@@ -2,7 +2,6 @@ package com.piriurna.superquiz.presentation.onboarding.composables
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
@@ -10,12 +9,9 @@ import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.piriurna.superquiz.R
 import com.piriurna.superquiz.presentation.onboarding.models.OnboardingPageModel
-import com.piriurna.superquiz.presentation.onboarding.models.OnboardingScrollListener
 import com.piriurna.superquiz.presentation.onboarding.models.OnboardingViewPagerModel
 import com.piriurna.superquiz.ui.theme.*
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -76,7 +72,7 @@ val secondPageMock = OnboardingPageModel(
     primaryColor = primaryBlue,
     backgroundColor = backgroundBlue,
     pageIndex = 1,
-    mainImage = R.drawable.ic_banana_svgrepo_com
+    mainImage = R.drawable.ic_banana_juice
 )
 
 val thirdPageMock = OnboardingPageModel(
@@ -85,5 +81,5 @@ val thirdPageMock = OnboardingPageModel(
     primaryColor = primaryGreen,
     backgroundColor = backgroundGreen,
     pageIndex = 2,
-    mainImage = R.drawable.ic_banana_svgrepo_com
+    mainImage = R.drawable.ic_strawberries
 )
