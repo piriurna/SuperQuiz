@@ -17,6 +17,7 @@ fun SQViewPagerIndicator(
     selectedIndex : Int,
     selectedColor: Color,
     unSelectedColor: Color,
+    modifier: Modifier = Modifier
 ) {
     LazyRow(
         modifier = Modifier
