@@ -2,10 +2,7 @@ package com.piriurna.superquiz.presentation.onboarding.composables
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -24,28 +21,30 @@ import com.piriurna.superquiz.ui.theme.purple
 
 @Composable
 fun SQRoundButton(
-    primaryColor : Color
+    primaryColor : Color,
+    modifier: Modifier = Modifier
 ) {
     Button(
         onClick = { /*TODO*/ },
         shape = CircleShape,
         colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
-        modifier = Modifier
-            .width(100.dp)
-            .height(100.dp)
+        modifier = modifier
+            .width(80.dp)
+            .height(80.dp)
     ) {
         Box(
             modifier = Modifier
                 .clip(CircleShape)
-                .width(40.dp)
-                .height(40.dp)
+                .wrapContentWidth()
+                .wrapContentHeight()
                 .background(Color.White),
             contentAlignment = Alignment.Center
         ) {
             Image(
                 imageVector = Icons.Default.ArrowForward,
                 contentDescription = "Button Icon",
-                colorFilter = ColorFilter.tint(primaryColor)
+                colorFilter = ColorFilter.tint(primaryColor),
+                modifier = Modifier.padding(4.dp)
             )
         }
     }
