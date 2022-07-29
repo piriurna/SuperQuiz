@@ -18,6 +18,11 @@ import com.piriurna.superquiz.presentation.onboarding.models.OnboardingPage
 @Composable
 fun OnboardingCard(
     onboardingPage: OnboardingPage,
+    pageCount: Int,
+    selectedPageIndex : Int,
+    onSkipClick: () -> Unit = {},
+    onNextClick: () -> Unit = {},
+    onFinishClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -38,8 +43,8 @@ fun OnboardingCard(
             // ViewPager Indicator
             //-----------------
             SQViewPagerIndicator(
-                totalDots = 3,
-                selectedIndex = 1,
+                totalDots = pageCount,
+                selectedIndex = selectedPageIndex,
                 selectedColor = onboardingPage.primaryColor,
                 unSelectedColor = onboardingPage.backgroundColor,
                 modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally)
@@ -79,10 +84,10 @@ fun OnboardingCard(
             ) {
                 OnboardingOptions(
                     onboardingPage = onboardingPage,
-                    isLastPage = false,
-                    onSkipClick= {},
-                    onNextClick= {},
-                    onFinishClick= {},
+                    isLastPage = selectedPageIndex == pageCount - 1,
+                    onSkipClick= onSkipClick,
+                    onNextClick= onNextClick,
+                    onFinishClick= onFinishClick,
                     modifier = Modifier
                         .padding(horizontal = 16.dp, vertical = 16.dp)
                         .align(Alignment.Center)
@@ -97,7 +102,14 @@ fun OnboardingCard(
 @Composable
 private fun OnboardingCardPreview() {
     Box(modifier = Modifier.fillMaxSize()) {
-        OnboardingCard(OnboardingPage.getOnboardingMockList[0])
+        OnboardingCard(
+            onboardingPage = OnboardingPage.getOnboardingMockList[0],
+            onSkipClick = {},
+            onNextClick = {},
+            onFinishClick = {},
+            pageCount = 3,
+            selectedPageIndex = 0
+        )
 
     }
 }
