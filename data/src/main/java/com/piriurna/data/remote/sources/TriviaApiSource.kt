@@ -1,5 +1,6 @@
 package com.piriurna.data.remote.sources
 
+import com.piriurna.data.remote.HandleApi.safeApiCall
 import com.piriurna.data.remote.TriviaApi
 import com.piriurna.data.remote.dto.CategoryDto
 
@@ -8,6 +9,6 @@ class TriviaApiSource(
 ) {
 
     suspend fun getCategories() : CategoryDto {
-        return triviaApi.getCategories()
+        return safeApiCall{ triviaApi.getCategories() }
     }
 }
