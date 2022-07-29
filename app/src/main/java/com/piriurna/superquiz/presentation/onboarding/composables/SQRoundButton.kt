@@ -16,36 +16,36 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.piriurna.superquiz.ui.theme.purple
 
 @Composable
 fun SQRoundButton(
-    primaryColor : Color,
+    icon : ImageVector = Icons.Default.ArrowForward,
+    imageColor: Color,
+    buttonColor : Color,
     onClickListener: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Button(
-        onClick = { onClickListener.invoke() },
+        onClick = onClickListener,
         shape = CircleShape,
-        colors = ButtonDefaults.buttonColors(backgroundColor = primaryColor),
+        colors = ButtonDefaults.buttonColors(backgroundColor = buttonColor),
         modifier = modifier
-            .width(80.dp)
-            .height(80.dp)
+            .size(80.dp)
     ) {
         Box(
             modifier = Modifier
                 .clip(CircleShape)
-                .wrapContentWidth()
-                .wrapContentHeight()
                 .background(Color.White),
             contentAlignment = Alignment.Center
         ) {
             Image(
-                imageVector = Icons.Default.ArrowForward,
+                imageVector = icon,
                 contentDescription = "Button Icon",
-                colorFilter = ColorFilter.tint(primaryColor),
+                colorFilter = ColorFilter.tint(imageColor),
                 modifier = Modifier.padding(4.dp)
             )
         }
@@ -56,6 +56,6 @@ fun SQRoundButton(
 @Composable
 private fun SQRoundButtonPreview(){
     Box(modifier = Modifier.fillMaxSize()) {
-        SQRoundButton(primaryColor = purple, {})
+        SQRoundButton(buttonColor = purple, imageColor = purple, onClickListener = {})
     }
 }

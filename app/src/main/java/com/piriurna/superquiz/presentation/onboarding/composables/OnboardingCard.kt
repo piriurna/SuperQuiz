@@ -8,20 +8,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.piriurna.superquiz.presentation.onboarding.models.OnboardingPageModel
-import com.piriurna.superquiz.ui.theme.lightPurple
-import com.piriurna.superquiz.ui.theme.orange
-import com.piriurna.superquiz.ui.theme.purple
+import com.piriurna.superquiz.presentation.onboarding.models.OnboardingPage
 
 @Composable
 fun OnboardingCard(
-    onboardingPageModel: OnboardingPageModel,
+    onboardingPage: OnboardingPage,
     modifier: Modifier = Modifier
 ) {
     Card(
@@ -42,10 +38,10 @@ fun OnboardingCard(
             // ViewPager Indicator
             //-----------------
             SQViewPagerIndicator(
-                totalDots = onboardingPageModel.pageCount,
-                selectedIndex = onboardingPageModel.pageIndex,
-                selectedColor = onboardingPageModel.primaryColor,
-                unSelectedColor = onboardingPageModel.backgroundColor,
+                totalDots = 3,
+                selectedIndex = 1,
+                selectedColor = onboardingPage.primaryColor,
+                unSelectedColor = onboardingPage.backgroundColor,
                 modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally)
             )
 
@@ -54,7 +50,7 @@ fun OnboardingCard(
             // TEXTS CONTAINERS
             //-----------------
             Text(
-                text = onboardingPageModel.pageTitle,
+                text = onboardingPage.pageTitle,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.padding(top = 16.dp)
@@ -64,7 +60,7 @@ fun OnboardingCard(
                 .height(75.dp)
             ) {
                 Text(
-                    text = onboardingPageModel.pageDescription,
+                    text = onboardingPage.pageDescription,
                     textAlign = TextAlign.Center,
                     color = Color.Gray,
                     lineHeight = 23.sp,
@@ -82,7 +78,11 @@ fun OnboardingCard(
                 .height(120.dp)
             ) {
                 OnboardingOptions(
-                    onboardingPageModel = onboardingPageModel,
+                    onboardingPage = onboardingPage,
+                    isLastPage = false,
+                    onSkipClick= {},
+                    onNextClick= {},
+                    onFinishClick= {},
                     modifier = Modifier
                         .padding(horizontal = 16.dp, vertical = 16.dp)
                         .align(Alignment.Center)
@@ -96,16 +96,8 @@ fun OnboardingCard(
 @Preview(showBackground = true)
 @Composable
 private fun OnboardingCardPreview() {
-    val model = OnboardingPageModel(
-        pageTitle = "Hmmmm, Healthy food",
-        pageDescription = "A variety of healthy foods made by the best chefs, ingredients are easy to find, all delicious flavours can only be found at cookbunda",
-        primaryColor = orange,
-        backgroundColor = lightPurple,
-        pageIndex = 1,
-        pageCount = 6,
-    )
     Box(modifier = Modifier.fillMaxSize()) {
-        OnboardingCard(model)
+        OnboardingCard(OnboardingPage.getOnboardingMockList[0])
 
     }
 }
