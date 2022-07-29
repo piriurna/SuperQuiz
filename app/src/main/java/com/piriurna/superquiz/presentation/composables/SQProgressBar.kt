@@ -20,13 +20,14 @@ import com.piriurna.superquiz.ui.theme.purple
 fun SQProgressBar(
     progress: Float,
     foregroundColor: Color,
-    backgroundColor: Color
+    backgroundColor: Color,
+    modifier: Modifier = Modifier.height(8.dp)
 ) {
     LinearProgressIndicator(
         progress = progress,
         color = foregroundColor,
         backgroundColor = backgroundColor,
-        modifier = Modifier
+        modifier = modifier
             .clip(shape = RoundedCornerShape(30.dp))
     )
 }
