@@ -1,6 +1,9 @@
 ext.versions = [
-        compose             : '1.1.1',
-        hilt                : '2.39.1',
+        compose                : '1.1.1',
+        hilt                   : '2.39.1',
+        hiltLifecycleViewmodel : '1.0.0-alpha03',
+        hiltNavigationCompose  : '1.0.0-alpha03',
+
 
 ]
 
@@ -8,6 +11,9 @@ ext.libraries = [
         compose                   : "androidx.compose.ui:ui:$versions.compose",
         hiltAndroid               : "com.google.dagger:hilt-android:$versions.hilt",
         hiltAndroidCompiler       : "com.google.dagger:hilt-android-compiler:$versions.hilt",
+        hiltLifecycleViewmodel    : "androidx.hilt:hilt-lifecycle-viewmodel:$versions.hiltLifecycleViewmodel",
+        hiltNavigationCompose     : "androidx.hilt:hilt-navigation-compose:$versions.hiltNavigationCompose"
+
 
 ]
 

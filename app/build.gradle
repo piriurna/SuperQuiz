@@ -68,4 +68,8 @@ dependencies {
     implementation rootProject.libraries.hiltAndroid
     kapt rootProject.libraries.hiltAndroidCompiler
 
+    implementation rootProject.libraries.hiltLifecycleViewmodel
+    implementation rootProject.libraries.hiltNavigationCompose
+
+
 }
