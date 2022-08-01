@@ -31,7 +31,6 @@ fun RowScope.SQNavigationItem(
 ) {
     val iconColor = if(selected) selectedColor else unselectedColor
     val textColor = if(selected) Color.Black else Color.LightGray
-    val iconSize = if(selected) 36.dp else 32.dp
 
     Box(
         modifier = modifier
@@ -48,7 +47,7 @@ fun RowScope.SQNavigationItem(
                 .align(Alignment.Center),
         ) {
             Icon(
-                modifier = Modifier.size(iconSize),
+                modifier = Modifier.size(32.dp),
                 imageVector = icon,
                 contentDescription = "Item Icon",
                 tint = iconColor
