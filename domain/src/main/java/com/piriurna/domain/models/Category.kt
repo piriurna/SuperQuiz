@@ -26,6 +26,11 @@ data class Category(
                 id = 23,
                 name = "History",
                 completionRate = 40
+            ),
+            Category(
+                id = 25,
+                name = "Art",
+                completionRate = 40
             )
         )
     }
