@@ -16,6 +16,10 @@ import com.piriurna.superquiz.ui.theme.lightPurple
 import com.piriurna.superquiz.ui.theme.orange
 import com.piriurna.superquiz.ui.theme.purple
 
+
+//TODO: Extender funcionamento apra suportar chip e diferentes textos e posicoes de text
+// para o progresso
+
 @Composable
 fun SQProgressBar(
     progress: Float,
