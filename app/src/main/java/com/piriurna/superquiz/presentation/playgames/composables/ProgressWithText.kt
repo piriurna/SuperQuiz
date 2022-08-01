@@ -17,7 +17,7 @@ import com.piriurna.superquiz.ui.theme.*
 fun ProgressWithText(
     modifier: Modifier = Modifier,
     foregroundColor : Color = progressBlue,
-    backgroundClor: Color = incompleteGray,
+    backgroundColor: Color = incompleteGray,
     completionPercentage : Int
 ) {
 
@@ -34,7 +34,7 @@ fun ProgressWithText(
         SQProgressBar(
             progress = completionPercentage/100f,
             foregroundColor = if(completionPercentage != 100) foregroundColor else primaryGreen,
-            backgroundColor = backgroundClor
+            backgroundColor = backgroundColor
         )
     }
 }
