@@ -1,0 +1,16 @@
+ext.versions = [
+        compose             : '1.1.1',
+]
+
+ext.libraries = [
+
+        compose                   : "androidx.compose.ui:ui:$versions.compose",
+]
+
+ext.tests = [
+//        kotlin        : "org.jetbrains.kotlin:kotlin-test-junit:$versions.kotlin",
+]
+
+ext.classpath = [
+//        gradle             : "com.android.tools.build:gradle:$versions.gradle",
+]
