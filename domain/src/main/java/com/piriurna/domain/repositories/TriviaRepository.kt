@@ -8,5 +8,5 @@ interface TriviaRepository {
 
     suspend fun getCategories() : ApiNetworkResponse<List<Category>>
 
-    suspend fun getCategoryQuestions(categoryId: Int) : List<Question>
+    suspend fun getCategoryQuestions(categoryId: Int) : ApiNetworkResponse<List<Question>>
 }
