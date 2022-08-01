@@ -1,6 +1,8 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
+    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -62,4 +64,8 @@ dependencies {
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
     implementation "com.google.accompanist:accompanist-pager:0.23.1"
+
+    implementation rootProject.libraries.hiltAndroid
+    kapt rootProject.libraries.hiltAndroidCompiler
+
 }

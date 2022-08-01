@@ -1,10 +1,14 @@
 ext.versions = [
         compose             : '1.1.1',
+        hilt                : '2.39.1',
+
 ]
 
 ext.libraries = [
-
         compose                   : "androidx.compose.ui:ui:$versions.compose",
+        hiltAndroid               : "com.google.dagger:hilt-android:$versions.hilt",
+        hiltAndroidCompiler       : "com.google.dagger:hilt-android-compiler:$versions.hilt",
+
 ]
 
 ext.tests = [
@@ -12,5 +16,6 @@ ext.tests = [
 ]
 
 ext.classpath = [
+        hilt             : "com.google.dagger:hilt-android-gradle-plugin:$versions.hilt",
 //        gradle             : "com.android.tools.build:gradle:$versions.gradle",
 ]
