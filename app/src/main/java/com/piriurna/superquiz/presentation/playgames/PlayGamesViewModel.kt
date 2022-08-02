@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PlayGamesViewModel @Inject constructor(
-//    private val getCategoriesUseCase: GetCategoriesUseCase
+    private val getCategoriesUseCase: GetCategoriesUseCase
 ) : SQBaseEventViewModel<PlayGamesEvents>(){
 
     init {

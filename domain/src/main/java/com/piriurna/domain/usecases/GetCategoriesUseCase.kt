@@ -6,8 +6,9 @@ import com.piriurna.domain.models.Category
 import com.piriurna.domain.repositories.TriviaRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class GetCategoriesUseCase(
+class GetCategoriesUseCase @Inject constructor(
     private val triviaRepository: TriviaRepository
 ) {
 
