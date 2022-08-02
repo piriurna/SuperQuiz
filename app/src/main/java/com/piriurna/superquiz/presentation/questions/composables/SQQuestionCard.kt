@@ -16,11 +16,7 @@ fun SQQuestionCard(
     questionIndex : Int,
     answerSelectedListener : AnswerSelectedListener? = null
 ) {
-
-    val answers = question.incorrectAnswers.toMutableList()
-    answers.add(question.correctAnswer)
-
-    answers.shuffle()
+    val answers = question.allAnswers
 
     Column(
         modifier = modifier,

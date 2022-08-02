@@ -17,11 +17,15 @@ fun CategoryDto.toCategory() : List<Category> {
 
 fun QuizDto.toQuestions() : List<Question> {
     return this.questions.map { questionDto ->
+        val allAnswers = questionDto.incorrectAnswers.toMutableList()
+        allAnswers.add(questionDto.correctAnswer)
+        allAnswers.shuffle()
+
         return@map Question(
             category = questionDto.category,
             correctAnswer = questionDto.correctAnswer,
             difficulty = questionDto.difficulty,
-            incorrectAnswers = questionDto.incorrectAnswers,
+            allAnswers = allAnswers,
             question = questionDto.question,
             type = questionDto.type
         )

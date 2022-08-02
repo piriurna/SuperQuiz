@@ -4,11 +4,10 @@ data class Question(
     val category: String,
     val correctAnswer : String,
     val difficulty : String,
-    val incorrectAnswers: List<String>,
+    val allAnswers : List<String>,
     val question : String,
     val type : String
 ) {
-
 
     companion object {
         val mockQuestions = listOf(
@@ -18,7 +17,8 @@ data class Question(
                 difficulty = "medium",
                 question = "Two angles are complementary, if the sum of their measures is",
                 correctAnswer = "-90",
-                incorrectAnswers = listOf("-10", "-180", "-360")
+
+                allAnswers = listOf("-10", "-90", "-180", "-360")
             ),
             Question(
                 category = "Sports",
@@ -26,7 +26,7 @@ data class Question(
                 difficulty = "medium",
                 question = "With which team did Michael Schumacher make his Formula One debut at the 1991 Belgian Grand Prix?",
                 correctAnswer = "Jordan",
-                incorrectAnswers = listOf("Benetton","Ferrari","Mercedes")
+                allAnswers = listOf("Benetton", "Jordan", "Ferrari", "Mercedes")
             ),
             Question(
                 category = "Entertainment: Video Games",
@@ -34,7 +34,7 @@ data class Question(
                 difficulty = "easy",
                 question = "In what year was the first \"Mass Effect\" game released?",
                 correctAnswer = "2007",
-                incorrectAnswers = listOf("2008", "2009", "2010")
+                allAnswers = listOf("2007", "2008", "2009", "2010")
             )
         )
     }
