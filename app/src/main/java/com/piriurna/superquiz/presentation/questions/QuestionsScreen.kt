@@ -12,20 +12,17 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.PagerDefaults
 import com.google.accompanist.pager.rememberPagerState
 import com.piriurna.domain.models.Question
 import com.piriurna.superquiz.presentation.composables.SQChip
 import com.piriurna.superquiz.presentation.composables.SQProgressBar
-import com.piriurna.superquiz.presentation.composables.models.ChipModel
-import com.piriurna.superquiz.presentation.composables.models.ProgressIndicatorModel
-import com.piriurna.superquiz.presentation.composables.models.ProgressIndicatorText
 import com.piriurna.superquiz.presentation.composables.models.disabledHorizontalPointerInputScroll
 import com.piriurna.superquiz.presentation.questions.composables.SQQuestionCard
 import com.piriurna.superquiz.presentation.questions.models.AnswerSelectedListener
 import com.piriurna.superquiz.ui.theme.lightPurple
 import com.piriurna.superquiz.ui.theme.purple
 import kotlinx.coroutines.launch
+import kotlin.math.min
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -96,7 +93,8 @@ fun QuestionsScreen(
         Button(
             onClick = { scope.launch {
                 if(questions[pagerState.currentPage].correctAnswer == selectedAnswer) {
-                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                    val nextPage = min(pagerState.pageCount - 1, pagerState.currentPage + 1)
+                    pagerState.animateScrollToPage(nextPage)
                 }
             } },
             enabled = selectedAnswer != null,
