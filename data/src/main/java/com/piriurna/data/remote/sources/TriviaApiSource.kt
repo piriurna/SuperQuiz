@@ -4,8 +4,9 @@ import com.piriurna.data.remote.HandleApi.safeApiCall
 import com.piriurna.data.remote.TriviaApi
 import com.piriurna.data.remote.dto.CategoryDto
 import com.piriurna.data.remote.dto.QuizDto
+import javax.inject.Inject
 
-class TriviaApiSource(
+class TriviaApiSource @Inject constructor(
     private val triviaApi: TriviaApi
 ) {
 

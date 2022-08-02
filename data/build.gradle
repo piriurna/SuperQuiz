@@ -48,4 +48,7 @@ dependencies {
     api "com.squareup.okhttp3:okhttp:$okhttpVersion"
     api "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
 
+    implementation("com.google.dagger:dagger:2.26")
+
+
 }

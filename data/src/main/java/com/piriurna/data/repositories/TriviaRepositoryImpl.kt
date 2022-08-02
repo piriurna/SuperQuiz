@@ -9,9 +9,10 @@ import com.piriurna.domain.models.Category
 import com.piriurna.domain.models.Question
 import com.piriurna.domain.repositories.TriviaRepository
 import java.lang.Exception
+import javax.inject.Inject
 
 
-class TriviaRepositoryImpl(
+class TriviaRepositoryImpl @Inject constructor(
     private val triviaApiSource: TriviaApiSource
 ): TriviaRepository {
 
