@@ -24,9 +24,7 @@ fun TestScreen() {
         modifier = Modifier.fillMaxSize()
     ) {
         SQProgressBar(
-            progressIndicatorModel = ProgressIndicatorModel(
-                progress = 50,
-            )
+            progress = 50,
         )
 
 
