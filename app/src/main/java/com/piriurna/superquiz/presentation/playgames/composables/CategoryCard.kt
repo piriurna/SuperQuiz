@@ -17,7 +17,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.piriurna.domain.models.Category
 import com.piriurna.superquiz.mappers.getImage
-
+import com.piriurna.superquiz.presentation.composables.SQProgressBar
+import com.piriurna.superquiz.presentation.composables.models.ProgressIndicatorModel
+import com.piriurna.superquiz.presentation.composables.models.ProgressIndicatorText
 @Composable
 fun CategoryCard(
     modifier: Modifier = Modifier,
@@ -58,7 +60,14 @@ fun CategoryCard(
                 )
             }
 
-            ProgressWithText(completionPercentage = category.completionRate)
+            val progressIndicatorText = ProgressIndicatorText.CompletedExplicitText(category.completionRate)
+            SQProgressBar(
+                progressIndicatorModel = ProgressIndicatorModel(
+                    progress = category.completionRate,
+                    progressIndicatorText = progressIndicatorText
+                )
+
+            )
         }
     }
 }

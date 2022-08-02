@@ -11,6 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.piriurna.superquiz.presentation.composables.SQProgressBar
+import com.piriurna.superquiz.presentation.composables.models.ProgressIndicatorModel
 import com.piriurna.superquiz.ui.theme.*
 
 @Composable
@@ -32,9 +33,9 @@ fun ProgressWithText(
             color = if(completionPercentage == 0) Color.Gray else Color.Black
         )
         SQProgressBar(
-            progress = completionPercentage/100f,
-            foregroundColor = if(completionPercentage != 100) foregroundColor else primaryGreen,
-            backgroundColor = backgroundColor
+            progressIndicatorModel = ProgressIndicatorModel(
+                progress = completionPercentage,
+            )
         )
     }
 }
