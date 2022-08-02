@@ -15,8 +15,9 @@ sealed class ProgressIndicatorText(
             text = "You completed ${percentage}%"
         )
 
-    class FractionText(percentage: Int) : ProgressIndicatorText(
-        percentage = percentage,
-        text = "${(percentage/10)}/10"
+    class FractionText(current: Int, count: Int = 10) : ProgressIndicatorText(
+        percentage = ((current.toFloat()/count) * 100).toInt(),
+        text = "${(current)}/$count",
+        incompleteColor = Color.Black
     )
 }

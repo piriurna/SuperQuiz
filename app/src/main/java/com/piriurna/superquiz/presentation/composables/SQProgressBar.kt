@@ -30,6 +30,7 @@ fun SQProgressBar(
             progressIndicatorModel.progressColor
 
     Column(
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
 
@@ -71,11 +72,11 @@ fun SQProgressBar(
 @Preview(showBackground = true)
 @Composable
 private fun DefaultPreview() {
-    Box(
+    Column(
         modifier = Modifier
             .padding(16.dp)
             .fillMaxSize(),
-        contentAlignment = Alignment.Center
+        verticalArrangement = Arrangement.spacedBy(32.dp)
     ) {
         SQProgressBar(
             progressIndicatorModel = ProgressIndicatorModel(
@@ -87,6 +88,20 @@ private fun DefaultPreview() {
                     backgroundColor = lightOrange,
                     foregroundColor = orange
                 )
+            ),
+        )
+
+        //TODO: Melhorar para nao precisar definir 2 progressos
+        SQProgressBar(
+            progressIndicatorModel = ProgressIndicatorModel(
+                progress = 0,
+                progressIndicatorText = ProgressIndicatorText.CompletedExplicitText(0)
+            ),
+        )
+
+        SQProgressBar(
+            progressIndicatorModel = ProgressIndicatorModel(
+                progress = 100,
             ),
         )
 

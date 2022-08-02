@@ -6,9 +6,9 @@ import com.piriurna.superquiz.ui.theme.primaryGreen
 import com.piriurna.superquiz.ui.theme.progressBlue
 
 data class ProgressIndicatorModel(
+    val progress : Int,
     val progressIndicatorText: ProgressIndicatorText? = null,
     val chipModel: ChipModel? = null,
-    val progress : Int,
     val progressColor: Color = progressBlue,
     val backgroundColor: Color = incompleteGray,
     val completedColor: Color = primaryGreen
