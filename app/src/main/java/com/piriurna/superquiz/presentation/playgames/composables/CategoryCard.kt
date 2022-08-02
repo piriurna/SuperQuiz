@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.piriurna.domain.models.Category
 import com.piriurna.superquiz.mappers.getImage
+import com.piriurna.superquiz.presentation.composables.SQCard
 import com.piriurna.superquiz.presentation.composables.SQProgressBar
 import com.piriurna.superquiz.presentation.composables.models.ProgressIndicatorModel
 import com.piriurna.superquiz.presentation.composables.models.ProgressIndicatorText
@@ -26,12 +27,7 @@ fun CategoryCard(
     category: Category
 ) {
 
-    Card(
-        shape = RoundedCornerShape(
-            size = 30.dp,
-        ),
-        elevation = 0.dp,
-        border = BorderStroke(1.dp, Color.LightGray),
+    SQCard(
         modifier = modifier
             .padding(all = 8.dp)
     ) {
