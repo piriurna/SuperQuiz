@@ -9,11 +9,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.piriurna.superquiz.presentation.questions.models.AnswerSelectedListener
 
 @Composable
 fun SQAnswerRow(
     modifier: Modifier = Modifier,
-    text: String
+    text: String,
+    answerSelectedListener: AnswerSelectedListener? = null
 ) {
 
     var selected by remember { mutableStateOf(false) }
@@ -21,7 +23,13 @@ fun SQAnswerRow(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier.fillMaxWidth()
     ) {
-        RadioButton(selected = selected, onClick = { selected = !selected })
+        RadioButton(
+            selected = answerSelectedListener?.isAnswerSelected(text) == true,
+            onClick = {
+                selected = !selected
+                answerSelectedListener?.onAnswerSelected(text)
+            }
+        )
 
         Text(
             text = text,

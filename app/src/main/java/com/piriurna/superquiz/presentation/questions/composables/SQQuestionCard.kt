@@ -1,20 +1,20 @@
 package com.piriurna.superquiz.presentation.questions.composables
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.piriurna.domain.models.Question
 import com.piriurna.superquiz.presentation.composables.SQCard
+import com.piriurna.superquiz.presentation.questions.models.AnswerSelectedListener
 
 @Composable
 fun SQQuestionCard(
     modifier: Modifier = Modifier,
     question: Question,
-    index : Int
+    questionIndex : Int,
+    answerSelectedListener : AnswerSelectedListener? = null
 ) {
 
     val answers = question.incorrectAnswers.toMutableList()
@@ -27,12 +27,12 @@ fun SQQuestionCard(
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
 
-        SQQuestion(index = index, question = question)
+        SQQuestion(index = questionIndex, question = question)
 
         SQCard {
             Column(modifier = Modifier.padding(8.dp)) {
                 answers.forEach {
-                    SQAnswerRow(text = it)
+                    SQAnswerRow(text = it, answerSelectedListener = answerSelectedListener)
                 }
             }
         }
@@ -43,5 +43,5 @@ fun SQQuestionCard(
 @Preview(showBackground = true)
 @Composable
 private fun SQQuestionCardPreview() {
-    SQQuestionCard(question = Question.mockQuestions[0], index = 0)
+    SQQuestionCard(question = Question.mockQuestions[0], questionIndex = 0)
 }

@@ -2,6 +2,8 @@ package com.piriurna.superquiz.presentation.composables.models
 
 import androidx.compose.ui.graphics.Color
 
+
+//TODO: Deixar isso tudo como responsabilidade do SQProgressBar
 sealed class ProgressIndicatorText(
     val percentage : Int, //0-100 percentage
     val text : String,

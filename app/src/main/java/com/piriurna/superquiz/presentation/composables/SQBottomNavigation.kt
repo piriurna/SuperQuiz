@@ -61,7 +61,7 @@ private fun SQBottomNavigationPreview() {
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 16.dp),
-            items = BottomNavigationItem.mockBottomNavigationItems,
+            items = listOf(BottomNavigationItem.PlayGames, BottomNavigationItem.Profile),
             selectedRoute = selected
         )
     }

@@ -6,8 +6,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -21,6 +20,7 @@ import com.piriurna.superquiz.presentation.composables.models.ChipModel
 import com.piriurna.superquiz.presentation.composables.models.ProgressIndicatorModel
 import com.piriurna.superquiz.presentation.composables.models.ProgressIndicatorText
 import com.piriurna.superquiz.presentation.questions.composables.SQQuestionCard
+import com.piriurna.superquiz.presentation.questions.models.AnswerSelectedListener
 import com.piriurna.superquiz.ui.theme.lightPurple
 import com.piriurna.superquiz.ui.theme.purple
 import kotlinx.coroutines.launch
@@ -41,6 +41,10 @@ fun QuestionsScreen(
         verticalArrangement = Arrangement.SpaceBetween
     ) {
         val percentage = ((pagerState.currentPage.toFloat()/(questions.size-1)) * 100).toInt()
+
+        var selectedAnswer by remember {
+            mutableStateOf<String?>(null)
+        }
 
         Column(verticalArrangement = Arrangement.spacedBy(36.dp)) {
             SQProgressBar(
@@ -63,7 +67,19 @@ fun QuestionsScreen(
                     count = questions.size,
                     state = pagerState,
                 ) { index ->
-                    SQQuestionCard(question = questions[index], index = index)
+                    SQQuestionCard(
+                        question = questions[index],
+                        questionIndex = index,
+                        answerSelectedListener = object : AnswerSelectedListener {
+                            override fun onAnswerSelected(answer: String) {
+                                selectedAnswer = answer
+                            }
+
+                            override fun getSelectedAnswer(): String {
+                                return selectedAnswer?:""
+                            }
+                        }
+                    )
                 }
 
                 Row(

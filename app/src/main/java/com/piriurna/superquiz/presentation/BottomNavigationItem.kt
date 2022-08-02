@@ -26,7 +26,7 @@ sealed class BottomNavigationItem(
     companion object {
         val mockBottomNavigationItems = listOf(
             PlayGames,
-            Profile
+            PlayGames
         )
     }
 
