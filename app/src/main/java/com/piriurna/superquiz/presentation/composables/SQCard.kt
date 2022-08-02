@@ -1,6 +1,7 @@
 package com.piriurna.superquiz.presentation.composables
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -15,12 +16,14 @@ fun SQCard(
     content: @Composable () -> Unit
 ) {
 
-    Card(shape = RoundedCornerShape(
-        size = 30.dp,
-    ),
+    Card(
+        backgroundColor = Color.Transparent,
+        modifier = modifier,
+        shape = RoundedCornerShape(
+            size = 30.dp,
+        ),
         elevation = 0.dp,
         border = BorderStroke(1.dp, Color.LightGray),
-        modifier = modifier,
         content = content
     )
 }
