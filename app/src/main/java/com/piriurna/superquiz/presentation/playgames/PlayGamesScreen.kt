@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.piriurna.domain.models.Category
 import com.piriurna.superquiz.presentation.playgames.composables.CategoryCard
 import com.piriurna.superquiz.ui.theme.*
@@ -26,17 +27,21 @@ import com.piriurna.superquiz.ui.theme.*
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PlayGamesScreen() {
+    val playGamesViewModel : PlayGamesViewModel = hiltViewModel()
+
     Box(
         modifier = Modifier
-            .background(brush = Brush.radialGradient(
-                radius = 800f,
-                center= Offset(x=250f, y = 800f),
-                colors = listOf(
-                    gradientInnerColor,
-                    gradientCentralColor,
-                    gradientOuterColor,
+            .background(
+                brush = Brush.radialGradient(
+                    radius = 800f,
+                    center = Offset(x = 250f, y = 800f),
+                    colors = listOf(
+                        gradientInnerColor,
+                        gradientCentralColor,
+                        gradientOuterColor,
+                    )
                 )
-            ))
+            )
             .fillMaxSize()
     ) {
         

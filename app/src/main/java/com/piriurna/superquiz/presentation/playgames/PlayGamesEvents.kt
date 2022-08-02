@@ -1,6 +1,8 @@
 package com.piriurna.superquiz.presentation.playgames
 
-sealed class PlayGamesEvents {
+import com.piriurna.superquiz.SQBaseEvent
+
+sealed class PlayGamesEvents : SQBaseEvent() {
     object GetCategories: PlayGamesEvents()
 
 }
