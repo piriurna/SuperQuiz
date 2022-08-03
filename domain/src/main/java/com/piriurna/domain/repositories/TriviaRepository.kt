@@ -11,4 +11,6 @@ interface TriviaRepository {
     suspend fun getCategoryQuestions(categoryId: Int) : ApiNetworkResponse<List<Question>>
 
     suspend fun getDbCategories() : List<Category>
+
+    suspend fun insertCategoriesInDb(categories: List<Category>)
 }

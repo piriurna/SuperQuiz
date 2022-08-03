@@ -3,6 +3,7 @@ package com.piriurna.data.repositories
 import com.piriurna.data.database.daos.CategoryDao
 import com.piriurna.data.mappers.toApiNetworkError
 import com.piriurna.data.mappers.toCategory
+import com.piriurna.data.mappers.toCategoryEntity
 import com.piriurna.data.mappers.toQuestions
 import com.piriurna.data.remote.sources.TriviaApiSource
 import com.piriurna.domain.ApiNetworkResponse
@@ -52,6 +53,10 @@ class TriviaRepositoryImpl @Inject constructor(
             return emptyList()
         }
 
+    }
+
+    override suspend fun insertCategoriesInDb(categories: List<Category>) {
+        categoryDao.insertCategories(categories.toCategoryEntity())
     }
 
 }

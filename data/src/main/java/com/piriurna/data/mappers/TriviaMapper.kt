@@ -23,6 +23,20 @@ fun CategoryEntity.toCategory() : Category {
 }
 
 
+fun Category.toCategoryEntity() : CategoryEntity {
+    return CategoryEntity(
+        id = this.id,
+        name = this.name
+    )
+}
+
+fun List<Category>.toCategoryEntity() : List<CategoryEntity> {
+    return this.map {
+        return@map it.toCategoryEntity()
+    }
+}
+
+
 fun QuizDto.toQuestions() : List<Question> {
     return this.questions.map { questionDto ->
         return@map Question(
