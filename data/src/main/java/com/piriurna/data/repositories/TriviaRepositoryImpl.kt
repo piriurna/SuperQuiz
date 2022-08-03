@@ -1,5 +1,6 @@
 package com.piriurna.data.repositories
 
+import com.piriurna.data.database.daos.CategoryDao
 import com.piriurna.data.mappers.toApiNetworkError
 import com.piriurna.data.mappers.toCategory
 import com.piriurna.data.mappers.toQuestions
@@ -13,7 +14,8 @@ import javax.inject.Inject
 
 
 class TriviaRepositoryImpl @Inject constructor(
-    private val triviaApiSource: TriviaApiSource
+    private val triviaApiSource: TriviaApiSource,
+    private val categoryDao: CategoryDao
 ): TriviaRepository {
 
     override suspend fun getCategories(): ApiNetworkResponse<List<Category>> {
@@ -41,6 +43,15 @@ class TriviaRepositoryImpl @Inject constructor(
                 error = e.toApiNetworkError()
             )
         }
+    }
+
+    override suspend fun getDbCategories(): List<Category> {
+        return categoryDao.getCategories()?.map { categoryEntity ->
+            return@map categoryEntity.toCategory()
+        } ?: kotlin.run {
+            return emptyList()
+        }
+
     }
 
 }

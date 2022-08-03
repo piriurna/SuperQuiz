@@ -1,5 +1,6 @@
 package com.piriurna.data.mappers
 
+import com.piriurna.data.database.entities.CategoryEntity
 import com.piriurna.data.remote.dto.CategoryDto
 import com.piriurna.data.remote.dto.QuizDto
 import com.piriurna.domain.models.Category
@@ -12,6 +13,13 @@ fun CategoryDto.toCategory() : List<Category> {
             name = categoryDto.name
         )
     }
+}
+
+fun CategoryEntity.toCategory() : Category {
+    return Category(
+        id = this.id,
+        name = this.name
+    )
 }
 
 
@@ -27,3 +35,4 @@ fun QuizDto.toQuestions() : List<Question> {
         )
     }
 }
+
