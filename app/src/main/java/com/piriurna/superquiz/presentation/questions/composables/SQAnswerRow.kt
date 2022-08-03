@@ -16,7 +16,7 @@ fun SQAnswerRow(
     text: String,
     selected : Boolean,
     onClick : (String) -> Unit,
-
+    isEnabled : Boolean
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -26,7 +26,8 @@ fun SQAnswerRow(
             selected = selected,
             onClick = {
                 onClick(text)
-            }
+            },
+            enabled = isEnabled
         )
 
         Text(
@@ -40,5 +41,5 @@ fun SQAnswerRow(
 @Preview(showBackground = true)
 @Composable
 private fun SQAnswerRowPreview() {
-    SQAnswerRow(text = "text", selected = false, onClick = {})
+    SQAnswerRow(text = "text", selected = false, onClick = {}, isEnabled = true)
 }

@@ -11,19 +11,27 @@ import com.piriurna.superquiz.presentation.questions.composables.SQAnswerRow
 fun SQToggleRadioGroup(
     modifier: Modifier = Modifier,
     options: List<String>,
-    onAnswerSelected : (String) -> Unit = {}
+    onAnswerSelected : (String) -> Unit = {},
+    isEnabled: Boolean
 ) {
 
     var selected by remember { mutableStateOf<String?>(null) }
 
     val onSelectionChange = { text: String ->
-        selected = text
-        onAnswerSelected.invoke(text)
+        if(isEnabled) {
+            selected = text
+            onAnswerSelected.invoke(text)
+        }
     }
 
     Column(modifier = modifier) {
         options.forEach {
-            SQAnswerRow(text = it, selected = selected == it, onClick = onSelectionChange)
+            SQAnswerRow(
+                text = it,
+                selected = selected == it,
+                onClick = onSelectionChange,
+                isEnabled = true
+            )
         }
     }
 
@@ -32,5 +40,5 @@ fun SQToggleRadioGroup(
 @Preview(showBackground = true)
 @Composable
 private fun SQToggleRadioGroupPreview() {
-    SQToggleRadioGroup(options = Question.mockQuestions[0].allAnswers)
+    SQToggleRadioGroup(options = Question.mockQuestions[0].allAnswers, isEnabled = true)
 }
