@@ -3,7 +3,7 @@ ext.versions = [
         hilt                   : '2.39.1',
         hiltLifecycleViewmodel : '1.0.0-alpha03',
         hiltNavigationCompose  : '1.0.0-alpha03',
-
+        room                   : '2.3.0'
 
 ]
 
@@ -12,7 +12,10 @@ ext.libraries = [
         hiltAndroid               : "com.google.dagger:hilt-android:$versions.hilt",
         hiltAndroidCompiler       : "com.google.dagger:hilt-android-compiler:$versions.hilt",
         hiltLifecycleViewmodel    : "androidx.hilt:hilt-lifecycle-viewmodel:$versions.hiltLifecycleViewmodel",
-        hiltNavigationCompose     : "androidx.hilt:hilt-navigation-compose:$versions.hiltNavigationCompose"
+        hiltNavigationCompose     : "androidx.hilt:hilt-navigation-compose:$versions.hiltNavigationCompose",
+        roomRuntime               : "androidx.room:room-runtime:$versions.room",
+        roomCompiler              : "androidx.room:room-compiler:$versions.room",
+        roomKtx                   : "androidx.room:room-ktx:$versions.room"
 
 
 ]
