@@ -18,7 +18,6 @@ import com.piriurna.superquiz.presentation.composables.SQChip
 import com.piriurna.superquiz.presentation.composables.SQProgressBar
 import com.piriurna.superquiz.presentation.composables.models.disabledHorizontalPointerInputScroll
 import com.piriurna.superquiz.presentation.questions.composables.SQQuestionCard
-import com.piriurna.superquiz.presentation.questions.models.AnswerSelectedListener
 import com.piriurna.superquiz.ui.theme.lightPurple
 import com.piriurna.superquiz.ui.theme.purple
 import kotlinx.coroutines.launch
@@ -63,14 +62,8 @@ fun QuestionsScreen(
                     SQQuestionCard(
                         question = questions[index],
                         questionIndex = index,
-                        answerSelectedListener = object : AnswerSelectedListener {
-                            override fun onAnswerSelected(answer: String) {
-                                selectedAnswer = answer
-                            }
-
-                            override fun getSelectedAnswer(): String {
-                                return selectedAnswer?:""
-                            }
+                        onAnswerSelected = {text ->
+                            selectedAnswer = text
                         }
                     )
                 }
@@ -93,9 +86,15 @@ fun QuestionsScreen(
         Button(
             onClick = { scope.launch {
                 if(questions[pagerState.currentPage].correctAnswer == selectedAnswer) {
+                    //SHOW CORRECT ANSWER PANEL
                     val nextPage = min(pagerState.pageCount - 1, pagerState.currentPage + 1)
                     pagerState.animateScrollToPage(nextPage)
+                } else {
+                    //SHOW INCORRECT ANSWER PANEL
                 }
+
+                //WAIT A WHILE ~3s OR PRESS BUTTON AGAIN
+                //MOVE TO NEXT QUESTION
             } },
             enabled = selectedAnswer != null,
             modifier= Modifier
