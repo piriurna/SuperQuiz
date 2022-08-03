@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.piriurna.superquiz">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:name=".SuperQuizApplication"
         android:allowBackup="true"
