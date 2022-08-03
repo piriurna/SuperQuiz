@@ -24,7 +24,7 @@ fun SQProgressBar(
     barBackgroundColor: Color = incompleteGray,
     barCompletedColor: Color = primaryGreen,
     textIncompleteColor: Color = Color.Gray,
-    textProgressColor: Color = progressBlue,
+    textProgressColor: Color = Color.Black,
     chipForegroundColor: Color = progressBlue,
     chipBackgroundColor: Color = incompleteGray,
     chipIcon : ImageVector? = null,
