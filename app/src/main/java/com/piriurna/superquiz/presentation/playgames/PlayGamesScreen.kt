@@ -29,6 +29,9 @@ import com.piriurna.superquiz.ui.theme.*
 fun PlayGamesScreen() {
     val playGamesViewModel : PlayGamesViewModel = hiltViewModel()
 
+    val state = playGamesViewModel.state.value
+
+
     Box(
         modifier = Modifier
             .background(
@@ -44,7 +47,7 @@ fun PlayGamesScreen() {
             )
             .fillMaxSize()
     ) {
-        
+
         Column(
             verticalArrangement= Arrangement.spacedBy(12.dp),
             modifier = Modifier
@@ -56,7 +59,7 @@ fun PlayGamesScreen() {
                 text = "\uD83D\uDC4B Hello, Dear",
                 color = Color.White
             )
-            
+
             Text(
                 text = "What Do You Want To Improve?",
                 fontSize = 36.sp,
@@ -65,7 +68,7 @@ fun PlayGamesScreen() {
                 fontWeight = FontWeight.W500
             )
         }
-        
+
         Card(
             shape = RoundedCornerShape(
                 topStartPercent = 10,
@@ -80,9 +83,8 @@ fun PlayGamesScreen() {
                 modifier = Modifier.padding(12.dp),
                 cells = GridCells.Fixed(2),
                 content = {
-                    val categories = getCategories()
-                    items(categories.size) { index ->
-                        CategoryCard(category = categories[index])
+                    items(state.categories.size) { index ->
+                        CategoryCard(category = state.categories[index])
                     }
                 }
             )
