@@ -3,7 +3,7 @@ ext.versions = [
         hilt                   : '2.39.1',
         hiltLifecycleViewmodel : '1.0.0-alpha03',
         hiltNavigationCompose  : '1.0.0-alpha03',
-        room                   : '2.3.0'
+        room                   : '2.4.3'
 
 ]
 
