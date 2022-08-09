@@ -4,6 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import com.piriurna.data.database.models.Difficulty
+import com.piriurna.data.database.models.QuestionType
 
 @Entity(tableName = "question",
     foreignKeys = [
@@ -26,8 +28,8 @@ data class QuestionEntity(
     val categoryId: Int,
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val difficulty: String, //Todo: verificar enums no room
-    val type: String, //Todo: verificar enums no room
+    val difficulty: Difficulty, //Todo: verificar enums no room
+    val type: QuestionType, //Todo: verificar enums no room
     val description: String,
     val chosenAnswerId: Int
 )
