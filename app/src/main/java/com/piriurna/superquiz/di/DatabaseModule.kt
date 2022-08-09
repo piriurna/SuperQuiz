@@ -24,10 +24,5 @@ object DatabaseModule {
         SuperQuizDatabase::class.java,
         DATABASE_NAME
     ).build()
-
-    @Singleton
-    @Provides
-    fun provideDao(database: SuperQuizDatabase) = database.categoryDao()
-
 }
 

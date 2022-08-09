@@ -1,5 +1,6 @@
 package com.piriurna.superquiz.di
 
+import com.piriurna.data.database.SuperQuizDatabase
 import com.piriurna.data.database.daos.CategoryDao
 import com.piriurna.data.remote.sources.TriviaApiSource
 import com.piriurna.data.repositories.TriviaRepositoryImpl
@@ -17,8 +18,8 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideTriviaRepository(dogApiSource: TriviaApiSource): TriviaRepository {
-        return TriviaRepositoryImpl(dogApiSource, Any() as CategoryDao)
+    fun provideTriviaRepository(triviaApiSource: TriviaApiSource, superQuizDatabase: SuperQuizDatabase): TriviaRepository {
+        return TriviaRepositoryImpl(triviaApiSource,superQuizDatabase.categoryDao())
     }
 
 
