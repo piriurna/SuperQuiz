@@ -53,11 +53,11 @@ dependencies {
 
 
     // Room
-    implementation rootProject.libraries.roomRuntime
+    api rootProject.libraries.roomRuntime
     kapt rootProject.libraries.roomCompiler
 
     // Kotlin Extensions and Coroutines support for Room
-    implementation rootProject.libraries.roomKtx
+    api rootProject.libraries.roomKtx
 
 
 }
