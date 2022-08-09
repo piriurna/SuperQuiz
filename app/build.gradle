@@ -73,4 +73,5 @@ dependencies {
     implementation rootProject.libraries.hiltNavigationCompose
 
 
+    implementation rootProject.libraries.lottie
 }
