@@ -20,6 +20,10 @@ class SplashViewModel @Inject constructor(
     private val _state: MutableState<SplashState> = mutableStateOf(SplashState())
     val state: State<SplashState> = _state
 
+    init {
+        onTriggerEvent(SplashEvents.LoadTriviaData)
+    }
+
     override fun onTriggerEvent(event: SplashEvents) {
         when(event) {
             is SplashEvents.LoadTriviaData -> {
@@ -35,7 +39,7 @@ class SplashViewModel @Inject constructor(
                 is Resource.Success -> {
                     _state.value = _state.value.copy(
                         isLoading = false,
-                        success = result.data == true
+                        success = result.data != null
                     )
                 }
                 is Resource.Loading -> {
