@@ -3,6 +3,7 @@ package com.piriurna.domain.usecases
 import com.piriurna.domain.ApiNetworkResponse
 import com.piriurna.domain.Resource
 import com.piriurna.domain.models.Category
+import com.piriurna.domain.models.LoadTriviaType
 import com.piriurna.domain.repositories.TriviaRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -12,18 +13,18 @@ class LoadTriviaDataUseCase @Inject constructor(
     private val triviaRepository: TriviaRepository
 ) {
 
-    operator fun invoke() : Flow<Resource<Boolean>> = flow {
+    operator fun invoke() : Flow<Resource<LoadTriviaType>> = flow {
         emit(Resource.Loading())
 
-        val firstInstall = true
-        val shouldFetchNewCategories = false
+        val firstInstall = false
+        val shouldFetchNewCategories = true
         if(firstInstall){
             val categoriesResult : ApiNetworkResponse<List<Category>> = triviaRepository.getCategories()
 
             categoriesResult.data?.let { data ->
                 triviaRepository.insertCategoriesInDb(data)
                 //TODO: Tratar das perguntas dessa categoria
-                emit(Resource.Success(true))
+                emit(Resource.Success(LoadTriviaType.FIRST_INSTALL))
             }?: kotlin.run {
                 emit(Resource.Error(message = categoriesResult.error.message!!))
             }
@@ -37,12 +38,12 @@ class LoadTriviaDataUseCase @Inject constructor(
                     }
 
                     if(nonExistingCategories.isNullOrEmpty()) {
-                        emit(Resource.Success(true))
+                        emit(Resource.Success(LoadTriviaType.NO_CATEGORIES_UPDATED))
                     } else {
                         //TODO: Buscar todas as perguntas destas categorias novas
                         triviaRepository.insertCategoriesInDb(nonExistingCategories)//
                         //TODO: Fazer o insert das perguntas na base de dados
-                        emit(Resource.Success(true))
+                        emit(Resource.Success(LoadTriviaType.CATEGORIES_UPDATED))
                     }
 
                 }?: kotlin.run {
@@ -55,12 +56,12 @@ class LoadTriviaDataUseCase @Inject constructor(
                     categoriesResult.data?.let { data ->
                         triviaRepository.insertCategoriesInDb(data)
                         //TODO: Tratar das perguntas dessa categoria
-                        emit(Resource.Success(true))
+                        emit(Resource.Success(LoadTriviaType.NO_STATE))
                     }?: kotlin.run {
                         emit(Resource.Error(message = categoriesResult.error.message!!))
                     }
                 } else {
-                    emit(Resource.Success(true))
+                    emit(Resource.Success(LoadTriviaType.NO_STATE))
                 }
             }
         }
