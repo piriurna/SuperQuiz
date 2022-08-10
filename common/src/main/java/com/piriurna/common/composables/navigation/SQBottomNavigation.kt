@@ -22,7 +22,7 @@ fun SQBottomNavigation(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(Color.Transparent),
+            .background(Color.White),
         horizontalArrangement = Arrangement.SpaceBetween
     ){
         items.forEach { item ->

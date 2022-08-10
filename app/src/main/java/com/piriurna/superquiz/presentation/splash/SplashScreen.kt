@@ -1,28 +1,22 @@
 package com.piriurna.superquiz.presentation.splash
 
-import androidx.compose.animation.animateColor
-import androidx.compose.animation.core.*
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.piriurna.superquiz.R
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
+import com.piriurna.domain.models.LoadTriviaType
 import com.piriurna.superquiz.presentation.AppLogo
-import com.piriurna.superquiz.ui.theme.*
+import com.piriurna.superquiz.presentation.navigation.RootDestinationScreen
 
 @Composable
-fun SplashScreen() {
+fun SplashScreen(
+    navController: NavHostController
+) {
     val splashViewModel : SplashViewModel = hiltViewModel()
 
     //todo: fazer e colocar aqui o composable apenas do logo
@@ -30,6 +24,15 @@ fun SplashScreen() {
     val state = splashViewModel.state.value
 
 
+    when(state.loadTriviaState) {
+        LoadTriviaType.FIRST_INSTALL,
+        LoadTriviaType.NO_CATEGORIES_UPDATED,
+        LoadTriviaType.CATEGORIES_UPDATED,
+        LoadTriviaType.NO_STATE -> {
+            navController.navigate(RootDestinationScreen.Home.route)
+        }
+        else -> {}
+    }
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -41,5 +44,5 @@ fun SplashScreen() {
 @Preview(showBackground = true)
 @Composable
 private fun SplashScreenPreview() {
-    SplashScreen()
+    SplashScreen(rememberNavController())
 }

@@ -17,7 +17,7 @@ class LoadTriviaDataUseCase @Inject constructor(
     operator fun invoke() : Flow<Resource<LoadTriviaType>> = flow {
         emit(Resource.Loading())
 
-        val firstInstall = true
+        val firstInstall = false
         val shouldFetchNewCategories = false
         if(firstInstall){
             val categoriesResult : ApiNetworkResponse<List<Category>> = triviaRepository.getCategories()

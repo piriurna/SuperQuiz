@@ -20,7 +20,7 @@ import com.piriurna.common.models.BottomNavigationItem
 @Composable
 fun SQScaffold(
     modifier: Modifier = Modifier,
-    isLoading: Boolean,
+    isLoading: Boolean = false,
     bottomBarItems: List<BottomNavigationItem> = emptyList(),
     content: @Composable (PaddingValues) -> Unit,
 ) {
@@ -39,9 +39,6 @@ fun SQScaffold(
                     SQBottomNavigation(
                         selectedColor = purple,
                         unselectedColor = Color.LightGray,
-                        modifier = Modifier
-                            .align(Alignment.BottomCenter)
-                            .padding(bottom = 16.dp),
                         items = bottomBarItems,
                         selectedRoute = ""
                     )

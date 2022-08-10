@@ -6,31 +6,31 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.piriurna.superquiz.presentation.home.HomeScreen
 import com.piriurna.superquiz.presentation.navigation.models.Graph
+import com.piriurna.superquiz.presentation.playgames.PlayGamesScreen
 import com.piriurna.superquiz.presentation.splash.SplashScreen
 
 @Composable
-fun RootNavigationGraph(navController: NavHostController) {
+fun HomeNavigationGraph(navController: NavHostController) {
 
     NavHost(
         navController = navController,
-        route = Graph.ROOT_GRAPH,
-        startDestination = RootDestinationScreen.Splash.route
+        route = Graph.HOME_GRAPH,
+        startDestination = HomeDestinationScreen.PlayGames.route
     ) {
 
         //--authenticationNavGraph(navController = navController)
 
-        composable(route = RootDestinationScreen.Home.route) {
-            HomeScreen()
+        composable(route = HomeDestinationScreen.PlayGames.route) {
+            PlayGamesScreen()
         }
 
-        composable(route = RootDestinationScreen.Splash.route) {
-            SplashScreen(navController = navController)
-        }
+//        composable(route = RootDestinationScreen.Splash.route) {
+//            SplashScreen(navController = navController)
+//        }
     }
 
 }
 
-sealed class RootDestinationScreen(val route: String) {
-    object Home : RootDestinationScreen(route = "HOME")
-    object Splash : RootDestinationScreen(route = "SPLASH")
+sealed class HomeDestinationScreen(val route: String) {
+    object PlayGames : RootDestinationScreen(route = "PLAY_GAMES")
 }

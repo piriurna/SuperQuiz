@@ -10,6 +10,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.piriurna.superquiz.presentation.navigation.RootNavigationGraph
 import com.piriurna.superquiz.presentation.playgames.PlayGamesScreen
 import com.piriurna.superquiz.presentation.splash.SplashScreen
 import com.piriurna.superquiz.ui.theme.SuperQuizTheme
@@ -26,7 +28,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    SplashScreen()
+                    RootNavigationGraph(navController = rememberNavController())
                 }
             }
         }

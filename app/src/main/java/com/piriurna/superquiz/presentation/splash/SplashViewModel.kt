@@ -5,6 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.piriurna.domain.Resource
+import com.piriurna.domain.models.LoadTriviaType
 import com.piriurna.domain.usecases.LoadTriviaDataUseCase
 import com.piriurna.superquiz.SQBaseEventViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -39,7 +40,7 @@ class SplashViewModel @Inject constructor(
                 is Resource.Success -> {
                     _state.value = _state.value.copy(
                         isLoading = false,
-                        success = result.data != null
+                        loadTriviaState = result.data?:LoadTriviaType.UNDEFINED
                     )
                 }
                 is Resource.Loading -> {
