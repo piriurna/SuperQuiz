@@ -4,8 +4,7 @@ ext.versions = [
         hiltLifecycleViewmodel : '1.0.0-alpha03',
         hiltNavigationCompose  : '1.0.0-alpha03',
         room                   : '2.4.3',
-        lottie                 : '5.2.0'
-
+        lottie                 : '5.2.0',
 ]
 
 ext.libraries = [
@@ -17,8 +16,9 @@ ext.libraries = [
         roomRuntime               : "androidx.room:room-runtime:$versions.room",
         roomCompiler              : "androidx.room:room-compiler:$versions.room",
         roomKtx                   : "androidx.room:room-ktx:$versions.room",
-        lottie                    : "com.airbnb.android:lottie-compose:$versions.lottie"
-
+        lottie                    : "com.airbnb.android:lottie-compose:$versions.lottie",
+        composeMaterial           : "androidx.compose.material:material:$versions.compose",
+        composeUiTooling          : "androidx.compose.ui:ui-tooling:$versions.compose",
 
 ]
 
