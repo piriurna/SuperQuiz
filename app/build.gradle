@@ -72,7 +72,4 @@ dependencies {
 
     implementation rootProject.libraries.hiltLifecycleViewmodel
     implementation rootProject.libraries.hiltNavigationCompose
-
-
-    implementation rootProject.libraries.lottie
 }
