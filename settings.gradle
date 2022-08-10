@@ -16,3 +16,4 @@ rootProject.name = "SuperQuiz"
 include ':app'
 include ':data'
 include ':domain'
+include ':common'
