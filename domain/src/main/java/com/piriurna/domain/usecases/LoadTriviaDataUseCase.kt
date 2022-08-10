@@ -4,6 +4,7 @@ import com.piriurna.domain.ApiNetworkResponse
 import com.piriurna.domain.Resource
 import com.piriurna.domain.models.Category
 import com.piriurna.domain.models.LoadTriviaType
+import com.piriurna.domain.models.Question
 import com.piriurna.domain.repositories.TriviaRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -16,14 +17,25 @@ class LoadTriviaDataUseCase @Inject constructor(
     operator fun invoke() : Flow<Resource<LoadTriviaType>> = flow {
         emit(Resource.Loading())
 
-        val firstInstall = false
-        val shouldFetchNewCategories = true
+        val firstInstall = true
+        val shouldFetchNewCategories = false
         if(firstInstall){
             val categoriesResult : ApiNetworkResponse<List<Category>> = triviaRepository.getCategories()
 
             categoriesResult.data?.let { data ->
                 triviaRepository.insertCategoriesInDb(data)
-                //TODO: Tratar das perguntas dessa categoria
+
+                data.forEach { category ->
+                    val questionsResult : ApiNetworkResponse<List<Question>> = triviaRepository.getCategoryQuestions(category.id)
+
+                    questionsResult.data?.let { questionsData ->
+                        val ids = triviaRepository.insertCategoryQuestionsInDb(questionsData)
+                        ids
+                    }?: kotlin.run {
+                        emit(Resource.Error(message = categoriesResult.error.message!!))
+                    }
+                }
+
                 emit(Resource.Success(LoadTriviaType.FIRST_INSTALL))
             }?: kotlin.run {
                 emit(Resource.Error(message = categoriesResult.error.message!!))
