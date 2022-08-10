@@ -4,8 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.piriurna.data.database.models.DifficultyType
-import com.piriurna.data.database.models.QuestionType
+import com.piriurna.domain.models.DifficultyType
+import com.piriurna.domain.models.QuestionType
 
 @Entity(tableName = "question",
     foreignKeys = [
@@ -32,5 +32,5 @@ data class QuestionEntity(
     val type: QuestionType,
     val description: String,
     @ColumnInfo(index = true)
-    val chosenAnswerId: Int
+    val chosenAnswerId: Int? = null
 )

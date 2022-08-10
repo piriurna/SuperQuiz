@@ -1,9 +1,6 @@
 package com.piriurna.data.database.daos
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.piriurna.data.database.entities.QuestionEntity
 
 @Dao
@@ -13,4 +10,7 @@ interface QuestionDao {
 
     @Query("SELECT * FROM QUESTION WHERE categoryId =:categoryId")
     suspend fun getQuestions(categoryId: Int): List<QuestionEntity>?
+
+    @Update
+    suspend fun updateQuestion(questionUpdated : QuestionEntity)
 }

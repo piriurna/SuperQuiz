@@ -1,10 +1,8 @@
 package com.piriurna.data.repositories
 
 import com.piriurna.data.database.daos.CategoryDao
-import com.piriurna.data.mappers.toApiNetworkError
-import com.piriurna.data.mappers.toCategory
-import com.piriurna.data.mappers.toCategoryEntity
-import com.piriurna.data.mappers.toQuestions
+import com.piriurna.data.database.daos.QuestionDao
+import com.piriurna.data.mappers.*
 import com.piriurna.data.remote.sources.TriviaApiSource
 import com.piriurna.domain.ApiNetworkResponse
 import com.piriurna.domain.models.Category
@@ -16,7 +14,8 @@ import javax.inject.Inject
 
 class TriviaRepositoryImpl @Inject constructor(
     private val triviaApiSource: TriviaApiSource,
-    private val categoryDao: CategoryDao
+    private val categoryDao: CategoryDao,
+    private val questionDao: QuestionDao
 ): TriviaRepository {
 
     override suspend fun getCategories(): ApiNetworkResponse<List<Category>> {
@@ -35,7 +34,7 @@ class TriviaRepositoryImpl @Inject constructor(
 
     override suspend fun getCategoryQuestions(categoryId: Int): ApiNetworkResponse<List<Question>> {
         return try {
-            val result = triviaApiSource.getQuiz(categoryId).toQuestions()
+            val result = triviaApiSource.getQuiz(categoryId).toQuestions(categoryId)
             ApiNetworkResponse(
                 data = result
             )
@@ -44,6 +43,10 @@ class TriviaRepositoryImpl @Inject constructor(
                 error = e.toApiNetworkError()
             )
         }
+    }
+
+    override suspend fun insertCategoryQuestionsInDb(questions: List<Question>): List<Long> {
+        return questionDao.insertQuestions(questions.toQuestionEntity())
     }
 
     override suspend fun getDbCategories(): List<Category> {

@@ -21,7 +21,7 @@ fun SQQuestion(
             )
 
             Text(
-                text = question.question,
+                text = question.description,
                 softWrap = true
             )
         }

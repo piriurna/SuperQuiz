@@ -19,7 +19,7 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideTriviaRepository(triviaApiSource: TriviaApiSource, superQuizDatabase: SuperQuizDatabase): TriviaRepository {
-        return TriviaRepositoryImpl(triviaApiSource,superQuizDatabase.categoryDao())
+        return TriviaRepositoryImpl(triviaApiSource,superQuizDatabase.categoryDao(), superQuizDatabase.questionDao())
     }
 
 
