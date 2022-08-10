@@ -1,11 +1,10 @@
-package com.piriurna.superquiz.presentation.composables
+package com.piriurna.common.composables.navigation
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
@@ -16,8 +15,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.piriurna.superquiz.ui.theme.orange
-import com.piriurna.superquiz.ui.theme.purple
+import com.piriurna.common.composables.theme.orange
+import com.piriurna.common.composables.theme.purple
 
 @Composable
 fun RowScope.SQNavigationItem(

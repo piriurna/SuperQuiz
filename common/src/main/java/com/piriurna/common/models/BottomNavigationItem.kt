@@ -1,4 +1,4 @@
-package com.piriurna.superquiz.presentation
+package com.piriurna.common.models
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face

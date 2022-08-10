@@ -1,23 +1,15 @@
-package com.piriurna.superquiz.presentation.composables
+package com.piriurna.common.composables.navigation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.BottomNavigation
-import androidx.compose.material.BottomNavigationItem
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
-import com.piriurna.superquiz.presentation.BottomNavigationItem
-import com.piriurna.superquiz.ui.theme.purple
+import com.piriurna.common.composables.theme.purple
+import com.piriurna.common.models.BottomNavigationItem
 
 @Composable
 fun SQBottomNavigation(
