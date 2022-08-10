@@ -10,19 +10,18 @@ import androidx.compose.ui.unit.dp
 import com.piriurna.common.composables.cards.SQCard
 import com.piriurna.domain.models.Question
 import com.piriurna.superquiz.presentation.questions.models.AnswerSelectedListener
+import com.piriurna.superquiz.presentation.composables.SQCard
+import com.piriurna.superquiz.presentation.composables.SQToggleRadioGroup
 
 @Composable
 fun SQQuestionCard(
     modifier: Modifier = Modifier,
     question: Question,
     questionIndex : Int,
-    answerSelectedListener : AnswerSelectedListener? = null
+    onAnswerSelected : (String) -> Unit = {},
+    isEnabled : Boolean
 ) {
-
-    val answers = question.incorrectAnswers.toMutableList()
-    answers.add(question.correctAnswer)
-
-    answers.shuffle()
+    val answers = question.allAnswers
 
     Column(
         modifier = modifier,
@@ -32,11 +31,12 @@ fun SQQuestionCard(
         SQQuestion(index = questionIndex, question = question)
 
         SQCard {
-            Column(modifier = Modifier.padding(8.dp)) {
-                answers.forEach {
-                    SQAnswerRow(text = it, answerSelectedListener = answerSelectedListener)
-                }
-            }
+            SQToggleRadioGroup(
+                modifier = Modifier.padding(8.dp),
+                options = answers,
+                onAnswerSelected = onAnswerSelected,
+                isEnabled = isEnabled
+            )
         }
     }
 
@@ -45,5 +45,5 @@ fun SQQuestionCard(
 @Preview(showBackground = true)
 @Composable
 private fun SQQuestionCardPreview() {
-    SQQuestionCard(question = Question.mockQuestions[0], questionIndex = 0)
+    SQQuestionCard(question = Question.mockQuestions[0], questionIndex = 0, isEnabled = true)
 }

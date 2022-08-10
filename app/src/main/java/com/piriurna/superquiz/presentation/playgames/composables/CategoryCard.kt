@@ -53,14 +53,11 @@ fun CategoryCard(
                 )
             }
 
-            val progressIndicatorText = ProgressIndicatorText.CompletedExplicitText(category.completionRate)
+            val progressIndicatorText = "You completed ${category.completionRate}%"
             SQProgressBar(
-                progressIndicatorModel = ProgressIndicatorModel(
                     progress = category.completionRate,
-                    progressIndicatorText = progressIndicatorText
+                    percentageText = progressIndicatorText
                 )
-
-            )
         }
     }
 }

@@ -42,11 +42,15 @@ fun List<Category>.toCategoryEntity() : List<CategoryEntity> {
 
 fun QuizDto.toQuestions(categoryId: Int) : List<Question> {
     return this.questions.map { questionDto ->
+        val allAnswers = questionDto.incorrectAnswers.toMutableList()
+        allAnswers.add(questionDto.correctAnswer)
+        allAnswers.shuffle()
+
         return@map Question(
             categoryId = categoryId,
             correctAnswer = questionDto.correctAnswer,
             difficulty = DifficultyType.convertFromString(questionDto.difficulty),
-            incorrectAnswers = questionDto.incorrectAnswers,
+            allAnswers = allAnswers,
             description = questionDto.question,
             type = QuestionType.convertFromString(questionDto.type)
         )

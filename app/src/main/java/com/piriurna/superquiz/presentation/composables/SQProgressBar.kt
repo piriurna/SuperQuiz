@@ -10,24 +10,33 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.piriurna.superquiz.presentation.composables.models.ChipModel
-import com.piriurna.superquiz.presentation.composables.models.ProgressIndicatorModel
-import com.piriurna.superquiz.presentation.composables.models.ProgressIndicatorText
 import com.piriurna.superquiz.ui.theme.*
 
 @Composable
 fun SQProgressBar(
     modifier: Modifier = Modifier,
-    progressIndicatorModel: ProgressIndicatorModel
+    progress : Int = 0,
+    barProgressColor: Color = progressBlue,
+    barBackgroundColor: Color = incompleteGray,
+    barCompletedColor: Color = primaryGreen,
+    textIncompleteColor: Color = Color.Gray,
+    textProgressColor: Color = Color.Black,
+    chipForegroundColor: Color = progressBlue,
+    chipBackgroundColor: Color = incompleteGray,
+    chipIcon : ImageVector? = null,
+    chipText : String? = null,
+    percentageText: String? = null
 ) {
 
     val progressColor =
-        if(progressIndicatorModel.isCompleted())
-            progressIndicatorModel.completedColor
+        if(progress == 100)
+            barCompletedColor
         else
-            progressIndicatorModel.progressColor
+            barProgressColor
 
     Column(
         modifier = modifier,
@@ -40,27 +49,29 @@ fun SQProgressBar(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
 
-            progressIndicatorModel.progressIndicatorText?.let {
+            percentageText?.let {
                 Text(
-                    text = it.text,
-                    color = if(progressIndicatorModel.isZero()) it.incompleteColor else it.progressColor
+                    text = it,
+                    color = if(progress == 0) textIncompleteColor else textProgressColor
                 )
             }
 
-            progressIndicatorModel.chipModel?.let {
-                SQChip(
-                    text = it.text,
-                    icon = it.icon,
-                    foregroundColor = it.foregroundColor,
-                    backgroundColor = it.backgroundColor
-                )
+            chipIcon?.let { chipIcon ->
+                chipText?.let { chipText ->
+                    SQChip(
+                        text = chipText,
+                        icon = chipIcon,
+                        foregroundColor = chipForegroundColor,
+                        backgroundColor = chipBackgroundColor
+                    )
+                }
             }
         }
 
         LinearProgressIndicator(
-            progress = progressIndicatorModel.progress/100f,
+            progress = progress/100f,
             color = progressColor,
-            backgroundColor = progressIndicatorModel.backgroundColor,
+            backgroundColor = barBackgroundColor,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(8.dp)
@@ -79,30 +90,28 @@ private fun DefaultPreview() {
         verticalArrangement = Arrangement.spacedBy(32.dp)
     ) {
         SQProgressBar(
-            progressIndicatorModel = ProgressIndicatorModel(
-                progress = 30,
-                progressIndicatorText = ProgressIndicatorText.FractionText(30),
-                chipModel = ChipModel(
-                    icon = Icons.Default.Home,
-                    text = "3min 55s",
-                    backgroundColor = lightOrange,
-                    foregroundColor = orange
-                )
-            ),
+            progress = 50,
+            barBackgroundColor = incompleteGray,
+            barCompletedColor = primaryGreen,
+            barProgressColor = progressBlue,
+            chipBackgroundColor = lightOrange,
+            chipForegroundColor = orange,
+            chipIcon = Icons.Default.Home,
+            chipText = "5min 55s",
+            percentageText = "3/10"
         )
 
         //TODO: Melhorar para nao precisar definir 2 progressos
         SQProgressBar(
-            progressIndicatorModel = ProgressIndicatorModel(
-                progress = 0,
-                progressIndicatorText = ProgressIndicatorText.CompletedExplicitText(0)
-            ),
+            progress = 0,
+            barBackgroundColor = incompleteGray,
+            barCompletedColor = primaryGreen,
+            barProgressColor = progressBlue,
+            percentageText = "You completed ${0}%"
         )
 
         SQProgressBar(
-            progressIndicatorModel = ProgressIndicatorModel(
-                progress = 100,
-            ),
+            progress = 100,
         )
 
     }
