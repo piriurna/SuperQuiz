@@ -1,4 +1,4 @@
-package com.piriurna.superquiz.presentation.composables
+package com.piriurna.common.composables.animations
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,10 +9,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.*
-import com.piriurna.superquiz.R
+import com.piriurna.common.R
 
 @Composable
-fun SQLoading(
+fun SQLottieLoading(
     modifier: Modifier = Modifier
 ) {
     val composition by rememberLottieComposition(
@@ -44,12 +44,12 @@ fun SQLoading(
 
 @Preview(showBackground = true)
 @Composable
-fun SQLoadingPreview() {
+fun SQLottieLoadingPreview() {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        SQLoading(Modifier.size(400.dp))
+        SQLottieLoading(Modifier.size(400.dp))
     }
 
 }
