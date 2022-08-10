@@ -19,6 +19,6 @@ data class AnswerEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
     val text: String,
-    val isCorrectAnswer : Boolean,
+    val isCorrectAnswer : Boolean = false,
     val questionId: Int
 )
