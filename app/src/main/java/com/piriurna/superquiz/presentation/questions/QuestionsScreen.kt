@@ -16,6 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.piriurna.domain.models.Answer
 import com.piriurna.domain.models.Question
 import com.piriurna.superquiz.presentation.composables.AnswerAlertPanel
 import com.piriurna.superquiz.presentation.composables.SQChip
@@ -45,7 +46,7 @@ fun QuestionsScreen(
         val percentage = ((pagerState.currentPage.toFloat()/(questions.size-1)) * 100).toInt()
 
         var selectedAnswer by remember {
-            mutableStateOf<String?>(null)
+            mutableStateOf<Answer?>(null)
         }
 
         var shouldShowAlert by remember {
@@ -75,8 +76,8 @@ fun QuestionsScreen(
                     SQQuestionCard(
                         question = questions[index],
                         questionIndex = index,
-                        onAnswerSelected = {text ->
-                            selectedAnswer = text
+                        onAnswerSelected = { answer ->
+                            selectedAnswer = answer
                         },
                         isEnabled = !isAnswered
                     )

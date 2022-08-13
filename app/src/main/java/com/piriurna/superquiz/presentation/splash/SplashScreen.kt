@@ -19,8 +19,6 @@ fun SplashScreen(
 ) {
     val splashViewModel : SplashViewModel = hiltViewModel()
 
-    //todo: fazer e colocar aqui o composable apenas do logo
-
     val state = splashViewModel.state.value
 
 

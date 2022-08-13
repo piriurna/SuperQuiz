@@ -4,30 +4,31 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.piriurna.domain.models.Answer
 import com.piriurna.domain.models.Question
 import com.piriurna.superquiz.presentation.questions.composables.SQAnswerRow
 
 @Composable
 fun SQToggleRadioGroup(
     modifier: Modifier = Modifier,
-    options: List<String>,
-    onAnswerSelected : (String) -> Unit = {},
+    options: List<Answer>,
+    onAnswerSelected : (Answer) -> Unit = {},
     isEnabled: Boolean
 ) {
 
-    var selected by remember { mutableStateOf<String?>(null) }
+    var selected by remember { mutableStateOf<Answer?>(null) }
 
-    val onSelectionChange = { text: String ->
+    val onSelectionChange = { answer: Answer ->
         if(isEnabled) {
-            selected = text
-            onAnswerSelected.invoke(text)
+            selected = answer
+            onAnswerSelected.invoke(answer)
         }
     }
 
     Column(modifier = modifier) {
         options.forEach {
             SQAnswerRow(
-                text = it,
+                answer = it,
                 selected = selected == it,
                 onClick = onSelectionChange,
                 isEnabled = true

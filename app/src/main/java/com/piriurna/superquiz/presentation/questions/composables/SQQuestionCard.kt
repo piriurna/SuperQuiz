@@ -8,9 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.piriurna.common.composables.cards.SQCard
+import com.piriurna.domain.models.Answer
 import com.piriurna.domain.models.Question
-import com.piriurna.superquiz.presentation.questions.models.AnswerSelectedListener
-import com.piriurna.superquiz.presentation.composables.SQCard
 import com.piriurna.superquiz.presentation.composables.SQToggleRadioGroup
 
 @Composable
@@ -18,7 +17,7 @@ fun SQQuestionCard(
     modifier: Modifier = Modifier,
     question: Question,
     questionIndex : Int,
-    onAnswerSelected : (String) -> Unit = {},
+    onAnswerSelected : (Answer) -> Unit = {},
     isEnabled : Boolean
 ) {
     val answers = question.allAnswers

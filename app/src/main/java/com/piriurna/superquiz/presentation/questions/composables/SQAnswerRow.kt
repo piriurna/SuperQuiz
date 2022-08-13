@@ -9,13 +9,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import com.piriurna.domain.models.Answer
 
 @Composable
 fun SQAnswerRow(
     modifier: Modifier = Modifier,
-    text: String,
+    answer: Answer,
     selected : Boolean,
-    onClick : (String) -> Unit,
+    onClick : (Answer) -> Unit,
     isEnabled : Boolean
 ) {
     Row(
@@ -25,13 +26,13 @@ fun SQAnswerRow(
         RadioButton(
             selected = selected,
             onClick = {
-                onClick(text)
+                onClick(answer)
             },
             enabled = isEnabled
         )
 
         Text(
-            text = text,
+            text = answer.description,
             fontWeight = FontWeight.W500
         )
     }
@@ -41,5 +42,5 @@ fun SQAnswerRow(
 @Preview(showBackground = true)
 @Composable
 private fun SQAnswerRowPreview() {
-    SQAnswerRow(text = "text", selected = false, onClick = {}, isEnabled = true)
+    SQAnswerRow(answer = Answer.getFirstQuestionMockAnswers()[0], selected = false, onClick = {}, isEnabled = true)
 }

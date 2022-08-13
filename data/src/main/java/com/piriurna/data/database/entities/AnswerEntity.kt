@@ -1,9 +1,6 @@
 package com.piriurna.data.database.entities
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.ForeignKey
-import androidx.room.PrimaryKey
+import androidx.room.*
 
 @Entity(tableName = "answer",
     foreignKeys = [
@@ -20,5 +17,6 @@ data class AnswerEntity(
     val id: Int = 0,
     val text: String,
     val isCorrectAnswer : Boolean = false,
+    @ColumnInfo(index = true)
     val questionId: Int
 )

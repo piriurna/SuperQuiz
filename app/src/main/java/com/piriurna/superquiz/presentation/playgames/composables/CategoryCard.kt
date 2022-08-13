@@ -15,8 +15,6 @@ import com.piriurna.common.composables.cards.SQCard
 import com.piriurna.domain.models.Category
 import com.piriurna.superquiz.mappers.getImage
 import com.piriurna.superquiz.presentation.composables.SQProgressBar
-import com.piriurna.superquiz.presentation.composables.models.ProgressIndicatorModel
-import com.piriurna.superquiz.presentation.composables.models.ProgressIndicatorText
 
 @Composable
 fun CategoryCard(

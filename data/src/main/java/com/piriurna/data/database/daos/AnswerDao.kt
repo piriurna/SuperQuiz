@@ -1,10 +1,8 @@
 package com.piriurna.data.database.daos
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Update
+import androidx.room.*
 import com.piriurna.data.database.entities.AnswerEntity
+import com.piriurna.data.database.models.QuestionWithAnswers
 
 @Dao
 interface AnswerDao {
@@ -13,4 +11,8 @@ interface AnswerDao {
 
     @Update
     suspend fun updateAnswer(updatedAnswer : AnswerEntity)
+
+//    @Transaction
+//    @Query("SELECT * FROM ANSWER")
+//    fun getQuestionAnswers(): List<QuestionWithAnswers>
 }

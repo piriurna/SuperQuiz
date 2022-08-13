@@ -2,6 +2,7 @@ package com.piriurna.domain.usecases
 
 import com.piriurna.domain.ApiNetworkResponse
 import com.piriurna.domain.Resource
+import com.piriurna.domain.models.Answer
 import com.piriurna.domain.models.Category
 import com.piriurna.domain.models.LoadTriviaType
 import com.piriurna.domain.models.Question
@@ -17,9 +18,9 @@ class LoadTriviaDataUseCase @Inject constructor(
     operator fun invoke() : Flow<Resource<LoadTriviaType>> = flow {
         emit(Resource.Loading())
 
-        val firstInstall = false
-        val shouldFetchNewCategories = false
-        if(firstInstall){
+        val firstInstall = true
+        val shouldFetchNewCategories = true
+        if(firstInstall){ //First install user has no data in database
             val categoriesResult : ApiNetworkResponse<List<Category>> = triviaRepository.getCategories()
 
             categoriesResult.data?.let { data ->
@@ -29,10 +30,24 @@ class LoadTriviaDataUseCase @Inject constructor(
                     val questionsResult : ApiNetworkResponse<List<Question>> = triviaRepository.getCategoryQuestions(category.id)
 
                     questionsResult.data?.let { questionsData ->
-                        val ids = triviaRepository.insertCategoryQuestionsInDb(questionsData)
-                        ids
+                        val answersForQuestions : Map<String, List<Answer>> = questionsData.map {
+                            return@map (it.description to it.allAnswers)
+                        }.toMap()
+                        triviaRepository.insertCategoryQuestionsInDb(questionsData)
+
+                        val questionsFromDb = triviaRepository.getCategoryQuestionsFromDb(questionsData.first().categoryId)
+
+                        answersForQuestions.forEach { (questionText, answers) ->
+
+                            val questionId = questionsFromDb.firstOrNull { it.description == questionText }?.id
+
+                            if(questionId != null) {
+                                triviaRepository.insertAnswersInDb(answers, questionId)
+                            }
+                        }
                     }?: kotlin.run {
-                        emit(Resource.Error(message = categoriesResult.error.message!!))
+                        if(questionsResult.data == null) //TODO: VER COM GUSTAVO, ERRO NOS TESTES SEM O IF, MAS NA APP FUNCIONA SEMPRE...
+                            emit(Resource.Error(message = questionsResult.error.message?:"${category.id} error with question result ${questionsResult.data}"))
                     }
                 }
 
@@ -40,8 +55,8 @@ class LoadTriviaDataUseCase @Inject constructor(
             }?: kotlin.run {
                 emit(Resource.Error(message = categoriesResult.error.message!!))
             }
-        } else {
-            if(shouldFetchNewCategories) {
+        } else { // User entering the app for next times, its supposed for them to have data
+            if(shouldFetchNewCategories) { // Should go look if the service has new categories that don't exist in the app yet
                 val categoriesResult : ApiNetworkResponse<List<Category>> = triviaRepository.getCategories()
 
                 categoriesResult.data?.let { data ->
@@ -49,12 +64,34 @@ class LoadTriviaDataUseCase @Inject constructor(
                         return@filterNot triviaRepository.getDbCategories().any { it.id == apiCategory.id }
                     }
 
-                    if(nonExistingCategories.isNullOrEmpty()) {
+                    if(nonExistingCategories.isEmpty()) { //Does not have new categories in service
                         emit(Resource.Success(LoadTriviaType.NO_CATEGORIES_UPDATED))
                     } else {
-                        //TODO: Buscar todas as perguntas destas categorias novas
-                        triviaRepository.insertCategoriesInDb(nonExistingCategories)//
-                        //TODO: Fazer o insert das perguntas na base de dados
+                        triviaRepository.insertCategoriesInDb(nonExistingCategories)
+                        nonExistingCategories.forEach { category ->
+                            val questionsResult : ApiNetworkResponse<List<Question>> = triviaRepository.getCategoryQuestions(category.id)
+
+                            questionsResult.data?.let { questionsData ->
+                                val answersForQuestions : Map<String, List<Answer>> = questionsData.map {
+                                    return@map (it.description to it.allAnswers)
+                                }.toMap()
+                                triviaRepository.insertCategoryQuestionsInDb(questionsData)
+
+                                val questionsFromDb = triviaRepository.getCategoryQuestionsFromDb(questionsData.first().categoryId)
+
+                                answersForQuestions.forEach { (questionText, answers) ->
+
+                                    val questionId = questionsFromDb.firstOrNull { it.description == questionText }?.id
+
+                                    if(questionId != null) {
+                                        triviaRepository.insertAnswersInDb(answers, questionId)
+                                    }
+                                }
+                            }?: kotlin.run {
+                                if(questionsResult.data == null)
+                                    emit(Resource.Error(message = questionsResult.error.message?:"error"))
+                            }
+                        }
                         emit(Resource.Success(LoadTriviaType.CATEGORIES_UPDATED))
                     }
 
@@ -62,67 +99,45 @@ class LoadTriviaDataUseCase @Inject constructor(
                     emit(Resource.Error(message = categoriesResult.error.message!!))
                 }
             } else {
-                if(triviaRepository.getDbCategories().isNullOrEmpty()){
+                if(triviaRepository.getDbCategories().isEmpty()){ //Should not go look for new categories but the app somehow doesn't have any data in the database
                     val categoriesResult : ApiNetworkResponse<List<Category>> = triviaRepository.getCategories()
 
                     categoriesResult.data?.let { data ->
                         triviaRepository.insertCategoriesInDb(data)
-                        //TODO: Tratar das perguntas dessa categoria
-                        emit(Resource.Success(LoadTriviaType.NO_STATE))
+
+                        data.forEach { category ->
+                            val questionsResult : ApiNetworkResponse<List<Question>> = triviaRepository.getCategoryQuestions(category.id)
+
+                            questionsResult.data?.let { questionsData ->
+                                val answersForQuestions : Map<String, List<Answer>> = questionsData.map {
+                                    return@map (it.description to it.allAnswers)
+                                }.toMap() //TODO: REFACTOR
+
+                                triviaRepository.insertCategoryQuestionsInDb(questionsData)
+
+                                val questionsFromDb = triviaRepository.getCategoryQuestionsFromDb(questionsData.first().categoryId)
+
+                                answersForQuestions.forEach { (questionText, answers) ->
+
+                                    val questionId = questionsFromDb.firstOrNull { it.description == questionText }?.id
+
+                                    if(questionId != null) {
+                                        triviaRepository.insertAnswersInDb(answers, questionId)
+                                    }
+                                }
+                            }?: kotlin.run {
+                                emit(Resource.Error(message = questionsResult.error.message?:"error"))
+                            }
+                        }
+
+                        emit(Resource.Success(LoadTriviaType.CATEGORIES_UPDATED))
                     }?: kotlin.run {
                         emit(Resource.Error(message = categoriesResult.error.message!!))
                     }
-                } else {
-                    emit(Resource.Success(LoadTriviaType.NO_STATE))
+                } else { // Normal flow, don't need to do anything different
+                    emit(Resource.Success(LoadTriviaType.NO_CATEGORIES_UPDATED))
                 }
             }
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        //Primeira instalacao da app
-        //Ir buscar à api as categorias e suas respectivas perguntas
-        //gravar na base de dados essa info
-        //enviar sucesso
-
-        //Se houver erro da api
-        //enviar erro
-
-
-
-        //Restantes aberturas da app
-        //Verificar se ja temos dados na base de dados
-        //if true
-        //enviar sucesso
-        //if false
-        //seguir o fluxo da primeira instalacao
-
-
-
-
-        //De 3 a 3 dias verificar se temos novas categorias na api
-        //if true
-        //ir buscar todas as categorias que ainda nao existem na app na base de dados
-        //fazer o pedido das perguntas destas categorias novas
-        //gravar tudo na base de dados
-        //
-        //if false
-        //enviar sucesso
-
-
-
-    }
+}
 }
