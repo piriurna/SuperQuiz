@@ -8,6 +8,10 @@ plugins {
 android {
     compileSdk 32
 
+    packagingOptions {
+        pickFirst  '**'
+    }
+
     defaultConfig {
         applicationId "com.piriurna.superquiz"
         minSdk 24

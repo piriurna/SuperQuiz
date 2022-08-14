@@ -33,6 +33,10 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion rootProject.versions.compose
     }
+
+    packagingOptions {
+        pickFirst  '**'
+    }
 }
 
 dependencies {
