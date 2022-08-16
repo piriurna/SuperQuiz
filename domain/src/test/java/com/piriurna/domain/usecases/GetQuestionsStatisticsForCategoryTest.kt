@@ -1,7 +1,6 @@
 package com.piriurna.domain.usecases
 
 import BaseUseCaseTest
-import com.piriurna.domain.ApiNetworkResponse
 import com.piriurna.domain.Resource
 import com.piriurna.domain.models.Answer
 import com.piriurna.domain.models.Category
@@ -15,15 +14,15 @@ import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
-class GetAnswersForCategoryUseCaseTest : BaseUseCaseTest() {
+class GetQuestionsStatisticsForCategoryTest : BaseUseCaseTest() {
 
-    private lateinit var getAnswersForCategoryUseCase: GetAnswersForCategoryUseCase
+    private lateinit var getQuestionsStatisticsForCategory: GetQuestionsStatisticsForCategory
     private lateinit var triviaRepository: TriviaRepository
 
     @Before
     fun setUp() {
         triviaRepository = mock()
-        getAnswersForCategoryUseCase = GetAnswersForCategoryUseCase(triviaRepository = triviaRepository)
+        getQuestionsStatisticsForCategory = GetQuestionsStatisticsForCategory(triviaRepository = triviaRepository)
     }
 
 
@@ -43,7 +42,7 @@ class GetAnswersForCategoryUseCaseTest : BaseUseCaseTest() {
 
 
         // Execute the use-case
-        val emissions = getAnswersForCategoryUseCase(category.id).toList()
+        val emissions = getQuestionsStatisticsForCategory(category.id).toList()
         var result = (emissions[0] as Resource)
 
         assert(result is Resource.Loading)

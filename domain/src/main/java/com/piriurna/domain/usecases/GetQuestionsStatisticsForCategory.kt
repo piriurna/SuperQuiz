@@ -8,17 +8,15 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class GetAnswersForCategoryUseCase @Inject constructor(
+class GetQuestionsStatisticsForCategory @Inject constructor(
     private val triviaRepository: TriviaRepository
 ) {
 
-    operator fun invoke(categoryId : Int) : Flow<Resource<List<Answer>>> = flow {
+    operator fun invoke(categoryId : Int) : Flow<Resource<List<Question>>> = flow {
         emit(Resource.Loading())
 
-        val categories : List<Question> = triviaRepository.getCategoryQuestionsFromDb(categoryId)
+        val questions : List<Question> = triviaRepository.getCategoryQuestionsFromDb(categoryId)
 
-        val answers = categories.flatMap { it.allAnswers }
-
-        emit(Resource.Success(answers))
+        emit(Resource.Success(questions))
     }
 }
