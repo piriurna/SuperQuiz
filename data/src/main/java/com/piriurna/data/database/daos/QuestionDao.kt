@@ -9,8 +9,13 @@ interface QuestionDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertQuestions(questions: List<QuestionEntity>) : List<Long>
 
-    @Query("SELECT * FROM QUESTION WHERE categoryId =:categoryId")
+    @Transaction
+    @Query("SELECT * FROM QUESTION WHERE ownerCategoryId =:categoryId")
     suspend fun getQuestions(categoryId: Int): List<QuestionWithAnswers>?
+
+    @Transaction
+    @Query("SELECT * FROM QUESTION WHERE questionId IN (:ids)")
+    suspend fun getQuestions(ids: List<Long>): List<QuestionWithAnswers>?
 
     @Update
     suspend fun updateQuestion(questionUpdated : QuestionEntity)
