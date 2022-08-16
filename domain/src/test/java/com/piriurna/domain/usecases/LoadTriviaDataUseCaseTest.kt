@@ -49,7 +49,6 @@ class LoadTriviaDataUseCaseTest : BaseUseCaseTest(){
                 type = QuestionType.MULTIPLE_CHOICE,
                 difficulty = DifficultyType.MEDIUM,
                 description = "Two angles are complementary, if the sum of their measures is",
-                correctAnswer = Answer.getFirstQuestionMockAnswers()[0],
                 allAnswers = Answer.getFirstQuestionMockAnswers()
             ),
             Question(
@@ -58,7 +57,6 @@ class LoadTriviaDataUseCaseTest : BaseUseCaseTest(){
                 type = QuestionType.MULTIPLE_CHOICE,
                 difficulty = DifficultyType.MEDIUM,
                 description = "With which team did Michael Schumacher make his Formula One debut at the 1991 Belgian Grand Prix?",
-                correctAnswer = Answer.getSecondQuestionMockAnswers()[0],
                 allAnswers = Answer.getSecondQuestionMockAnswers()
             ),
         )
@@ -70,7 +68,6 @@ class LoadTriviaDataUseCaseTest : BaseUseCaseTest(){
                 type = QuestionType.MULTIPLE_CHOICE,
                 difficulty = DifficultyType.MEDIUM,
                 description = "Two angles are complementary, if the sum of their measures is",
-                correctAnswer = Answer.getFirstQuestionMockAnswers()[0],
                 allAnswers = Answer.getFirstQuestionMockAnswers()
             ),
             Question(
@@ -79,7 +76,6 @@ class LoadTriviaDataUseCaseTest : BaseUseCaseTest(){
                 type = QuestionType.MULTIPLE_CHOICE,
                 difficulty = DifficultyType.MEDIUM,
                 description = "With which team did Michael Schumacher make his Formula One debut at the 1991 Belgian Grand Prix?",
-                correctAnswer = Answer.getSecondQuestionMockAnswers()[0],
                 allAnswers = Answer.getSecondQuestionMockAnswers()
             ),
         )

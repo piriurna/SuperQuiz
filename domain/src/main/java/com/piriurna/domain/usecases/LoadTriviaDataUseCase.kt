@@ -32,10 +32,11 @@ class LoadTriviaDataUseCase @Inject constructor(
                     questionsResult.data?.let { questionsData ->
                         val answersForQuestions : Map<String, List<Answer>> = questionsData.map {
                             return@map (it.description to it.allAnswers)
-                        }.toMap()
-                        triviaRepository.insertCategoryQuestionsInDb(questionsData)
+                        }.toMap() //TODO: REFACTOR
 
-                        val questionsFromDb = triviaRepository.getCategoryQuestionsFromDb(questionsData.first().categoryId)
+                        val ids = triviaRepository.insertCategoryQuestionsInDb(questionsData)
+
+                        val questionsFromDb = triviaRepository.getCategoryQuestionsFromIdList(ids)
 
                         answersForQuestions.forEach { (questionText, answers) ->
 
@@ -75,9 +76,9 @@ class LoadTriviaDataUseCase @Inject constructor(
                                 val answersForQuestions : Map<String, List<Answer>> = questionsData.map {
                                     return@map (it.description to it.allAnswers)
                                 }.toMap()
-                                triviaRepository.insertCategoryQuestionsInDb(questionsData)
+                                val ids = triviaRepository.insertCategoryQuestionsInDb(questionsData)
 
-                                val questionsFromDb = triviaRepository.getCategoryQuestionsFromDb(questionsData.first().categoryId)
+                                val questionsFromDb = triviaRepository.getCategoryQuestionsFromIdList(ids)
 
                                 answersForQuestions.forEach { (questionText, answers) ->
 
@@ -113,9 +114,9 @@ class LoadTriviaDataUseCase @Inject constructor(
                                     return@map (it.description to it.allAnswers)
                                 }.toMap() //TODO: REFACTOR
 
-                                triviaRepository.insertCategoryQuestionsInDb(questionsData)
+                                val ids = triviaRepository.insertCategoryQuestionsInDb(questionsData)
 
-                                val questionsFromDb = triviaRepository.getCategoryQuestionsFromDb(questionsData.first().categoryId)
+                                val questionsFromDb = triviaRepository.getCategoryQuestionsFromIdList(ids)
 
                                 answersForQuestions.forEach { (questionText, answers) ->
 

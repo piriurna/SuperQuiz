@@ -50,15 +50,17 @@ class TriviaRepositoryImpl @Inject constructor(
 
 
     override suspend fun insertCategoryQuestionsInDb(questions: List<Question>): List<Long> {
-
-        val questionsIds = questionDao.insertQuestions(questions.toQuestionEntity())
-
-        return questionsIds
+        return questionDao.insertQuestions(questions.toQuestionEntity())
     }
 
 
     override suspend fun getCategoryQuestionsFromDb(categoryId: Int): List<Question> {
         return questionDao.getQuestions(categoryId)!!.toQuestion()
+    }
+
+
+    override suspend fun getCategoryQuestionsFromIdList(ids: List<Long>): List<Question> {
+        return questionDao.getQuestions(ids)!!.toQuestion()
     }
 
     override suspend fun getDbCategories(): List<Category> {

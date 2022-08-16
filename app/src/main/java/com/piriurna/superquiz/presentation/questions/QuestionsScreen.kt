@@ -117,7 +117,7 @@ fun QuestionsScreen(
                 }
 
                 isAnswered = true
-                shouldShowAlert = questions[pagerState.currentPage].correctAnswer == selectedAnswer
+                shouldShowAlert = questions[pagerState.currentPage].getCorrectAnswer() == selectedAnswer
             } },
             enabled = selectedAnswer != null,
             modifier= Modifier

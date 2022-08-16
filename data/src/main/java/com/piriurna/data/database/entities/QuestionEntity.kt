@@ -11,13 +11,13 @@ import com.piriurna.domain.models.QuestionType
     foreignKeys = [
         ForeignKey(
             entity = CategoryEntity::class,
-            parentColumns = arrayOf("id"),
-            childColumns = arrayOf("categoryId"),
+            parentColumns = arrayOf("categoryId"),
+            childColumns = arrayOf("ownerCategoryId"),
             onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
             entity = AnswerEntity::class,
-            parentColumns = arrayOf("id"),
+            parentColumns = arrayOf("answerId"),
             childColumns = arrayOf("chosenAnswerId"),
             onDelete = ForeignKey.CASCADE
         )
@@ -25,9 +25,9 @@ import com.piriurna.domain.models.QuestionType
 )
 data class QuestionEntity(
     @ColumnInfo(index = true)
-    val categoryId: Int,
+    val ownerCategoryId: Int,
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val questionId: Int = 0,
     val difficulty: DifficultyType,
     val type: QuestionType,
     val description: String,

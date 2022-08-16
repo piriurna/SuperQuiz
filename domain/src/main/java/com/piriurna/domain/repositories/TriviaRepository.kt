@@ -16,6 +16,8 @@ interface TriviaRepository {
 
     suspend fun getCategoryQuestionsFromDb(categoryId: Int) : List<Question>
 
+    suspend fun getCategoryQuestionsFromIdList(ids: List<Long>) : List<Question>
+
     suspend fun getDbCategories() : List<Category>
 
     suspend fun insertCategoriesInDb(categories: List<Category>)

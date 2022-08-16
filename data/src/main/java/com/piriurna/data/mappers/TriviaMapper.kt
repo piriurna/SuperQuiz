@@ -19,7 +19,7 @@ fun CategoryDto.toCategory() : List<Category> {
 
 fun CategoryEntity.toCategory() : Category {
     return Category(
-        id = this.id,
+        id = this.categoryId,
         name = this.name
     )
 }
@@ -27,7 +27,7 @@ fun CategoryEntity.toCategory() : Category {
 
 fun Category.toCategoryEntity() : CategoryEntity {
     return CategoryEntity(
-        id = this.id,
+        categoryId = this.id,
         name = this.name
     )
 }
@@ -50,7 +50,6 @@ fun QuizDto.toQuestions(categoryId: Int) : List<Question> {
         return@map Question(
             id = 0,
             categoryId = categoryId,
-            correctAnswer = allAnswers.first{ it.isCorrectAnswer },
             difficulty = DifficultyType.convertFromString(questionDto.difficulty),
             allAnswers = allAnswers,
             description = questionDto.question,
@@ -62,10 +61,11 @@ fun QuizDto.toQuestions(categoryId: Int) : List<Question> {
 
 fun Question.toQuestionEntity() : QuestionEntity {
     return QuestionEntity(
-        categoryId = this.categoryId,
+        ownerCategoryId = this.categoryId,
         difficulty = this.difficulty,
         type = this.type,
-        description = this.description
+        description = this.description,
+        chosenAnswerId = null
     )
 }
 
@@ -76,16 +76,14 @@ fun List<Question>.toQuestionEntity() : List<QuestionEntity> {
 }
 
 fun QuestionWithAnswers.toQuestion() : Question {
-    val correctAnswer : AnswerEntity = this.answers.firstOrNull { it.isCorrectAnswer }?:AnswerEntity(id = 0, isCorrectAnswer = true, text = "", questionId = this.question.id)
-
     return Question(
-        id = this.question.id,
-        categoryId = this.question.categoryId,
+        id = this.question.questionId,
+        categoryId = this.question.ownerCategoryId,
         difficulty = this.question.difficulty,
         type = this.question.type,
         description = this.question.description,
-        correctAnswer = correctAnswer.toAnswer(),
-        allAnswers = this.answers.toAnswer()
+        allAnswers = this.answers.toAnswer(),
+        chosenAnswer = this.chosenAnswer?.toAnswer()
     )
 }
 
@@ -99,7 +97,7 @@ fun Answer.toAnswerEntity(questionId: Int) : AnswerEntity {
     return AnswerEntity(
         text = this.description,
         isCorrectAnswer = this.isCorrectAnswer,
-        questionId = questionId
+        ownerQuestionId = questionId
     )
 }
 
@@ -111,7 +109,7 @@ fun List<Answer>.toAnswerEntity(questionId: Int) : List<AnswerEntity> {
 
 fun AnswerEntity.toAnswer() : Answer {
     return Answer(
-        id = this.id,
+        id = this.answerId,
         description = this.text,
         isCorrectAnswer = this.isCorrectAnswer
     )

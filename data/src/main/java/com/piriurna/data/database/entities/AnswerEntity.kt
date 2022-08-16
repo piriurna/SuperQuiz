@@ -6,17 +6,17 @@ import androidx.room.*
     foreignKeys = [
         ForeignKey(
             entity = QuestionEntity::class,
-            parentColumns = arrayOf("id"),
-            childColumns = arrayOf("questionId"),
+            parentColumns = arrayOf("questionId"),
+            childColumns = arrayOf("ownerQuestionId"),
             onDelete = ForeignKey.CASCADE
         ),
     ]
 )
 data class AnswerEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val answerId: Int = 0,
     val text: String,
     val isCorrectAnswer : Boolean = false,
     @ColumnInfo(index = true)
-    val questionId: Int
+    val ownerQuestionId: Int
 )
