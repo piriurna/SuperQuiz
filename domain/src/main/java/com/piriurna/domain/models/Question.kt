@@ -30,7 +30,7 @@ data class Question(
             ),
             Question(
                 id = 1,
-                categoryId = 10,
+                categoryId = 9,
                 type = QuestionType.MULTIPLE_CHOICE,
                 difficulty = DifficultyType.MEDIUM,
                 description = "With which team did Michael Schumacher make his Formula One debut at the 1991 Belgian Grand Prix?",
@@ -38,6 +38,22 @@ data class Question(
             ),
             Question(
                 id = 2,
+                categoryId = 9,
+                type = QuestionType.MULTIPLE_CHOICE,
+                difficulty = DifficultyType.EASY,
+                description = "In what year was the first \"Mass Effect\" game released?",
+                allAnswers = Answer.getThirdQuestionMockAnswers()
+            ),
+            Question(
+                id = 3,
+                categoryId = 10,
+                type = QuestionType.MULTIPLE_CHOICE,
+                difficulty = DifficultyType.MEDIUM,
+                description = "With which team did Michael Schumacher make his Formula One debut at the 1991 Belgian Grand Prix?",
+                allAnswers = Answer.getSecondQuestionMockAnswers()
+            ),
+            Question(
+                id = 4,
                 categoryId = 11,
                 type = QuestionType.MULTIPLE_CHOICE,
                 difficulty = DifficultyType.EASY,
