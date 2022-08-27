@@ -65,7 +65,7 @@ fun Question.toQuestionEntity() : QuestionEntity {
         difficulty = this.difficulty,
         type = this.type,
         description = this.description,
-        chosenAnswerId = null
+        chosenAnswerId = this.chosenAnswer?.id
     )
 }
 

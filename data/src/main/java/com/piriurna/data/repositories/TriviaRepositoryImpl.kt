@@ -48,6 +48,10 @@ class TriviaRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getQuestionFromDb(questionId: Int): Question? {
+        return questionDao.getQuestion(questionId.toLong())?.toQuestion()
+    }
+
 
     override suspend fun insertCategoryQuestionsInDb(questions: List<Question>): List<Long> {
         return questionDao.insertQuestions(questions.toQuestionEntity())
@@ -78,6 +82,14 @@ class TriviaRepositoryImpl @Inject constructor(
 
     override suspend fun insertAnswersInDb(answers: List<Answer>, questionId: Int) {
         answerDao.insertAnswers(answers.toAnswerEntity(questionId))
+    }
+
+    override suspend fun updateQuestion(question: Question) : Int {
+        question.chosenAnswer?.let {
+            return questionDao.updateQuestion(question.id.toLong(), it.id)
+        }
+
+        return 0
     }
 
 }

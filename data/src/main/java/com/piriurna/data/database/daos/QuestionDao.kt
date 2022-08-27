@@ -17,6 +17,10 @@ interface QuestionDao {
     @Query("SELECT * FROM QUESTION WHERE questionId IN (:ids)")
     suspend fun getQuestions(ids: List<Long>): List<QuestionWithAnswers>?
 
-    @Update
-    suspend fun updateQuestion(questionUpdated : QuestionEntity)
+    @Transaction
+    @Query("SELECT * FROM QUESTION WHERE questionId =:questionId")
+    suspend fun getQuestion(questionId: Long): QuestionWithAnswers?
+
+    @Query("UPDATE question SET chosenAnswerId =:chosenAnswerId WHERE questionId =:questionId")
+    suspend fun updateQuestion(questionId: Long, chosenAnswerId : Int) : Int
 }

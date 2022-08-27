@@ -128,17 +128,19 @@ fun QuestionsScreen(
 
 
             Button(
-                onClick = { scope.launch {
-                    if(isAnswered) {
-                        isAnswered = false
-                        val nextPage = min(pagerState.pageCount - 1, pagerState.currentPage + 1)
-                        pagerState.animateScrollToPage(nextPage)
+                onClick = {
+                    scope.launch {
+                        if(isAnswered) {
+                            isAnswered = false
+                            val nextPage = min(pagerState.pageCount - 1, pagerState.currentPage + 1)
+                            pagerState.animateScrollToPage(nextPage)
+                        } else {
+                            viewModel.triggerSaveAnswer(questions[pagerState.currentPage].id, selectedAnswer!!)
+                            isAnswered = true
+                        }
                         shouldShowAlert = questions[pagerState.currentPage].getCorrectAnswer() == selectedAnswer
-                        return@launch
                     }
-                    isAnswered = true
-                    shouldShowAlert = questions[pagerState.currentPage].getCorrectAnswer() == selectedAnswer
-                } },
+                },
                 enabled = selectedAnswer != null,
                 modifier= Modifier
                     .fillMaxWidth(),
