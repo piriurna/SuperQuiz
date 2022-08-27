@@ -18,6 +18,8 @@ data class Question(
 
     fun isQuestionAnswered() = chosenAnswer != null
 
+    fun isQuestionAnsweredCorrectly() = chosenAnswer == getCorrectAnswer()
+
     companion object {
         val mockQuestions = listOf(
             Question(
