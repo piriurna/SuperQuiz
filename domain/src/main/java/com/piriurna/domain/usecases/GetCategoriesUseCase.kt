@@ -16,6 +16,14 @@ class GetCategoriesUseCase @Inject constructor(
 
         val categories : List<Category> = triviaRepository.getDbCategories()
 
-        emit(Resource.Success(categories))
+        val categoriesWithCompletionRate = categories.map { category ->
+            val questions = triviaRepository.getCategoryQuestionsFromDb(category.id)
+            val completionRate = (questions.filter { it.isQuestionAnswered() }.size.toFloat() / questions.size.toFloat()) * 100f
+            return@map category.copy(
+                completionRate = completionRate.toInt()
+            )
+        }
+
+        emit(Resource.Success(categoriesWithCompletionRate))
     }
 }
