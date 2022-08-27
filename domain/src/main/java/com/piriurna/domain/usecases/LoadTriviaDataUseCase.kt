@@ -18,8 +18,8 @@ class LoadTriviaDataUseCase @Inject constructor(
     operator fun invoke() : Flow<Resource<LoadTriviaType>> = flow {
         emit(Resource.Loading())
 
-        val firstInstall = true
-        val shouldFetchNewCategories = true
+        val firstInstall = false
+        val shouldFetchNewCategories = false
         if(firstInstall){ //First install user has no data in database
             val categoriesResult : ApiNetworkResponse<List<Category>> = triviaRepository.getCategories()
 
