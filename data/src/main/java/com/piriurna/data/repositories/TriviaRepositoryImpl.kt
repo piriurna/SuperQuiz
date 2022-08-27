@@ -63,7 +63,7 @@ class TriviaRepositoryImpl @Inject constructor(
     }
 
 
-    override suspend fun getCategoryQuestionsFromIdList(ids: List<Long>): List<Question> {
+    override suspend fun getQuestionsFromIdList(ids: List<Long>): List<Question> {
         return questionDao.getQuestions(ids)!!.toQuestion()
     }
 

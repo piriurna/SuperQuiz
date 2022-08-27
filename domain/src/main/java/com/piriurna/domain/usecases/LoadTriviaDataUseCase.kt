@@ -36,7 +36,7 @@ class LoadTriviaDataUseCase @Inject constructor(
 
                         val ids = triviaRepository.insertCategoryQuestionsInDb(questionsData)
 
-                        val questionsFromDb = triviaRepository.getCategoryQuestionsFromIdList(ids)
+                        val questionsFromDb = triviaRepository.getQuestionsFromIdList(ids)
 
                         answersForQuestions.forEach { (questionText, answers) ->
 
@@ -78,7 +78,7 @@ class LoadTriviaDataUseCase @Inject constructor(
                                 }.toMap()
                                 val ids = triviaRepository.insertCategoryQuestionsInDb(questionsData)
 
-                                val questionsFromDb = triviaRepository.getCategoryQuestionsFromIdList(ids)
+                                val questionsFromDb = triviaRepository.getQuestionsFromIdList(ids)
 
                                 answersForQuestions.forEach { (questionText, answers) ->
 
@@ -116,7 +116,7 @@ class LoadTriviaDataUseCase @Inject constructor(
 
                                 val ids = triviaRepository.insertCategoryQuestionsInDb(questionsData)
 
-                                val questionsFromDb = triviaRepository.getCategoryQuestionsFromIdList(ids)
+                                val questionsFromDb = triviaRepository.getQuestionsFromIdList(ids)
 
                                 answersForQuestions.forEach { (questionText, answers) ->
 
