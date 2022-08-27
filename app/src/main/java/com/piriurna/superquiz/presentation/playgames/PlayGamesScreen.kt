@@ -2,6 +2,7 @@ package com.piriurna.superquiz.presentation.playgames
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
@@ -21,14 +22,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.piriurna.common.composables.scaffold.SQScaffold
 import com.piriurna.domain.models.Category
+import com.piriurna.superquiz.presentation.navigation.HomeDestinationScreen
+import com.piriurna.superquiz.presentation.navigation.HomeNavigationGraph
 import com.piriurna.superquiz.presentation.playgames.composables.CategoryCard
 import com.piriurna.superquiz.ui.theme.*
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun PlayGamesScreen() {
+fun PlayGamesScreen(
+    navController: NavController = rememberNavController()
+) {
     val playGamesViewModel : PlayGamesViewModel = hiltViewModel()
 
     val state = playGamesViewModel.state.value
@@ -86,7 +93,13 @@ fun PlayGamesScreen() {
                     cells = GridCells.Fixed(2),
                     content = {
                         items(state.categories.size) { index ->
-                            CategoryCard(category = state.categories[index])
+                            val category = state.categories[index]
+                            CategoryCard(
+                                modifier = Modifier.clickable {
+                                    navController.navigate(route = HomeDestinationScreen.CategoryQuestions.route + "/${category.id}")
+                                },
+                                category = category
+                            )
                         }
                     }
                 )

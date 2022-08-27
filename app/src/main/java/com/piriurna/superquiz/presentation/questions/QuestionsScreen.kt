@@ -16,6 +16,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.piriurna.common.composables.scaffold.SQScaffold
+import com.piriurna.common.models.BottomNavigationItem
 import com.piriurna.domain.models.Answer
 import com.piriurna.superquiz.presentation.composables.AnswerAlertPanel
 import com.piriurna.superquiz.presentation.composables.SQChip
@@ -30,12 +32,17 @@ import kotlin.math.min
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun QuestionsScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    categoryId : Int
 ) {
     val pagerState = rememberPagerState()
     val scope = rememberCoroutineScope()
 
     val viewModel : QuestionsViewModel = hiltViewModel()
+
+    LaunchedEffect(Unit) {
+        viewModel.setCategoryId(categoryId)
+    }
 
     val state = viewModel.state
 
@@ -43,94 +50,101 @@ fun QuestionsScreen(
         state.value.questions
     }
 
+    val isLoading by derivedStateOf {
+        state.value.isLoading
+    }
 
-    Column(
-        modifier = modifier
-            .padding(16.dp)
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.SpaceBetween
-    ) {
-        val percentage = ((pagerState.currentPage.toFloat()/(questions.size-1)) * 100).toInt()
+    SQScaffold(isLoading = isLoading) {
+        Column(
+            modifier = modifier
+                .padding(16.dp)
+                .padding(bottom = 60.dp)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            val percentage = ((pagerState.currentPage.toFloat()/(questions.size-1)) * 100).toInt()
 
-        var selectedAnswer by remember {
-            mutableStateOf<Answer?>(null)
-        }
+            var selectedAnswer by remember {
+                mutableStateOf<Answer?>(null)
+            }
 
-        var shouldShowAlert by remember {
-            mutableStateOf(false)
-        }
+            var shouldShowAlert by remember {
+                mutableStateOf(false)
+            }
 
-        var isAnswered by remember {
-            mutableStateOf(false)
-        }
+            var isAnswered by remember {
+                mutableStateOf(false)
+            }
 
-        Column(verticalArrangement = Arrangement.spacedBy(36.dp)) {
-            SQProgressBar(
-                progress = percentage,
-                percentageText = "${pagerState.currentPage + 1}/${questions.size}",
-                textIncompleteColor = Color.Black,
-                chipIcon = Icons.Default.Info,
-                chipText = "5min 55s",
-                modifier = Modifier.padding(bottom = 16.dp)
-            )
+            Column(verticalArrangement = Arrangement.spacedBy(36.dp)) {
+                SQProgressBar(
+                    progress = percentage,
+                    percentageText = "${pagerState.currentPage + 1}/${questions.size}",
+                    textIncompleteColor = Color.Black,
+                    chipIcon = Icons.Default.Info,
+                    chipText = "5min 55s",
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
 
-            Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                HorizontalPager(
-                    count = questions.size,
-                    state = pagerState,
-                    modifier = Modifier.disabledHorizontalPointerInputScroll()
-                ) { index ->
-                    SQQuestionCard(
-                        question = questions[index],
-                        questionIndex = index,
-                        onAnswerSelected = { answer ->
-                            selectedAnswer = answer
-                        },
-                        isEnabled = !isAnswered
-                    )
-                }
+                Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    HorizontalPager(
+                        count = questions.size,
+                        state = pagerState,
+                        modifier = Modifier.disabledHorizontalPointerInputScroll()
+                    ) { index ->
+                        SQQuestionCard(
+                            question = questions[index],
+                            questionIndex = index,
+                            onAnswerSelected = { answer ->
+                                selectedAnswer = answer
+                            },
+                            isEnabled = !isAnswered
+                        )
+                    }
 
-                Row(
-                    horizontalArrangement = Arrangement.End,
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    SQChip(
-                        text = "Hints",
-                        icon = Icons.Default.Home,
-                        foregroundColor = purple,
-                        backgroundColor = lightPurple
-                    )
+                    Row(
+                        horizontalArrangement = Arrangement.End,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        SQChip(
+                            text = "Hints",
+                            icon = Icons.Default.Home,
+                            foregroundColor = purple,
+                            backgroundColor = lightPurple
+                        )
+                    }
                 }
             }
-        }
 
-        if(shouldShowAlert){
-            //GET THESE QUOTES FROM DOMAIN
-            AnswerAlertPanel(
-                topText = "Correct Answer",
-                topBadge = Icons.Default.Done,
-                middleText = "\"All good things come to those who wait.\"",
-                bottomText = "- Paulina Simons"
-            )
-        }
+            if(shouldShowAlert){
+                //GET THESE QUOTES FROM DOMAIN
+                AnswerAlertPanel(
+                    topText = "Correct Answer",
+                    topBadge = Icons.Default.Done,
+                    middleText = "\"All good things come to those who wait.\"",
+                    bottomText = "- Paulina Simons"
+                )
+            }
 
 
-        Button(
-            onClick = { scope.launch {
-                if(isAnswered) {
-                    isAnswered = false
-                    val nextPage = min(pagerState.pageCount - 1, pagerState.currentPage + 1)
-                    pagerState.animateScrollToPage(nextPage)
-                }
-
-                isAnswered = true
-                shouldShowAlert = questions[pagerState.currentPage].getCorrectAnswer() == selectedAnswer
-            } },
-            enabled = selectedAnswer != null,
-            modifier= Modifier
-                .fillMaxWidth(),
-        ) {
-            Text(text = if(isAnswered) "NEXT" else "SEND")
+            Button(
+                onClick = { scope.launch {
+                    if(isAnswered) {
+                        isAnswered = false
+                        val nextPage = min(pagerState.pageCount - 1, pagerState.currentPage + 1)
+                        pagerState.animateScrollToPage(nextPage)
+                        shouldShowAlert = questions[pagerState.currentPage].getCorrectAnswer() == selectedAnswer
+                        return@launch
+                    }
+                    isAnswered = true
+                    shouldShowAlert = questions[pagerState.currentPage].getCorrectAnswer() == selectedAnswer
+                } },
+                enabled = selectedAnswer != null,
+                modifier= Modifier
+                    .fillMaxWidth(),
+            ) {
+                Text(text = if(isAnswered) "NEXT" else "SEND")
+            }
         }
     }
 }
@@ -140,7 +154,7 @@ fun QuestionsScreen(
 @Composable
 private fun QuestionScreenPreview() {
     Column(Modifier.fillMaxSize()) {
-        QuestionsScreen()
+        QuestionsScreen(categoryId = 9)
 
     }
 }

@@ -3,10 +3,12 @@ package com.piriurna.superquiz.presentation.questions
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.viewModelScope
 import com.piriurna.domain.Resource
 import com.piriurna.domain.usecases.GetCategoryQuestionsUseCase
 import com.piriurna.superquiz.SQBaseEventViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
@@ -20,8 +22,8 @@ class QuestionsViewModel @Inject constructor(
     val state: State<QuestionsState> = _state
 
 
-    init {
-        onTriggerEvent(QuestionsEvents.GetQuestions(9))
+    fun setCategoryId(categoryId: Int){
+        onTriggerEvent(QuestionsEvents.GetQuestions(categoryId))
     }
 
     override fun onTriggerEvent(event: QuestionsEvents) {
@@ -55,6 +57,6 @@ class QuestionsViewModel @Inject constructor(
                     )
                 }
             }
-        }
+        }.launchIn(viewModelScope)
     }
 }
