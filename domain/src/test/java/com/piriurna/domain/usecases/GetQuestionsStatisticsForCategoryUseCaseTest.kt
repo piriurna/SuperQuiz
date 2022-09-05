@@ -14,15 +14,15 @@ import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
-class GetQuestionsStatisticsForCategoryTest : BaseUseCaseTest() {
+class GetQuestionsStatisticsForCategoryUseCaseTest : BaseUseCaseTest() {
 
-    private lateinit var getQuestionsStatisticsForCategory: GetQuestionsStatisticsForCategory
+    private lateinit var getQuestionsStatisticsForCategoryUseCase: GetQuestionsStatisticsForCategoryUseCase
     private lateinit var triviaRepository: TriviaRepository
 
     @Before
     fun setUp() {
         triviaRepository = mock()
-        getQuestionsStatisticsForCategory = GetQuestionsStatisticsForCategory(triviaRepository = triviaRepository)
+        getQuestionsStatisticsForCategoryUseCase = GetQuestionsStatisticsForCategoryUseCase(triviaRepository = triviaRepository)
     }
 
 
@@ -42,7 +42,7 @@ class GetQuestionsStatisticsForCategoryTest : BaseUseCaseTest() {
 
 
         // Execute the use-case
-        val emissions = getQuestionsStatisticsForCategory(category.id).toList()
+        val emissions = getQuestionsStatisticsForCategoryUseCase(category.id).toList()
         var result = (emissions[0] as Resource)
 
         assert(result is Resource.Loading)

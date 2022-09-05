@@ -15,7 +15,7 @@ fun List<Question>.toPieChartSections() : List<PieChartSection> {
 
     this.forEach {
         if (it.isQuestionAnswered()) {
-            if(it.getCorrectAnswer()?.isCorrectAnswer == true)
+            if(it.chosenAnswer?.isCorrectAnswer == true)
                 correctAnswersCount++
              else
                 incorrectAnswersCount++

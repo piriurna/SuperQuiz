@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class GetQuestionsStatisticsForCategory @Inject constructor(
+class GetQuestionsStatisticsForCategoryUseCase @Inject constructor(
     private val triviaRepository: TriviaRepository
 ) {
 
