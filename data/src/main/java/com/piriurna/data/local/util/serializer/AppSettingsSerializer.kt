@@ -2,20 +2,38 @@ package com.piriurna.data.local.util.serializer
 
 import androidx.datastore.core.Serializer
 import com.piriurna.data.local.models.AppSettings
+import kotlinx.serialization.SerializationException
+import kotlinx.serialization.json.Json
 import java.io.InputStream
 import java.io.OutputStream
 
+
+@Suppress("BlockingMethodInNonBlockingContext")
 object AppSettingsSerializer : Serializer<AppSettings> {
 
     override val defaultValue: AppSettings
-        get() = TODO("Not yet implemented")
+        get() = AppSettings()
 
     override suspend fun readFrom(input: InputStream): AppSettings {
-        TODO("Not yet implemented")
+        return try {
+            Json.decodeFromString(
+                deserializer = AppSettings.serializer(),
+                string = input.readBytes().decodeToString()
+            )
+        } catch (e: SerializationException) {
+            e.printStackTrace()
+            defaultValue
+        }
     }
 
     override suspend fun writeTo(t: AppSettings, output: OutputStream) {
-        TODO("Not yet implemented")
+        output.write(
+            Json.encodeToString(
+                serializer = AppSettings.serializer(),
+                value = t
+            ).encodeToByteArray()
+        )
     }
+
 
 }
