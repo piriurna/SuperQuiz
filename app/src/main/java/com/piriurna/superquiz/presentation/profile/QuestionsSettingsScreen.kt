@@ -40,6 +40,7 @@ fun QuestionsSettingsScreen() {
             onValueChange = { value ->
                 val closestNumber = availableOptions.minByOrNull { abs(value - it ) }
                 sliderPosition = closestNumber?:value
+                viewModel.triggerSaveSettings(sliderPosition.toInt())
             },
             valueRange = valueRange,
             steps = 2

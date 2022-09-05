@@ -7,5 +7,5 @@ sealed class ProfileEvents : SQBaseEvent() {
 
     object FetchSettings : ProfileEvents()
 
-    class SaveSettings(profileSettings: ProfileSettings) : ProfileEvents()
+    class SaveSettings(val profileSettings: ProfileSettings) : ProfileEvents()
 }
