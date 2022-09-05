@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface AppDataStoreRepository {
 
-    suspend fun saveAppSettings(profile: AppSettings)
+    suspend fun saveAppSettings(appSettings: AppSettings)
 
     suspend fun getAppSettings(): Flow<AppSettings>
 
