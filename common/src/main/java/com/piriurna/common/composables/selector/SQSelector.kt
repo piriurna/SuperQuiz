@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.piriurna.common.composables.text.SQText
 import com.piriurna.common.models.SelectableItem
+import com.piriurna.common.theme.SQStyle
 import java.lang.Integer.max
 import kotlin.math.min
 
@@ -47,7 +48,7 @@ fun SQSelector(
                 contentDescription = "Previous Button"
             )
 
-            SQText(text = selectedItem.name)
+            SQText(text = selectedItem.name, style = SQStyle.TextLatoBold)
 
             Icon(
                 modifier = Modifier.clickable {

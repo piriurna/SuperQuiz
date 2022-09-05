@@ -7,21 +7,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.piriurna.common.R
 
-private val LatoFont = FontFamily(
-    Font(R.font.lato_regular),
-    Font(R.font.lato_thin, FontWeight.W300),
-    Font(R.font.lato_bold, FontWeight.Bold)
-)
 
-val TextLato = TextStyle(
-    fontFamily = LatoFont,
-    fontSize = 14.sp
-)
+object SQStyle {
+    private val LatoFont = FontFamily(
+        Font(R.font.lato_regular),
+        Font(R.font.lato_thin, FontWeight.W300),
+        Font(R.font.lato_bold, FontWeight.Bold)
+    )
 
-val TextLato12 = TextLato.copy(
-    fontSize = 12.sp
-)
+    val TextLato = TextStyle(
+        fontFamily = LatoFont,
+        fontSize = 14.sp
+    )
 
-val TextLatoBold = TextLato.copy(
-    fontWeight = FontWeight.Bold
-)
+    val TextLato12 = TextLato.copy(
+        fontSize = 12.sp
+    )
+
+    val TextLatoBold = TextLato.copy(
+        fontWeight = FontWeight.Bold
+    )
+
+    val TextLatoThin = TextLato.copy(
+        fontWeight = FontWeight.W300
+    )
+}

@@ -8,6 +8,10 @@ import androidx.compose.ui.graphics.Color
 val Colors.secondaryBackground: Color
     get() = if (isLight) Color(0xffffffff) else Color(0xff252525)
 
+@get:Composable
+val Colors.primaryText: Color
+    get() = if (isLight) Color(0xff616161) else Color(0xfff3f5fb)
+
 
 val purple = Color(red = 149, green = 67, blue = 255)
 val lightPurple = Color(red = 149, green = 67, blue = 255, alpha = 26)
