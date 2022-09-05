@@ -53,6 +53,10 @@ class LoadTriviaDataUseCase @Inject constructor(
                 }
 
                 emit(Resource.Success(LoadTriviaType.FIRST_INSTALL))
+
+                appDataStoreRepository.saveAppSettings(appSettings.copy(
+                    firstInstall = false
+                ))
             }?: kotlin.run {
                 emit(Resource.Error(message = categoriesResult.error.message!!))
             }
@@ -95,6 +99,10 @@ class LoadTriviaDataUseCase @Inject constructor(
                         }
                         emit(Resource.Success(LoadTriviaType.CATEGORIES_UPDATED))
                     }
+
+                    appDataStoreRepository.saveAppSettings(appSettings.copy(
+                        shouldFetchNewCategories = false
+                    ))
 
                 }?: kotlin.run {
                     emit(Resource.Error(message = categoriesResult.error.message!!))
