@@ -19,7 +19,7 @@ sealed class BottomNavigationItem(
     )
 
     object Profile : BottomNavigationItem(
-        route = "profile",
+        route = "PROFILE",
         title = "Profile",
         icon = Icons.Default.Face
     )
