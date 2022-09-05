@@ -1,6 +1,5 @@
-package com.piriurna.superquiz.presentation.composables
+package com.piriurna.common.composables.text
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.Icon
@@ -15,7 +14,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.piriurna.superquiz.ui.theme.primaryGreen
+import com.piriurna.common.theme.primaryGreen
 
 @Composable
 fun SQBadgeText(
@@ -25,6 +24,7 @@ fun SQBadgeText(
     foregroundColor : Color = Color.Black
 ) {
     Row(
+        modifier = modifier,
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(16.dp)
     ) {

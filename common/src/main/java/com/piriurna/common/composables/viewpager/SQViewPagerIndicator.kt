@@ -1,4 +1,4 @@
-package com.piriurna.superquiz.presentation.onboarding.composables
+package com.piriurna.common.composables.viewpager
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -8,8 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.piriurna.superquiz.ui.theme.lightPurple
-import com.piriurna.superquiz.ui.theme.purple
+import com.piriurna.common.theme.lightPurple
+import com.piriurna.common.theme.purple
 
 @Composable
 fun SQViewPagerIndicator(

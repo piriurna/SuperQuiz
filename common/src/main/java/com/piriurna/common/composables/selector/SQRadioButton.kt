@@ -1,16 +1,12 @@
-package com.piriurna.superquiz.presentation.composables
+package com.piriurna.common.composables.selector
 
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.material.RadioButton
-import androidx.compose.material.RadioButtonColors
 import androidx.compose.material.RadioButtonDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import com.piriurna.superquiz.ui.theme.primaryGreen
+import com.piriurna.common.theme.primaryBlue
+import com.piriurna.common.theme.primaryGreen
 
 @Composable
 fun SQRadioButton(
@@ -41,5 +37,5 @@ fun SQRadioButton(
 @Preview
 @Composable
 private fun SQRadioButtonPreview() {
-
+    SQRadioButton(selected = true, enabled = true, onClick = { }, selectedColor = primaryBlue)
 }

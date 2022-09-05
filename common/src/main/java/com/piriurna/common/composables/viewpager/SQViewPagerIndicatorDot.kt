@@ -1,4 +1,4 @@
-package com.piriurna.superquiz.presentation.onboarding.composables
+package com.piriurna.common.composables.viewpager
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -14,7 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.piriurna.superquiz.ui.theme.purple
+import com.piriurna.common.theme.purple
 
 
 @Composable

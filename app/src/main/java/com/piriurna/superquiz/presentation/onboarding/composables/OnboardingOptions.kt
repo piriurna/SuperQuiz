@@ -14,8 +14,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.piriurna.common.composables.button.SQRoundButton
 import com.piriurna.superquiz.presentation.onboarding.models.OnboardingPage
-import kotlinx.coroutines.launch
 
 @Composable
 fun OnboardingOptions(

@@ -17,11 +17,10 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.piriurna.common.composables.scaffold.SQScaffold
-import com.piriurna.common.models.BottomNavigationItem
 import com.piriurna.domain.models.Answer
 import com.piriurna.superquiz.presentation.composables.AnswerAlertPanel
-import com.piriurna.superquiz.presentation.composables.SQChip
-import com.piriurna.superquiz.presentation.composables.SQProgressBar
+import com.piriurna.common.composables.chip.SQChip
+import com.piriurna.common.composables.progress.SQProgressBar
 import com.piriurna.superquiz.presentation.composables.models.disabledHorizontalPointerInputScroll
 import com.piriurna.superquiz.presentation.questions.composables.SQQuestionCard
 import com.piriurna.superquiz.ui.theme.lightPurple

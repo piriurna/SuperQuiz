@@ -1,4 +1,4 @@
-package com.piriurna.superquiz.presentation.composables
+package com.piriurna.common.composables.progress
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,7 +14,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.piriurna.superquiz.ui.theme.*
+import com.piriurna.common.composables.chip.SQChip
+import com.piriurna.common.theme.*
 
 @Composable
 fun SQProgressBar(
