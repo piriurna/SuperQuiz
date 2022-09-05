@@ -17,6 +17,7 @@ import com.piriurna.common.composables.selector.SQRow
 import com.piriurna.common.composables.text.SQText
 import com.piriurna.common.theme.SQStyle
 import com.piriurna.common.theme.SQStyle.TextLato35
+import com.piriurna.superquiz.presentation.navigation.HomeDestinationScreen
 
 @Composable
 fun ProfileScreen(
@@ -27,7 +28,8 @@ fun ProfileScreen(
             .padding(16.dp),
     ) {
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             Image(
                 imageVector = Icons.Default.Face,
@@ -35,13 +37,15 @@ fun ProfileScreen(
                 modifier = Modifier.size(35.dp)
             )
 
-            SQText(text = "Kate", style = TextLato35)
+            SQText(text = "Profile", style = TextLato35)
         }
 
         SQRow(
             modifier = Modifier.padding(top = 24.dp),
             label = "Questions",
-            onClick = {}
+            onClick = {
+                navController.navigate(HomeDestinationScreen.QuestionSettings.route)
+            }
         )
 
     }
