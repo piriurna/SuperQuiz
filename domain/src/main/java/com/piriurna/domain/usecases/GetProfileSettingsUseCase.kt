@@ -17,7 +17,7 @@ class GetProfileSettingsUseCase@Inject constructor(
     operator fun invoke() : Flow<Resource<ProfileSettings>> = flow {
         emit(Resource.Loading())
 
-        val profileSettings = profileDataStoreRepository.getAppSettings().first()
+        val profileSettings = profileDataStoreRepository.getProfileSettings().first()
 
         try {
             emit(Resource.Success(profileSettings))

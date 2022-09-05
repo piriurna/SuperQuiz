@@ -6,8 +6,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface ProfileDataStoreRepository {
 
-    suspend fun saveAppSettings(appSettings: ProfileSettings)
+    suspend fun saveProfileSettings(appSettings: ProfileSettings)
 
-    suspend fun getAppSettings(): Flow<ProfileSettings>
+    suspend fun getProfileSettings(): Flow<ProfileSettings>
 
 }
