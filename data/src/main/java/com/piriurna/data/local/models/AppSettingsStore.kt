@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class AppSettingsStore(
-    val firstInstall : Boolean = false,
+    val firstInstall : Boolean = true,
     val shouldFetchNewCategories : Boolean = false
 )
