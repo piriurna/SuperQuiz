@@ -1,8 +1,8 @@
 package com.piriurna.common.models
 
 import androidx.compose.ui.graphics.Color
-import com.piriurna.common.composables.theme.orange
-import com.piriurna.common.composables.theme.purple
+import com.piriurna.common.theme.orange
+import com.piriurna.common.theme.purple
 
 data class PieChartSection(
     val value: Float,

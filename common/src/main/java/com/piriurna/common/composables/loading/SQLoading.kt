@@ -13,7 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.piriurna.common.R
 import com.piriurna.common.composables.animations.SQLottieLoading
-import com.piriurna.common.composables.theme.secondaryBackground
+import com.piriurna.common.theme.secondaryBackground
 
 @Composable
 fun SQLoading(

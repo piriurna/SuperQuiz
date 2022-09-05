@@ -1,4 +1,4 @@
-package com.piriurna.common.composables.theme
+package com.piriurna.common.theme
 
 import androidx.compose.material.Colors
 import androidx.compose.runtime.Composable
