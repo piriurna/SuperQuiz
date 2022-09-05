@@ -6,6 +6,9 @@ buildscript {
     dependencies {
         classpath rootProject.classpath.hilt
 
+        classpath "org.jetbrains.kotlin:kotlin-serialization:1.6.10" // TODO: PASSAR PARA CONFIG.GRADLE
+
+
     }
 }// Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {

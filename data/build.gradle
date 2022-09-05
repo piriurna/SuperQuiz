@@ -60,4 +60,11 @@ dependencies {
     api rootProject.libraries.roomKtx
 
 
+    //Serializer
+    implementation rootProject.libraries.kotlinxSerializationJson
+
+    //Data store
+    implementation rootProject.libraries.datastore
+
+
 }
