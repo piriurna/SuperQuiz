@@ -8,11 +8,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
 fun SQCard(
     modifier : Modifier = Modifier,
+    radius : Dp = 30.dp,
+    elevation : Dp = 0.dp,
+    strokeColor : Color = Color.LightGray,
+    strokeWidth : Dp = 1.dp,
     content: @Composable () -> Unit
 ) {
 
@@ -20,10 +25,10 @@ fun SQCard(
         backgroundColor = Color.Transparent,
         modifier = modifier,
         shape = RoundedCornerShape(
-            size = 30.dp,
+            size = radius,
         ),
-        elevation = 0.dp,
-        border = BorderStroke(1.dp, Color.LightGray),
+        elevation = elevation,
+        border = BorderStroke(strokeWidth, strokeColor),
         content = content
     )
 }
