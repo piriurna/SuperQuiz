@@ -14,7 +14,7 @@ class TriviaApiSource @Inject constructor(
         return safeApiCall{ triviaApi.getCategories() }
     }
 
-    suspend fun getQuiz(categoryId: Int) : QuizDto {
-        return safeApiCall { triviaApi.getQuiz(amount = "10", categoryId = categoryId.toString()) }
+    suspend fun getQuiz(categoryId: Int, numberOfQuestions : Int) : QuizDto {
+        return safeApiCall { triviaApi.getQuiz(amount = numberOfQuestions.toString(), categoryId = categoryId.toString()) }
     }
 }

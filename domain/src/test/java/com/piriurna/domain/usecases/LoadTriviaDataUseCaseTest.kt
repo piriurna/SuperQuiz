@@ -5,6 +5,7 @@ import com.piriurna.domain.ApiNetworkResponse
 import com.piriurna.domain.Resource
 import com.piriurna.domain.models.*
 import com.piriurna.domain.repositories.AppDataStoreRepository
+import com.piriurna.domain.repositories.ProfileDataStoreRepository
 import com.piriurna.domain.repositories.TriviaRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -20,12 +21,14 @@ class LoadTriviaDataUseCaseTest : BaseUseCaseTest(){
     private lateinit var loadTriviaDataUseCase: LoadTriviaDataUseCase
     private lateinit var triviaRepository: TriviaRepository
     private lateinit var appDataStoreRepository: AppDataStoreRepository
+    private lateinit var profileDataStoreRepository: ProfileDataStoreRepository
 
     @Before
     fun setUp() {
         triviaRepository = mock()
         appDataStoreRepository= mock()
-        loadTriviaDataUseCase = LoadTriviaDataUseCase(triviaRepository = triviaRepository, appDataStoreRepository = appDataStoreRepository)
+        profileDataStoreRepository = mock()
+        loadTriviaDataUseCase = LoadTriviaDataUseCase(triviaRepository = triviaRepository, appDataStoreRepository = appDataStoreRepository, profileDataStoreRepository = profileDataStoreRepository)
     }
 
 
@@ -98,7 +101,7 @@ class LoadTriviaDataUseCaseTest : BaseUseCaseTest(){
             ApiNetworkResponse(categoryList)
         )
 
-        whenever(triviaRepository.getCategoryQuestions(9)).thenReturn(
+        whenever(triviaRepository.getCategoryQuestions(9, 10)).thenReturn(
             ApiNetworkResponse(data = questionsForFirstCategory)
         )
 
@@ -110,7 +113,7 @@ class LoadTriviaDataUseCaseTest : BaseUseCaseTest(){
             listOf(questionsFromDb[0])
         )
 
-        whenever(triviaRepository.getCategoryQuestions(10)).thenReturn(
+        whenever(triviaRepository.getCategoryQuestions(10, 10)).thenReturn(
             ApiNetworkResponse(data = questionsForSecondCategory)
         )
 
@@ -241,7 +244,7 @@ class LoadTriviaDataUseCaseTest : BaseUseCaseTest(){
             ApiNetworkResponse(categoriesInServer)
         )
 
-        whenever(triviaRepository.getCategoryQuestions(newCategory.id)).thenReturn(
+        whenever(triviaRepository.getCategoryQuestions(newCategory.id, 10)).thenReturn(
             ApiNetworkResponse(data = listOf(
                 Question.mockQuestions[2]
             ))
