@@ -30,7 +30,6 @@ fun SQRow(
 ) {
     Row(
         modifier = Modifier
-            .padding(vertical = 16.dp)
             .fillMaxWidth()
             .clickable {
                 if (!checkable) onClick()
@@ -47,6 +46,7 @@ fun SQRow(
             }
 
             SQText(
+                modifier = Modifier.padding(vertical = 16.dp),
                 text = label,
                 style = TextLato22
             )
