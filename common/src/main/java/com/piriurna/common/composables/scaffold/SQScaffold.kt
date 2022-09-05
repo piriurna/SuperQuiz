@@ -22,6 +22,7 @@ fun SQScaffold(
     modifier: Modifier = Modifier,
     isLoading: Boolean = false,
     bottomBarItems: List<BottomNavigationItem> = emptyList(),
+    onItemSelected : (BottomNavigationItem) -> Unit = {},
     content: @Composable (PaddingValues) -> Unit,
 ) {
 
@@ -40,7 +41,8 @@ fun SQScaffold(
                         selectedColor = purple,
                         unselectedColor = Color.LightGray,
                         items = bottomBarItems,
-                        selectedRoute = ""
+                        selectedRoute = "play_games",
+                        onItemSelected = onItemSelected
                     )
                 }
             }

@@ -12,7 +12,12 @@ import com.piriurna.superquiz.presentation.navigation.HomeNavigationGraph
 fun HomeScreen(
     navController: NavHostController = rememberNavController()
 ) {
-    SQScaffold(bottomBarItems = listOf(BottomNavigationItem.PlayGames, BottomNavigationItem.Profile)) {
+    SQScaffold(
+        bottomBarItems = listOf(BottomNavigationItem.PlayGames, BottomNavigationItem.Profile, BottomNavigationItem.Chart),
+        onItemSelected = { item ->
+            navController.navigate(item.route)
+        }
+    ) {
         HomeNavigationGraph(navController = navController)
     }
 }

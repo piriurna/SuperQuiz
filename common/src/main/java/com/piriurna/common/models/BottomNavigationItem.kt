@@ -2,6 +2,7 @@ package com.piriurna.common.models
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.ui.graphics.vector.ImageVector
 
@@ -21,6 +22,12 @@ sealed class BottomNavigationItem(
         route = "profile",
         title = "Profile",
         icon = Icons.Default.Face
+    )
+
+    object Chart : BottomNavigationItem(
+        route = "CHART",
+        title = "Statistics",
+        icon = Icons.Default.Favorite
     )
 
     companion object {

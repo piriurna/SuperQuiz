@@ -6,6 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
+import com.piriurna.superquiz.presentation.chart.ChartScreen
 import com.piriurna.superquiz.presentation.home.HomeScreen
 import com.piriurna.superquiz.presentation.navigation.models.Graph
 import com.piriurna.superquiz.presentation.playgames.PlayGamesScreen
@@ -25,6 +26,10 @@ fun HomeNavigationGraph(navController: NavHostController) {
 
         composable(route = HomeDestinationScreen.PlayGames.route) {
             PlayGamesScreen(navController)
+        }
+
+        composable(route = HomeDestinationScreen.Chart.route) {
+            ChartScreen()
         }
 
         composable(
@@ -47,5 +52,6 @@ fun HomeNavigationGraph(navController: NavHostController) {
 
 sealed class HomeDestinationScreen(val route: String, val arguments : String = "") {
     object PlayGames : HomeDestinationScreen(route = "PLAY_GAMES")
+    object Chart : HomeDestinationScreen(route = "CHART")
     object CategoryQuestions : HomeDestinationScreen(route = "QUESTIONS", arguments = "categoryId")
 }

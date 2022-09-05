@@ -17,7 +17,8 @@ fun SQBottomNavigation(
     selectedColor : Color,
     unselectedColor: Color,
     items: List<BottomNavigationItem>,
-    selectedRoute : String
+    selectedRoute : String,
+    onItemSelected: (BottomNavigationItem) -> Unit = {}
 ) {
     Row(
         modifier = modifier
@@ -32,7 +33,7 @@ fun SQBottomNavigation(
                 selected = selectedRoute == item.route,
                 selectedColor = selectedColor,
                 unselectedColor = unselectedColor,
-                onClick = {}
+                onClick = { onItemSelected(item) }
             )
         }
     }
@@ -53,7 +54,7 @@ private fun SQBottomNavigationPreview() {
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 16.dp),
-            items = listOf(BottomNavigationItem.PlayGames, BottomNavigationItem.Profile),
+            items = listOf(BottomNavigationItem.PlayGames, BottomNavigationItem.Profile, BottomNavigationItem.Chart),
             selectedRoute = selected
         )
     }
