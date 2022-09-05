@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 class ProfileDataStoreRepositoryImpl(
     private val context: Context
 ) : ProfileDataStoreRepository {
-    override suspend fun saveAppSettings(appSettings: ProfileSettings) {
+    override suspend fun saveProfileSettings(appSettings: ProfileSettings) {
         context.profileSettingsStore.updateData {
             it.copy(
                 numberOfQuestions = appSettings.numberOfQuestions
@@ -21,7 +21,7 @@ class ProfileDataStoreRepositoryImpl(
     }
 
 
-    override suspend fun getAppSettings(): Flow<ProfileSettings> {
+    override suspend fun getProfileSettings(): Flow<ProfileSettings> {
         return context.profileSettingsStore.data
     }
 
