@@ -1,7 +1,7 @@
 package com.piriurna.data.local.util.serializer
 
 import androidx.datastore.core.Serializer
-import com.piriurna.data.local.models.AppSettings
+import com.piriurna.data.local.models.AppSettingsStore
 import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 import java.io.InputStream
@@ -9,15 +9,15 @@ import java.io.OutputStream
 
 
 @Suppress("BlockingMethodInNonBlockingContext")
-object AppSettingsSerializer : Serializer<AppSettings> {
+object AppSettingsSerializer : Serializer<AppSettingsStore> {
 
-    override val defaultValue: AppSettings
-        get() = AppSettings()
+    override val defaultValue: AppSettingsStore
+        get() = AppSettingsStore()
 
-    override suspend fun readFrom(input: InputStream): AppSettings {
+    override suspend fun readFrom(input: InputStream): AppSettingsStore {
         return try {
             Json.decodeFromString(
-                deserializer = AppSettings.serializer(),
+                deserializer = AppSettingsStore.serializer(),
                 string = input.readBytes().decodeToString()
             )
         } catch (e: SerializationException) {
@@ -26,10 +26,10 @@ object AppSettingsSerializer : Serializer<AppSettings> {
         }
     }
 
-    override suspend fun writeTo(t: AppSettings, output: OutputStream) {
+    override suspend fun writeTo(t: AppSettingsStore, output: OutputStream) {
         output.write(
             Json.encodeToString(
-                serializer = AppSettings.serializer(),
+                serializer = AppSettingsStore.serializer(),
                 value = t
             ).encodeToByteArray()
         )
