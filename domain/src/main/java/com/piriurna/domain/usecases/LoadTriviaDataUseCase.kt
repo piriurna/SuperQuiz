@@ -2,25 +2,25 @@ package com.piriurna.domain.usecases
 
 import com.piriurna.domain.ApiNetworkResponse
 import com.piriurna.domain.Resource
-import com.piriurna.domain.models.Answer
-import com.piriurna.domain.models.Category
-import com.piriurna.domain.models.LoadTriviaType
-import com.piriurna.domain.models.Question
+import com.piriurna.domain.models.*
+import com.piriurna.domain.repositories.AppDataStoreRepository
 import com.piriurna.domain.repositories.TriviaRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class LoadTriviaDataUseCase @Inject constructor(
-    private val triviaRepository: TriviaRepository
+    private val triviaRepository: TriviaRepository,
+    private val appDataStoreRepository: AppDataStoreRepository
 ) {
 
     operator fun invoke() : Flow<Resource<LoadTriviaType>> = flow {
         emit(Resource.Loading())
 
-        val firstInstall = false
-        val shouldFetchNewCategories = false
-        if(firstInstall){ //First install user has no data in database
+        val appSettings = appDataStoreRepository.getAppSettings().first()
+
+        if(appSettings.firstInstall){ //First install user has no data in database
             val categoriesResult : ApiNetworkResponse<List<Category>> = triviaRepository.getCategories()
 
             categoriesResult.data?.let { data ->
@@ -57,7 +57,7 @@ class LoadTriviaDataUseCase @Inject constructor(
                 emit(Resource.Error(message = categoriesResult.error.message!!))
             }
         } else { // User entering the app for next times, its supposed for them to have data
-            if(shouldFetchNewCategories) { // Should go look if the service has new categories that don't exist in the app yet
+            if(appSettings.shouldFetchNewCategories) { // Should go look if the service has new categories that don't exist in the app yet
                 val categoriesResult : ApiNetworkResponse<List<Category>> = triviaRepository.getCategories()
 
                 categoriesResult.data?.let { data ->
