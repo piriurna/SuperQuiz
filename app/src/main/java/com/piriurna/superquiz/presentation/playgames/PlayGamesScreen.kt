@@ -65,7 +65,7 @@ fun PlayGamesScreen(
                     .padding(horizontal = 24.dp)
             ) {
                 Text(
-                    text = "\uD83D\uDC4B Hello, Dear",
+                    text = "\uD83D\uDC4B Hello, Dear ${state.userName}",
                     color = Color.White
                 )
 

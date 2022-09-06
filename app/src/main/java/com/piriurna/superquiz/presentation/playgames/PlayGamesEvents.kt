@@ -4,5 +4,5 @@ import com.piriurna.superquiz.SQBaseEvent
 
 sealed class PlayGamesEvents : SQBaseEvent() {
     object GetCategories: PlayGamesEvents()
-
+    object GetUserInfo: PlayGamesEvents()
 }

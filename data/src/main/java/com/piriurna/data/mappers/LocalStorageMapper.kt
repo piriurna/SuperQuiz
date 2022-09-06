@@ -23,12 +23,14 @@ fun AppSettings.toAppSettingsStore() : AppSettingsStore {
 
 fun ProfileSettingsStore.toProfileSettings() : ProfileSettings {
     return ProfileSettings(
-        numberOfQuestions = this.numberOfQuestions
+        numberOfQuestions = this.numberOfQuestions,
+        userName = this.userName
     )
 }
 
 fun ProfileSettings.toProfileSettingsStore() : ProfileSettingsStore {
     return ProfileSettingsStore(
-        numberOfQuestions = this.numberOfQuestions
+        numberOfQuestions = this.numberOfQuestions,
+        userName = this.userName
     )
 }

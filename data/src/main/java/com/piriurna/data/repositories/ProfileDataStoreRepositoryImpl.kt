@@ -15,7 +15,8 @@ class ProfileDataStoreRepositoryImpl(
     override suspend fun saveProfileSettings(appSettings: ProfileSettings) {
         context.profileSettingsStore.updateData {
             it.copy(
-                numberOfQuestions = appSettings.numberOfQuestions
+                numberOfQuestions = appSettings.numberOfQuestions,
+                userName = appSettings.userName
             )
         }
     }

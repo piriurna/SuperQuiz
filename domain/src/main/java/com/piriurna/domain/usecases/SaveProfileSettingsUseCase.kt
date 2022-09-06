@@ -15,7 +15,7 @@ class SaveProfileSettingsUseCase @Inject constructor(
 ) {
 
 
-    operator fun invoke(profileSettings: ProfileSettings) : Flow<Resource<Boolean>> = flow {
+    operator fun invoke(profileSettings: ProfileSettings) : Flow<Resource<ProfileSettings>> = flow {
         emit(Resource.Loading())
 
         try {
@@ -24,7 +24,7 @@ class SaveProfileSettingsUseCase @Inject constructor(
             appDataStoreRepository.saveAppSettings(appSettings.copy(
                 shouldFetchNewCategories = true
             ))
-            emit(Resource.Success(true))
+            emit(Resource.Success(profileSettings))
         } catch (e : Exception) {
             emit(Resource.Error(message = "Error saving profile settings"))
         }
