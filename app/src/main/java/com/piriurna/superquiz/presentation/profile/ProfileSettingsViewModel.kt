@@ -9,39 +9,48 @@ import com.piriurna.domain.models.ProfileSettings
 import com.piriurna.domain.usecases.GetProfileSettingsUseCase
 import com.piriurna.domain.usecases.SaveProfileSettingsUseCase
 import com.piriurna.superquiz.SQBaseEventViewModel
-import com.piriurna.superquiz.presentation.playgames.PlayGamesEvents
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileViewModel @Inject constructor(
+class ProfileSettingsViewModel @Inject constructor(
     private val getProfileSettingsUseCase : GetProfileSettingsUseCase,
     private val saveProfileSettingsUseCase: SaveProfileSettingsUseCase
-) : SQBaseEventViewModel<ProfileEvents>() {
+) : SQBaseEventViewModel<ProfileSettingsEvents>() {
 
-    private val _state : MutableState<ProfileState> = mutableStateOf(ProfileState())
-    val state: State<ProfileState> = _state
+    private val _state : MutableState<ProfileSettingsState> = mutableStateOf(ProfileSettingsState())
+    val state: State<ProfileSettingsState> = _state
 
 
     init {
-        onTriggerEvent(ProfileEvents.FetchSettings)
+        onTriggerEvent(ProfileSettingsEvents.FetchSettings)
     }
 
-    fun triggerSaveSettings(numberOfQuestions: Int) {
-        onTriggerEvent(ProfileEvents.SaveSettings(_state.value.profileSettings.copy(
-            numberOfQuestions = numberOfQuestions
-        )))
+    fun triggerSaveNumberOfQuestions(numberOfQuestions: Int) {
+        onTriggerEvent(
+            ProfileSettingsEvents.SaveSettings(
+                _state.value.profileSettings.copy(numberOfQuestions = numberOfQuestions)
+            )
+        )
     }
 
-    override fun onTriggerEvent(event: ProfileEvents) {
+    fun triggerSaveUserName(userName: String) {
+        onTriggerEvent(
+            ProfileSettingsEvents.SaveSettings(
+                _state.value.profileSettings.copy(userName = userName)
+            )
+        )
+    }
+
+    override fun onTriggerEvent(event: ProfileSettingsEvents) {
         when(event) {
-            is ProfileEvents.FetchSettings -> {
+            is ProfileSettingsEvents.FetchSettings -> {
                 fetchSettings()
             }
 
-            is ProfileEvents.SaveSettings -> {
+            is ProfileSettingsEvents.SaveSettings -> {
                 saveSettings(event.profileSettings)
             }
         }
@@ -86,6 +95,7 @@ class ProfileViewModel @Inject constructor(
                 is Resource.Success -> {
                     _state.value = _state.value.copy(
                         isLoading = false,
+                        profileSettings = result.data?:ProfileSettings()
                     )
                 }
 

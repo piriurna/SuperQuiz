@@ -27,7 +27,7 @@ fun SQScaffold(
         modifier = Modifier
             .fillMaxSize()
     ) {
-        var scaffoldModifier = modifier.fillMaxSize()
+        val scaffoldModifier = modifier.fillMaxSize()
 
         Scaffold(
             modifier = scaffoldModifier,
@@ -38,7 +38,7 @@ fun SQScaffold(
                         selectedColor = purple,
                         unselectedColor = Color.LightGray,
                         items = bottomBarItems,
-                        selectedRoute = "play_games",
+                        selectedRoute = bottomBarItems[0].route,
                         onItemSelected = onItemSelected
                     )
                 }

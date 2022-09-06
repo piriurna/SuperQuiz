@@ -2,7 +2,7 @@ package com.piriurna.common.composables.navigation
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,6 +20,10 @@ fun SQBottomNavigation(
     selectedRoute : String,
     onItemSelected: (BottomNavigationItem) -> Unit = {}
 ) {
+
+    var selectedItem by remember {
+        mutableStateOf(selectedRoute)
+    }
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -30,10 +34,13 @@ fun SQBottomNavigation(
             SQNavigationItem(
                 icon = item.icon,
                 text = item.title,
-                selected = selectedRoute == item.route,
+                selected = selectedItem == item.route,
                 selectedColor = selectedColor,
                 unselectedColor = unselectedColor,
-                onClick = { onItemSelected(item) }
+                onClick = {
+                    onItemSelected(item)
+                    selectedItem = item.route
+                }
             )
         }
     }
@@ -43,8 +50,6 @@ fun SQBottomNavigation(
 @Preview(showBackground = true)
 @Composable
 private fun SQBottomNavigationPreview() {
-    val selected = BottomNavigationItem.Profile.route
-
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -55,7 +60,10 @@ private fun SQBottomNavigationPreview() {
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 16.dp),
             items = listOf(BottomNavigationItem.PlayGames, BottomNavigationItem.Profile, BottomNavigationItem.Chart),
-            selectedRoute = selected
+            selectedRoute = BottomNavigationItem.Profile.route,
+            onItemSelected = {
+                print("a")
+            }
         )
     }
 }

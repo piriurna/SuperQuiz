@@ -29,7 +29,7 @@ fun SQRow(
     startIcon : ImageVector? = null
 ) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable {
                 if (!checkable) onClick()

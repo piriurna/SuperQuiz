@@ -7,13 +7,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import com.piriurna.superquiz.presentation.chart.ChartScreen
-import com.piriurna.superquiz.presentation.home.HomeScreen
 import com.piriurna.superquiz.presentation.navigation.models.Graph
 import com.piriurna.superquiz.presentation.playgames.PlayGamesScreen
 import com.piriurna.superquiz.presentation.profile.ProfileScreen
-import com.piriurna.superquiz.presentation.profile.QuestionsSettingsScreen
+import com.piriurna.superquiz.presentation.profile.questions.QuestionsSettingsScreen
+import com.piriurna.superquiz.presentation.profile.user.UserSettingsScreen
 import com.piriurna.superquiz.presentation.questions.QuestionsScreen
-import com.piriurna.superquiz.presentation.splash.SplashScreen
 
 @Composable
 fun HomeNavigationGraph(navController: NavHostController) {
@@ -52,6 +51,10 @@ fun HomeNavigationGraph(navController: NavHostController) {
         composable(route = HomeDestinationScreen.QuestionSettings.route) {
             QuestionsSettingsScreen()
         }
+
+        composable(route = HomeDestinationScreen.UserSettings.route) {
+            UserSettingsScreen()
+        }
     }
 
 }
@@ -61,5 +64,6 @@ sealed class HomeDestinationScreen(val route: String, val arguments : String = "
     object Chart : HomeDestinationScreen(route = "CHART")
     object Profile : HomeDestinationScreen(route = "PROFILE")
     object QuestionSettings : HomeDestinationScreen(route = "QUESTION_SETTINGS")
+    object UserSettings : HomeDestinationScreen(route = "USER_SETTINGS")
     object CategoryQuestions : HomeDestinationScreen(route = "QUESTIONS", arguments = "categoryId")
 }

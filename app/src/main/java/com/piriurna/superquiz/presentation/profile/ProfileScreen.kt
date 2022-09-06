@@ -41,12 +41,21 @@ fun ProfileScreen(
         }
 
         SQRow(
-            modifier = Modifier.padding(top = 24.dp),
+            modifier = Modifier.padding(top = 32.dp),
+            label = "Settings",
+            onClick = {
+                navController.navigate(HomeDestinationScreen.UserSettings.route)
+            }
+        )
+
+        SQRow(
+            modifier = Modifier.padding(top = 32.dp),
             label = "Questions",
             onClick = {
                 navController.navigate(HomeDestinationScreen.QuestionSettings.route)
             }
         )
+
 
     }
 }
