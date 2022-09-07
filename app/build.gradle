@@ -26,9 +26,40 @@ android {
     }
 
     buildTypes {
+        debug {
+            debuggable true
+            minifyEnabled false
+        }
+
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+    }
+
+    flavorDimensions "env"
+
+    productFlavors {
+        dev {
+            dimension "env"
+            applicationIdSuffix ".dev"
+            manifestPlaceholders variant: 'SuperQuiz - Dev'
+            buildConfigField("Boolean", "IS_REDIRECT_URL", "false")
+            buildConfigField("String", "BASE_URL", "\"https://opentdb.com/\"")
+        }
+
+        free {
+            dimension "env"
+            applicationIdSuffix ".free"
+            manifestPlaceholders variant: 'SuperQuiz - Free'
+            buildConfigField("String", "BASE_URL", "\"https://opentdb.com/\"")
+        }
+
+        prod {
+            dimension "env"
+            manifestPlaceholders variant: 'SuperQuiz'
+            buildConfigField("String", "BASE_URL", "\"https://opentdb.com/\"")
         }
     }
     compileOptions {
@@ -76,4 +107,7 @@ dependencies {
 
     implementation rootProject.libraries.hiltLifecycleViewmodel
     implementation rootProject.libraries.hiltNavigationCompose
+
+    //Coil
+    implementation rootProject.libraries.coil
 }

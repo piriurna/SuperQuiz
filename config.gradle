@@ -7,6 +7,7 @@ ext.versions = [
         lottie                      : '5.2.0',
         kotlinxSerializationJson    : '1.3.2',
         datastore                   : '1.0.0',
+        coil                        : '2.0.0'
 
 ]
 
@@ -23,8 +24,9 @@ ext.libraries = [
         composeMaterial           : "androidx.compose.material:material:$versions.compose",
         composeUiTooling          : "androidx.compose.ui:ui-tooling:$versions.compose",
         kotlinxSerializationJson  : "org.jetbrains.kotlinx:kotlinx-serialization-json:$versions.kotlinxSerializationJson",
-        datastore                 :"androidx.datastore:datastore:$versions.datastore",
-        datastoreCore             :"androidx.datastore:datastore-core:$versions.datastore"
+        datastore                 : "androidx.datastore:datastore:$versions.datastore",
+        datastoreCore             : "androidx.datastore:datastore-core:$versions.datastore",
+        coil                      : "io.coil-kt:coil-compose:$versions.coil"
 
 
 ]
