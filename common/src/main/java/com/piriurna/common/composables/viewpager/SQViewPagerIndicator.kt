@@ -30,8 +30,11 @@ fun SQViewPagerIndicator(
     ) {
         items(totalDots) { index ->
             val selected = index == selectedIndex
-            val color = if(selected) selectedColor else unSelectedColor
-            SQViewPagerIndicatorDot(color = color, selected = selected)
+            SQViewPagerIndicatorDot(
+                selectedColor = selectedColor,
+                unselectedColor = unSelectedColor,
+                selected = selected
+            )
 
 
             if (index != totalDots - 1) {

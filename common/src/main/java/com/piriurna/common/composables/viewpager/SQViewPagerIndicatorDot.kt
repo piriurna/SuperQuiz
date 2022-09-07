@@ -1,5 +1,6 @@
 package com.piriurna.common.composables.viewpager
 
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -19,7 +20,8 @@ import com.piriurna.common.theme.purple
 
 @Composable
 fun SQViewPagerIndicatorDot(
-    color: Color,
+    selectedColor: Color,
+    unselectedColor: Color,
     selected: Boolean,
     modifier: Modifier = Modifier
 ) {
@@ -27,10 +29,12 @@ fun SQViewPagerIndicatorDot(
 
     val height = animateDpAsState(targetValue = if (selected) 8.dp else 12.dp)
 
+    val color = animateColorAsState(targetValue = if(selected) selectedColor else unselectedColor)
+
     Box(modifier = modifier) {
         Surface(
             shape = RoundedCornerShape(15.dp),
-            color = color,
+            color = color.value,
             modifier = Modifier
                 .width(width = width.value)
                 .height(height = height.value)
@@ -52,9 +56,14 @@ private fun SQViewPagerIndicatorDotPreview() {
             modifier = Modifier.clickable {
                 selected = !selected
             },
-            color = purple,
+            selectedColor = purple,
+            unselectedColor = lightPurple,
             selected = selected
         )
-        SQViewPagerIndicatorDot(color = lightPurple, selected = !selected)
+        SQViewPagerIndicatorDot(
+            selectedColor = purple,
+            unselectedColor = lightPurple,
+            selected = !selected
+        )
     }
 }
