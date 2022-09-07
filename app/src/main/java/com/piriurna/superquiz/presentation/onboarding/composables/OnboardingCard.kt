@@ -13,7 +13,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.piriurna.common.composables.text.SQText
 import com.piriurna.common.composables.viewpager.SQViewPagerIndicator
+import com.piriurna.common.theme.SQStyle.TextLato
+import com.piriurna.common.theme.SQStyle.TextLatoBold24
 import com.piriurna.superquiz.presentation.onboarding.models.OnboardingPage
 
 @Composable
@@ -48,29 +51,31 @@ fun OnboardingCard(
                 selectedIndex = selectedPageIndex,
                 selectedColor = onboardingPage.primaryColor,
                 unSelectedColor = onboardingPage.backgroundColor,
-                modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally)
             )
 
 
             //-----------------
             // TEXTS CONTAINERS
             //-----------------
-            Text(
+            SQText(
                 text = onboardingPage.pageTitle,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
+                style = TextLatoBold24,
                 modifier = Modifier.padding(top = 16.dp)
             )
 
             Box(modifier = Modifier
-                .height(75.dp)
+                .fillMaxWidth()
+                .height(100.dp)
             ) {
-                Text(
+                SQText(
                     text = onboardingPage.pageDescription,
                     textAlign = TextAlign.Center,
                     color = Color.Gray,
                     lineHeight = 23.sp,
-                    fontWeight = FontWeight.W400,
+                    style = TextLato,
                     modifier = Modifier
                         .padding(horizontal = 36.dp)
                         .align(Alignment.Center)

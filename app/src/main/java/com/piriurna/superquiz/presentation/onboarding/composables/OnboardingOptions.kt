@@ -15,6 +15,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.piriurna.common.composables.button.SQRoundButton
+import com.piriurna.common.composables.text.SQText
+import com.piriurna.common.theme.SQStyle.TextLatoBold
 import com.piriurna.superquiz.presentation.onboarding.models.OnboardingPage
 
 @Composable
@@ -55,29 +57,18 @@ fun OnboardingSkipOption(
         modifier = Modifier.fillMaxWidth()
     ) {
         TextButton(onClick = onSkipClick) {
-            Text(
+            SQText(
                 text = "Skip now",
                 color = Color.Black,
-                fontWeight = FontWeight.W400
             )
         }
         
         SQRoundButton(
             imageColor = pageModel.primaryColor,
             buttonColor = pageModel.primaryColor,
-            onClickListener = onNextClick )
+            onClickListener = onNextClick
+        )
     }
-}
-
-@OptIn(ExperimentalPagerApi::class)
-private fun goToNextPage(pageModel: OnboardingPage) {
-//    pageModel.viewPagerModel?.let {
-//        with(it){
-//            scope.launch {
-//                state.animateScrollToPage(pageModel.nextPage)
-//            }
-//        }
-//    }
 }
 
 @Preview(showBackground = true)
@@ -103,10 +94,10 @@ fun OnboardingStartOption(
             .fillMaxWidth()
             .height(45.dp)
     ) {
-        Text(
+        SQText(
             text = "Get Started",
             color = Color.White,
-            fontWeight = FontWeight.Bold
+            style = TextLatoBold
         )
     }
 }

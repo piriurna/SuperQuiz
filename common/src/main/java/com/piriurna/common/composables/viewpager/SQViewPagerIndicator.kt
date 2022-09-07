@@ -2,7 +2,8 @@ package com.piriurna.common.composables.viewpager
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.runtime.Composable
+import androidx.compose.material.Button
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,11 +29,10 @@ fun SQViewPagerIndicator(
 
     ) {
         items(totalDots) { index ->
-            if (index == selectedIndex) {
-                SQViewPagerIndicatorDot(color = selectedColor, selected = true)
-            } else {
-                SQViewPagerIndicatorDot(color = unSelectedColor, selected = false)
-            }
+            val selected = index == selectedIndex
+            val color = if(selected) selectedColor else unSelectedColor
+            SQViewPagerIndicatorDot(color = color, selected = selected)
+
 
             if (index != totalDots - 1) {
                 Spacer(modifier = Modifier.padding(horizontal = 2.dp))
@@ -44,5 +44,13 @@ fun SQViewPagerIndicator(
 @Preview(showBackground = true)
 @Composable
 private fun SQViewPagerIndicatorPreview() {
-    SQViewPagerIndicator(9, 3, purple, lightPurple)
+    var selected by remember {
+        mutableStateOf(1)
+    }
+
+    Column() {
+        SQViewPagerIndicator(9, selected, purple, lightPurple)
+
+        Button(onClick = { selected++ }) {}
+    }
 }
