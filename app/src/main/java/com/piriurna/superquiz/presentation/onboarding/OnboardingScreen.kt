@@ -9,11 +9,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.drawable.toDrawable
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest
+import coil.size.Size
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
@@ -26,6 +32,66 @@ import kotlinx.coroutines.launch
 import java.lang.Integer.max
 import java.lang.Integer.min
 import kotlin.math.abs
+
+//@Composable
+//fun OnboardingScreen2() {
+//
+//    val viewModel: ProfileViewModel = hiltViewModel()
+//    val state = viewModel.state.value
+//
+//    BuildProfileScreen(
+//        state = state,
+//        events = viewModel::onTriggerEvent
+//    )
+//}
+//
+//@Composable
+//private fun BuildOnboardingScreen2(
+//    state: ProfileState,
+//    events: ((ProfileEvents) -> Unit),
+//) {
+//
+//}
+//
+//@Preview
+//@Composable
+//fun ProfileScreenPreview() {
+//    BuildProfileScreen(
+//        state = ProfileState(),
+//        events = {}
+//    )
+//}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -42,8 +108,16 @@ fun OnboardingScreen(
                 .fillMaxSize()
                 .background(pages[page].backgroundColor)
         ) {
+
+            val painter = rememberAsyncImagePainter(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(pages[page].mainImageUrl)
+                    .size(Size.ORIGINAL)
+                    .crossfade(100)
+                    .build()
+            )
             Image(
-                painter = painterResource(id = pages[page].mainImage),
+                painter = painter,
                 contentDescription = "Page Image",
                 modifier = Modifier
                     .align(Alignment.TopCenter)
