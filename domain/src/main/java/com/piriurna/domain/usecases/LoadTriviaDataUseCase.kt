@@ -36,7 +36,7 @@ class LoadTriviaDataUseCase @Inject constructor(
                     questionsResult.data?.let { questionsData ->
                         val answersForQuestions : Map<String, List<Answer>> = questionsData.map {
                             return@map (it.description to it.allAnswers)
-                        }.toMap() //TODO: REFACTOR
+                        }.toMap() //TODO: REFACTOR HOW TO SAVE ANSWERS FOR QUESTIONS
 
                         val ids = triviaRepository.insertCategoryQuestionsInDb(questionsData)
 
@@ -50,17 +50,17 @@ class LoadTriviaDataUseCase @Inject constructor(
                                 triviaRepository.insertAnswersInDb(answers, questionId)
                             }
                         }
+
                     }?: kotlin.run {
-                        if(questionsResult.data == null) //TODO: VER COM GUSTAVO, ERRO NOS TESTES SEM O IF, MAS NA APP FUNCIONA SEMPRE...
-                            emit(Resource.Error(message = questionsResult.error.message?:"${category.id} error with question result ${questionsResult.data}"))
+                        emit(Resource.Error(message = questionsResult.error.message!!))
+                        return@flow
                     }
                 }
-
-                emit(Resource.Success(LoadTriviaType.FIRST_INSTALL))
 
                 appDataStoreRepository.saveAppSettings(appSettings.copy(
                     firstInstall = false
                 ))
+                emit(Resource.Success(LoadTriviaType.FIRST_INSTALL))
             }?: kotlin.run {
                 emit(Resource.Error(message = categoriesResult.error.message!!))
             }
@@ -97,8 +97,7 @@ class LoadTriviaDataUseCase @Inject constructor(
                                     }
                                 }
                             }?: kotlin.run {
-                                if(questionsResult.data == null)
-                                    emit(Resource.Error(message = questionsResult.error.message?:"error"))
+                                emit(Resource.Error(message = questionsResult.error.message?:"error"))
                             }
                         }
                         emit(Resource.Success(LoadTriviaType.CATEGORIES_UPDATED))

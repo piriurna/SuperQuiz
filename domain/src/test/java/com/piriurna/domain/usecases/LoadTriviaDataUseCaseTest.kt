@@ -1,6 +1,7 @@
 package com.piriurna.domain.usecases
 
 import BaseUseCaseTest
+import com.piriurna.domain.ApiNetworkError
 import com.piriurna.domain.ApiNetworkResponse
 import com.piriurna.domain.Resource
 import com.piriurna.domain.models.*
@@ -93,9 +94,13 @@ class LoadTriviaDataUseCaseTest : BaseUseCaseTest(){
 
         val questionsForSecondCategoryIds = questionsForSecondCategory.map { it.id.toLong() }
 
-        val flow = flow { emit(AppSettings(firstInstall = true)) }
+        val appDataStoreflow = flow { emit(AppSettings(firstInstall = true)) }
 
-        whenever(appDataStoreRepository.getAppSettings()).thenReturn(flow)
+        val profileDataStoreflow = flow { emit(ProfileSettings(numberOfQuestions = 10)) }
+
+        whenever(appDataStoreRepository.getAppSettings()).thenReturn(appDataStoreflow)
+
+        whenever(profileDataStoreRepository.getProfileSettings()).thenReturn(profileDataStoreflow)
 
         whenever(triviaRepository.getCategories()).thenReturn(
             ApiNetworkResponse(categoryList)
@@ -272,5 +277,31 @@ class LoadTriviaDataUseCaseTest : BaseUseCaseTest(){
         verify(triviaRepository, times(1)).insertCategoryQuestionsInDb(listOf(Question.mockQuestions[2]))
 
         verify(triviaRepository, times(1)).insertAnswersInDb(Question.mockQuestions[2].allAnswers, Question.mockQuestions[2].id)
+    }
+
+    @ExperimentalCoroutinesApi
+    @Test
+    fun `first install fetch categories get error`() = runBlockingTest {
+
+        whenever(triviaRepository.getCategories()).thenReturn(
+            ApiNetworkResponse(null, error = ApiNetworkError(message = "Error"))
+        )
+
+        val appDataStoreflow = flow { emit(AppSettings(firstInstall = true)) }
+
+        val profileDataStoreflow = flow { emit(ProfileSettings(numberOfQuestions = 10)) }
+
+        whenever(appDataStoreRepository.getAppSettings()).thenReturn(appDataStoreflow)
+
+        whenever(profileDataStoreRepository.getProfileSettings()).thenReturn(profileDataStoreflow)
+
+        val emissions = loadTriviaDataUseCase().toList()
+        var result = (emissions[0] as Resource)
+
+        assert(result is Resource.Loading)
+
+        result = (emissions[1] as Resource)
+        val loadTriviaType = (result as Resource.Error)
+        assert(loadTriviaType.data == null)
     }
 }
