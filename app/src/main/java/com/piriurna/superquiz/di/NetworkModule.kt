@@ -2,9 +2,9 @@ package com.piriurna.superquiz.di
 
 import com.piriurna.data.remote.TriviaApi
 import com.piriurna.data.remote.sources.TriviaApiSource
-import com.piriurna.superquiz.ApiConstants.BASE_URL
 import com.piriurna.superquiz.ApiConstants.CONNECT_TIMEOUT
 import com.piriurna.superquiz.ApiConstants.READ_TIMEOUT
+import com.piriurna.superquiz.BuildConfig
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,7 +41,7 @@ object NetworkModule {
     @Singleton
     fun provideTriviaApi(okHttpClient: OkHttpClient): TriviaApi {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
