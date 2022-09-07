@@ -12,10 +12,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
+import com.piriurna.superquiz.presentation.navigation.RootDestinationScreen
 import com.piriurna.superquiz.presentation.onboarding.composables.OnboardingCard
 import com.piriurna.superquiz.presentation.onboarding.models.OnboardingPage
 import kotlinx.coroutines.CoroutineScope
@@ -27,6 +30,7 @@ import kotlin.math.abs
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun OnboardingScreen(
+    navController: NavController
 ) {
     val pages = OnboardingPage.getOnboardingMockList
     val pagerState = rememberPagerState()
@@ -56,7 +60,7 @@ fun OnboardingScreen(
                 navigateTo(scope, pagerState, pagerState.pageCount - 1)
             },
             onFinishClick = {
-                navigateTo(scope, pagerState, 0)
+                navController.navigate(RootDestinationScreen.Home.route)
             },
             modifier = Modifier
                 .align(Alignment.BottomCenter),
@@ -83,5 +87,5 @@ private fun navigateTo(scope: CoroutineScope, pagerState: PagerState, position :
 @Preview(showBackground = true)
 @Composable
 private fun OnboardingPreview() {
-    OnboardingScreen()
+    OnboardingScreen(rememberNavController())
 }
