@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.piriurna.common.composables.text.SQText
 import com.piriurna.common.theme.SQStyle
+import com.piriurna.superquiz.BuildConfig
 import com.piriurna.superquiz.presentation.profile.ProfileSettingsViewModel
 import kotlin.math.abs
 
@@ -32,18 +33,21 @@ fun QuestionsSettingsScreen() {
 
         val valueRange = 5f..20f
         val availableOptions = listOf(5f, 10f, 15f, 20f)
+        val isEnabled = BuildConfig.FLAVOR != "free"
         var sliderPosition by remember { mutableStateOf(state.profileSettings.numberOfQuestions.toFloat()) }
 
-        Slider(
-            value = sliderPosition,
-            onValueChange = { value ->
-                val closestNumber = availableOptions.minByOrNull { abs(value - it ) }
-                sliderPosition = closestNumber?:value
-                viewModel.triggerSaveNumberOfQuestions(sliderPosition.toInt())
-            },
-            valueRange = valueRange,
-            steps = 2
-        )
+        if(isEnabled){
+            Slider(
+                value = sliderPosition,
+                onValueChange = { value ->
+                    val closestNumber = availableOptions.minByOrNull { abs(value - it ) }
+                    sliderPosition = closestNumber?:value
+                    viewModel.triggerSaveNumberOfQuestions(sliderPosition.toInt())
+                },
+                valueRange = valueRange,
+                steps = 2
+            )
+        }
 
         if(sliderPosition in availableOptions)
             SQText(text = sliderPosition.toInt().toString(), style = SQStyle.TextLatoBold)

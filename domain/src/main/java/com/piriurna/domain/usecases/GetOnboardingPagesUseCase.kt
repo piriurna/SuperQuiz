@@ -5,8 +5,9 @@ import com.piriurna.domain.models.OnboardingPage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class GetOnboardingPagesUseCase {
+class GetOnboardingPagesUseCase @Inject constructor(){
 
     operator fun invoke() : Flow<Resource<List<OnboardingPage>>> = flow {
 

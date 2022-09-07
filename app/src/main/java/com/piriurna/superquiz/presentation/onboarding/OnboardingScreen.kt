@@ -6,18 +6,20 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.graphics.drawable.toDrawable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
+import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import coil.size.Size
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -29,120 +31,70 @@ import com.piriurna.superquiz.presentation.onboarding.composables.OnboardingCard
 import com.piriurna.superquiz.presentation.onboarding.models.OnboardingPage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import java.lang.Integer.max
 import java.lang.Integer.min
-import kotlin.math.abs
 
-//@Composable
-//fun OnboardingScreen2() {
-//
-//    val viewModel: ProfileViewModel = hiltViewModel()
-//    val state = viewModel.state.value
-//
-//    BuildProfileScreen(
-//        state = state,
-//        events = viewModel::onTriggerEvent
-//    )
-//}
-//
-//@Composable
-//private fun BuildOnboardingScreen2(
-//    state: ProfileState,
-//    events: ((ProfileEvents) -> Unit),
-//) {
-//
-//}
-//
-//@Preview
-//@Composable
-//fun ProfileScreenPreview() {
-//    BuildProfileScreen(
-//        state = ProfileState(),
-//        events = {}
-//    )
-//}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun OnboardingScreen(
     navController: NavController
 ) {
-    val pages = OnboardingPage.getOnboardingMockList
+    val viewModel : OnboardingViewModel = hiltViewModel()
+
+    BuildOnboardingScreen(state = viewModel.state.value, navController = navController)
+}
+
+
+@OptIn(ExperimentalPagerApi::class)
+@Composable
+fun BuildOnboardingScreen(
+    state: OnboardingState,
+    navController: NavController
+) {
     val pagerState = rememberPagerState()
     val scope = rememberCoroutineScope()
 
-    HorizontalPager(count = pages.size, state = pagerState) { page ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(pages[page].backgroundColor)
-        ) {
+    val pages by derivedStateOf {
+        state.onboardingPages
+    }
 
-            val painter = rememberAsyncImagePainter(
-                model = ImageRequest.Builder(LocalContext.current)
-                    .data(pages[page].mainImageUrl)
-                    .size(Size.ORIGINAL)
-                    .crossfade(100)
-                    .build()
-            )
-            Image(
-                painter = painter,
-                contentDescription = "Page Image",
+    if(pages.isNotEmpty()) {
+        HorizontalPager(count = pages.size, state = pagerState) { page ->
+            Box(
                 modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(horizontal = 36.dp)
-                    .padding(top = 36.dp)
+                    .fillMaxSize()
+                    .background(pages[page].backgroundColor)
+            ) {
+
+                Image(
+                    painter = painterResource(id = pages[page].mainImage),
+                    contentDescription = "Page Image",
+                    modifier = Modifier
+                        .align(Alignment.TopCenter)
+                        .padding(horizontal = 36.dp)
+                        .padding(top = 36.dp)
+                )
+            }
+        }
+        Box(modifier = Modifier.fillMaxSize()) {
+            OnboardingCard(
+                onboardingPage = pages[pagerState.currentPage],
+                onNextClick = { nextClicked(scope, pagerState) },
+                onSkipClick = {
+                    navigateTo(scope, pagerState, pagerState.pageCount - 1)
+                },
+                onFinishClick = {
+                    navController.navigate(RootDestinationScreen.Home.route)
+                },
+                modifier = Modifier
+                    .align(Alignment.BottomCenter),
+                selectedPageIndex = pagerState.currentPage,
+                pageCount = pages.size
             )
         }
     }
-    Box(modifier = Modifier.fillMaxSize()) {
-        OnboardingCard(
-            onboardingPage = pages[pagerState.currentPage],
-            onNextClick = { nextClicked(scope, pagerState) },
-            onSkipClick = {
-                navigateTo(scope, pagerState, pagerState.pageCount - 1)
-            },
-            onFinishClick = {
-                navController.navigate(RootDestinationScreen.Home.route)
-            },
-            modifier = Modifier
-                .align(Alignment.BottomCenter),
-            selectedPageIndex = pagerState.currentPage,
-            pageCount = pages.size
-        )
-    }
 }
+
+
+
 
 @OptIn(ExperimentalPagerApi::class)
 private fun nextClicked(scope: CoroutineScope, pagerState: PagerState) {
@@ -161,5 +113,10 @@ private fun navigateTo(scope: CoroutineScope, pagerState: PagerState, position :
 @Preview(showBackground = true)
 @Composable
 private fun OnboardingPreview() {
-    OnboardingScreen(rememberNavController())
+    BuildOnboardingScreen(
+        navController = rememberNavController(),
+        state = OnboardingState(
+            onboardingPages = OnboardingPage.getOnboardingMockList
+        )
+    )
 }
