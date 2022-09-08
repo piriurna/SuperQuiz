@@ -32,7 +32,8 @@ fun SplashScreen(
             LoadTriviaType.NO_CATEGORIES_UPDATED,
             LoadTriviaType.CATEGORIES_UPDATED,
             LoadTriviaType.NO_STATE -> {
-                navController.navigate(RootDestinationScreen.Home.route)
+//                navController.navigate(RootDestinationScreen.Home.route)
+                navController.navigate(RootDestinationScreen.Onboarding.route)
             }
             else -> {}
         }

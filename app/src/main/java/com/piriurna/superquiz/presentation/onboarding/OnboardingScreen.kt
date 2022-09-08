@@ -5,10 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -18,7 +15,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import coil.ImageLoader
+import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
 import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
 import coil.size.Size
@@ -26,6 +27,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
+import com.piriurna.superquiz.R
 import com.piriurna.superquiz.presentation.navigation.RootDestinationScreen
 import com.piriurna.superquiz.presentation.onboarding.composables.OnboardingCard
 import com.piriurna.superquiz.presentation.onboarding.models.OnboardingPage
@@ -47,7 +49,8 @@ fun OnboardingScreen(
 @Composable
 fun BuildOnboardingScreen(
     state: OnboardingState,
-    navController: NavController
+    navController: NavController,
+    asyncImage : Boolean = true
 ) {
     val pagerState = rememberPagerState()
     val scope = rememberCoroutineScope()
@@ -64,14 +67,32 @@ fun BuildOnboardingScreen(
                     .background(pages[page].backgroundColor)
             ) {
 
-                Image(
-                    painter = painterResource(id = pages[page].mainImage),
-                    contentDescription = "Page Image",
-                    modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .padding(horizontal = 36.dp)
-                        .padding(top = 36.dp)
-                )
+                if(asyncImage) {
+                    AsyncImage(
+                        modifier = Modifier
+                            .align(Alignment.TopCenter)
+                            .padding(horizontal = 36.dp)
+                            .padding(top = 36.dp),
+                        model = ImageRequest.Builder(LocalContext.current)
+                            .data(pages[page].mainImageUrl)
+                            .fallback(pages[page].mainImage)
+                            .placeholder(pages[page].mainImage)
+                            .error(pages[page].mainImage)
+                            .decoderFactory(SvgDecoder.Factory())
+                            .crossfade(true)
+                            .build(),
+                        contentDescription = "Page Image"
+                    )
+                } else {
+                    Image(
+                        painter = painterResource(id = pages[page].mainImage),
+                        contentDescription = "Page Image",
+                        modifier = Modifier
+                            .align(Alignment.TopCenter)
+                            .padding(horizontal = 36.dp)
+                            .padding(top = 36.dp)
+                    )
+                }
             }
         }
         Box(modifier = Modifier.fillMaxSize()) {
@@ -91,6 +112,8 @@ fun BuildOnboardingScreen(
             )
         }
     }
+
+
 }
 
 
@@ -117,6 +140,7 @@ private fun OnboardingPreview() {
         navController = rememberNavController(),
         state = OnboardingState(
             onboardingPages = OnboardingPage.getOnboardingMockList
-        )
+        ),
+        asyncImage = true
     )
 }

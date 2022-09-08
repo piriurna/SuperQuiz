@@ -12,7 +12,8 @@ fun com.piriurna.domain.models.OnboardingPage.toOnboardingPage() : OnboardingPag
         pageDescription = this.pageDescription,
         primaryColor = Color(red = this.primaryColor.red, blue = this.primaryColor.blue, green = this.primaryColor.green, alpha = this.primaryColor.alpha),
         backgroundColor = Color(red = this.backgroundColor.red, blue = this.backgroundColor.blue, green = this.backgroundColor.green, alpha = this.backgroundColor.alpha),
-        mainImage = OnboardingImage.getById(this.id).image
+        mainImage = OnboardingImage.getById(this.id).image,
+        mainImageUrl = this.mainImageUrl
     )
 }
 
