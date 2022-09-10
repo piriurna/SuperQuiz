@@ -25,12 +25,13 @@ fun SQAppBarIcon(
     onClick : () -> Unit,
     icon : ImageVector,
     iconSize : Dp = 12.dp,
-    iconColor: Color = MaterialTheme.colors.primaryText
+    iconColor: Color = MaterialTheme.colors.primaryText,
+    iconBackgroundColor : Color = Color.White
 ) {
     IconButton(modifier = modifier, onClick = onClick) {
         Box(
             modifier = Modifier
-                .background(shape = CircleShape, color = Color.White)
+                .background(shape = CircleShape, color = iconBackgroundColor)
         ) {
             Icon(
                 modifier = Modifier.padding(16.dp).size(iconSize),

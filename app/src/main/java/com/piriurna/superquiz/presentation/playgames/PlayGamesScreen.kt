@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.TileMode
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,7 +25,6 @@ import androidx.navigation.compose.rememberNavController
 import com.piriurna.common.composables.scaffold.SQScaffold
 import com.piriurna.domain.models.Category
 import com.piriurna.superquiz.presentation.navigation.HomeDestinationScreen
-import com.piriurna.superquiz.presentation.navigation.HomeNavigationGraph
 import com.piriurna.superquiz.presentation.playgames.composables.CategoryCard
 import com.piriurna.superquiz.ui.theme.*
 
