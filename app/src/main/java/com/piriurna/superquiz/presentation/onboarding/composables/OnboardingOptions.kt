@@ -14,6 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
+import com.piriurna.common.composables.button.SQButton
 import com.piriurna.common.composables.button.SQRoundButton
 import com.piriurna.common.composables.text.SQText
 import com.piriurna.common.theme.SQStyle.TextLatoBold
@@ -86,20 +87,11 @@ fun OnboardingStartOption(
     onboardingPage: OnboardingPage,
     onFinishClick: () -> Unit
 ) {
-    Button(
+    SQButton(
         onClick = onFinishClick,
-        shape = RoundedCornerShape(8.dp),
-        colors = ButtonDefaults.buttonColors(backgroundColor = onboardingPage.primaryColor),
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(45.dp)
-    ) {
-        SQText(
-            text = "Get Started",
-            color = Color.White,
-            style = TextLatoBold
-        )
-    }
+        buttonText = "Get Started",
+        backgroundColor = onboardingPage.primaryColor,
+    )
 }
 
 @Preview(showBackground = true)
