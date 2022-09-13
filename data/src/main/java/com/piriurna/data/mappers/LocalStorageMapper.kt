@@ -16,7 +16,8 @@ fun AppSettingsStore.toAppSettings() : AppSettings {
 fun AppSettings.toAppSettingsStore() : AppSettingsStore {
     return AppSettingsStore(
         firstInstall = this.firstInstall,
-        shouldFetchNewCategories = this.shouldFetchNewCategories
+        shouldFetchNewCategories = this.shouldFetchNewCategories,
+        onboardingComplete = this.onboardingComplete
     )
 }
 

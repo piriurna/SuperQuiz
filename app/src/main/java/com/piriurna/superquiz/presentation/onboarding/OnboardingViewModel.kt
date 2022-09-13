@@ -5,7 +5,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.piriurna.domain.Resource
-import com.piriurna.domain.usecases.GetOnboardingPagesUseCase
+import com.piriurna.domain.usecases.onboarding.GetOnboardingPagesUseCase
 import com.piriurna.superquiz.SQBaseEventViewModel
 import com.piriurna.superquiz.mappers.toOnboardingUI
 import dagger.hilt.android.lifecycle.HiltViewModel

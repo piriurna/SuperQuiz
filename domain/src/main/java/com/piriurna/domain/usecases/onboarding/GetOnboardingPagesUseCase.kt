@@ -1,4 +1,4 @@
-package com.piriurna.domain.usecases
+package com.piriurna.domain.usecases.onboarding
 
 import com.piriurna.domain.Resource
 import com.piriurna.domain.models.Onboarding

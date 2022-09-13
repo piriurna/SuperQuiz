@@ -13,7 +13,8 @@ class AppDataStoreRepositoryImpl(
         context.appSettingsStore.updateData {
             it.copy(
                 firstInstall = appSettings.firstInstall,
-                shouldFetchNewCategories = appSettings.shouldFetchNewCategories
+                shouldFetchNewCategories = appSettings.shouldFetchNewCategories,
+                onboardingComplete = appSettings.onboardingComplete
             )
         }
     }
