@@ -8,7 +8,8 @@ import com.piriurna.domain.models.ProfileSettings
 fun AppSettingsStore.toAppSettings() : AppSettings {
     return AppSettings(
         firstInstall = this.firstInstall,
-        shouldFetchNewCategories = this.shouldFetchNewCategories
+        shouldFetchNewCategories = this.shouldFetchNewCategories,
+        onboardingComplete = this.onboardingComplete
     )
 }
 
