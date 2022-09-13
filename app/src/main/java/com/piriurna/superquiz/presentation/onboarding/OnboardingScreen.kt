@@ -36,7 +36,11 @@ fun OnboardingScreen(
 ) {
     val viewModel : OnboardingViewModel = hiltViewModel()
 
-    BuildOnboardingScreen(state = viewModel.state.value, navController = navController)
+    BuildOnboardingScreen(
+        state = viewModel.state.value,
+        events = viewModel::onTriggerEvent,
+        navController = navController
+    )
 }
 
 
@@ -44,6 +48,7 @@ fun OnboardingScreen(
 @Composable
 fun BuildOnboardingScreen(
     state: OnboardingState,
+    events: ((OnboardingEvents) -> Unit)? = null,
     navController: NavController,
     asyncImage : Boolean = true
 ) {
@@ -96,6 +101,7 @@ fun BuildOnboardingScreen(
                         navigateTo(scope, pagerState, pagerState.pageCount - 1)
                     },
                     onFinishClick = {
+                        events?.invoke(OnboardingEvents.CompleteOnboarding)
                         navController.navigate(RootDestinationScreen.Home.route)
                     },
                     modifier = Modifier

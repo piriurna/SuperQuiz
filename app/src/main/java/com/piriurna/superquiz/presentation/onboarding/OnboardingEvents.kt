@@ -5,4 +5,6 @@ import com.piriurna.superquiz.SQBaseEvent
 sealed class OnboardingEvents : SQBaseEvent(){
 
     object FetchOnboardingPages : OnboardingEvents()
+
+    object CompleteOnboarding : OnboardingEvents()
 }
