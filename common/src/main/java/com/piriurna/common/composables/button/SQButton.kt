@@ -17,6 +17,7 @@ import com.piriurna.common.theme.primaryGreen
 
 @Composable
 fun SQButton(
+    modifier: Modifier = Modifier,
     onClick : () -> Unit,
     backgroundColor : Color = primaryGreen,
     foregroundColor: Color = backgroundGreen,
@@ -27,7 +28,7 @@ fun SQButton(
         onClick = onClick,
         shape = RoundedCornerShape(8.dp),
         colors = ButtonDefaults.buttonColors(backgroundColor = backgroundColor, contentColor = foregroundColor),
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(45.dp)
     ) {

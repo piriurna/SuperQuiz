@@ -11,7 +11,7 @@ import com.piriurna.common.R
 object SQStyle {
     private val LatoFont = FontFamily(
         Font(R.font.lato_regular),
-        Font(R.font.lato_thin, FontWeight.W300),
+        Font(R.font.lato_light, FontWeight.W300),
         Font(R.font.lato_bold, FontWeight.Bold)
     )
 
@@ -32,12 +32,20 @@ object SQStyle {
         fontWeight = FontWeight.W300
     )
 
+    val TextLatoThin18 = TextLatoThin.copy(
+        fontSize = 18.sp
+    )
+
     val TextLato22 = TextLato.copy(
         fontSize = 22.sp
     )
 
     val TextLato35 = TextLato.copy(
         fontSize = 35.sp
+    )
+
+    val TextLato27Bold = TextLatoBold.copy(
+        fontSize = 27.sp
     )
 
     val TextLatoBold24 = TextLatoBold.copy(
