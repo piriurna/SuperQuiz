@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,19 +27,23 @@ import com.piriurna.common.theme.incompleteGray
 @Composable
 fun SQAppBar(
     modifier: Modifier = Modifier,
-    backIcon: @Composable () -> Unit,
-    title : String? = null,
-    optionsIcon: @Composable () -> Unit,
+    appBarOptions: AppBarOptions,
     backgroundColor : Color = Color.Transparent
 ) {
+    val backButton : @Composable (() -> Unit)? = if(appBarOptions is BackAppbar) appBarOptions.getBackButton() else null
+    val title = if(appBarOptions is TitleAppbar) appBarOptions.getTitle() else null
+    val optionsButton = if(appBarOptions is OptionsAppbar) appBarOptions.getOptionsButton() else null
+
     Box(modifier = modifier
         .background(color = backgroundColor)
         .height(88.dp)
         .padding(10.dp)
         .fillMaxWidth()
     ) {
-        Box(modifier = Modifier.align(Alignment.CenterStart)) {
-            backIcon()
+        if(backButton != null) {
+            Box(modifier = Modifier.align(Alignment.CenterStart)) {
+                backButton()
+            }
         }
 
         if(title != null){
@@ -46,10 +51,12 @@ fun SQAppBar(
         }
 
 
-        Box(
-            modifier = Modifier.align(Alignment.CenterEnd)
-        ) {
-            optionsIcon()
+        if(optionsButton != null) {
+            Box(
+                modifier = Modifier.align(Alignment.CenterEnd)
+            ) {
+                optionsButton()
+            }
         }
     }
 }
@@ -65,30 +72,35 @@ fun SQAppBarPreview() {
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         SQAppBar(
-            title = "App Bar Title",
-            backIcon = {
-                SQAppBarIcon(onClick = { }, icon = Icons.Default.Menu)
-           },
-            optionsIcon = {
-                SQAppBarIcon(onClick = { }, icon = Icons.Default.Menu)
-            },
+            appBarOptions = AppBarOptions.AppBarWithTitleBackAndOptions(
+                appBarTitle = "This is the Appbar Title",
+                appBarBackButton = {
+                    SQAppBarIcon(onClick = { }, icon = Icons.Default.ArrowBack)
+               },
+                appBarOptionsButton = {
+                    SQAppBarIcon(onClick = { }, icon = Icons.Default.Menu)
+                }
+            )
         )
 
         SQAppBar(
-            title = "App Bar Title",
-            backIcon = {
-                SQAppBarIcon(onClick = { }, icon = Icons.Default.Menu)
-            },
-            optionsIcon = {
-            },
+            appBarOptions = AppBarOptions.AppBarWithTitleAndBack(
+                appBarTitle = "This is the Appbar Title",
+                appBarBackButton = {
+                    SQAppBarIcon(onClick = { }, icon = Icons.Default.ArrowBack)
+                }
+            )
         )
 
         SQAppBar(
-            title = "App Bar Title",
-            backIcon = {
-            },
-            optionsIcon = {
-            },
+            appBarOptions = AppBarOptions.AppBarWithBackAndOptions(
+                appBarBackButton = {
+                    SQAppBarIcon(onClick = { }, icon = Icons.Default.ArrowBack)
+                },
+                appBarOptionsButton = {
+                    SQAppBarIcon(onClick = { }, icon = Icons.Default.Menu)
+                }
+            )
         )
     }
 }

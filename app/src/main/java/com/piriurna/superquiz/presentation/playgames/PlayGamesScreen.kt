@@ -49,7 +49,7 @@ fun BuildPlayGamesScreen(
     events: ((PlayGamesEvents) -> Unit)? = null,
     navController: NavController,
 ) {
-    SQScaffold(isLoading = state.isLoading, hasToolbar = false) {
+    SQScaffold(isLoading = state.isLoading) {
         Box(
             modifier = Modifier
                 .background(

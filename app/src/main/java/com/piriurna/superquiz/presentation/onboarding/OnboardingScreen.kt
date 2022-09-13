@@ -57,7 +57,7 @@ fun BuildOnboardingScreen(
 
     val pages = state.onboardingPages
 
-    SQScaffold(isLoading = state.isLoading, hasToolbar = false) {
+    SQScaffold(isLoading = state.isLoading) {
             HorizontalPager(count = pages.size, state = pagerState) { page ->
                 Box(
                     modifier = Modifier

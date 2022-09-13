@@ -53,7 +53,7 @@ fun QuestionsScreen(
         state.value.isLoading
     }
 
-    SQScaffold(isLoading = isLoading, hasToolbar = false) {
+    SQScaffold(isLoading = isLoading) {
         Column(
             modifier = modifier
                 .padding(16.dp)

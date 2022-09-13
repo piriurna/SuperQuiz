@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -16,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.piriurna.common.composables.button.SQAppBarIcon
 import com.piriurna.common.composables.loading.SQLoading
 import com.piriurna.common.composables.navigation.SQBottomNavigation
+import com.piriurna.common.composables.toolbar.AppBarOptions
 import com.piriurna.common.composables.toolbar.SQAppBar
 import com.piriurna.common.theme.purple
 import com.piriurna.common.models.BottomNavigationItem
@@ -33,10 +35,7 @@ fun SQScaffold(
     isLoading: Boolean = false,
     bottomBarItems: List<BottomNavigationItem> = emptyList(),
     onItemSelected: (BottomNavigationItem) -> Unit = {},
-    hasToolbar: Boolean,
-    appBarTitle: String? = null,
-    appBarBackIcon: @Composable () -> Unit = {},
-    appBarOptionsIcon: @Composable () -> Unit = {},
+    appBarOptions: AppBarOptions? = null,
     content: @Composable (PaddingValues) -> Unit,
 ) {
 
@@ -65,12 +64,10 @@ fun SQScaffold(
             }
         )
 
-        if(hasToolbar)
+        if(appBarOptions != null)
             SQAppBar(
                 modifier = Modifier.padding(top = 20.dp).align(Alignment.TopCenter),
-                title = appBarTitle,
-                backIcon = appBarBackIcon,
-                optionsIcon = appBarOptionsIcon,
+                appBarOptions = appBarOptions
             )
 
         SQLoading(isLoading = isLoading)
@@ -84,12 +81,15 @@ fun SQScaffoldPreview() {
     SQScaffold(
         isLoading = false,
         bottomBarItems = listOf(BottomNavigationItem.PlayGames, BottomNavigationItem.Profile),
-        hasToolbar = true,
-        appBarTitle = "This is the toolbar",
-        appBarBackIcon = {},
-        appBarOptionsIcon = {
-            SQAppBarIcon(onClick = { }, icon = Icons.Default.Menu)
-        }
+        appBarOptions = AppBarOptions.AppBarWithTitleBackAndOptions(
+            appBarTitle = "This is the Appbar Title",
+            appBarBackButton = {
+                SQAppBarIcon(onClick = { }, icon = Icons.Default.ArrowBack)
+            },
+            appBarOptionsButton = {
+                SQAppBarIcon(onClick = { }, icon = Icons.Default.Menu)
+            }
+        )
     ) {
         Text(text = "Scaffold test")
     }
