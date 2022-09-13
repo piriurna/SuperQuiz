@@ -8,9 +8,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.piriurna.domain.models.LoadTriviaType
+import com.piriurna.domain.models.splash.SplashDestination
 import com.piriurna.superquiz.presentation.AppLogo
 import com.piriurna.superquiz.presentation.navigation.RootDestinationScreen
 
@@ -21,27 +23,33 @@ fun SplashScreen(
     val splashViewModel : SplashViewModel = hiltViewModel()
 
 
-    LaunchedEffect(key1 = splashViewModel.state.value) {
-        val state = splashViewModel.state.value
 
-        when(state.loadTriviaState) {
-            LoadTriviaType.FIRST_INSTALL -> {
-                navController.navigate(RootDestinationScreen.Onboarding.route)
+
+
+    BuildSplashScreen(splashViewModel.state.value, navController)
+
+}
+
+@Composable
+fun BuildSplashScreen(
+    state : SplashState,
+    navController : NavController
+) {
+    LaunchedEffect(key1 = state) {
+        when(state.destination) {
+            SplashDestination.HOME -> {
+                navController.popBackStack()
+                navController.navigate(RootDestinationScreen.Home.route)
             }
 
-            LoadTriviaType.NO_CATEGORIES_UPDATED,
-            LoadTriviaType.CATEGORIES_UPDATED,
-            LoadTriviaType.NO_STATE -> {
-//                navController.navigate(RootDestinationScreen.Home.route)
+            SplashDestination.ONBOARDING -> {
                 navController.popBackStack()
                 navController.navigate(RootDestinationScreen.Onboarding.route)
             }
+
             else -> {}
         }
     }
-
-
-
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -53,5 +61,8 @@ fun SplashScreen(
 @Preview(showBackground = true)
 @Composable
 private fun SplashScreenPreview() {
-    SplashScreen(rememberNavController())
+    BuildSplashScreen(
+        state = SplashState(),
+        navController = rememberNavController()
+    )
 }

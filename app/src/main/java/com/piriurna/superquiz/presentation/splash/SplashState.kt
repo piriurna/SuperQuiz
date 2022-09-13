@@ -1,8 +1,8 @@
 package com.piriurna.superquiz.presentation.splash
 
-import com.piriurna.domain.models.LoadTriviaType
+import com.piriurna.domain.models.splash.SplashDestination
 
 data class SplashState(
     val isLoading : Boolean = false,
-    val loadTriviaState: LoadTriviaType = LoadTriviaType.UNDEFINED
+    val destination: SplashDestination = SplashDestination.UNDEFINED
 )

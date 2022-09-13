@@ -6,7 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.piriurna.domain.Resource
 import com.piriurna.domain.models.LoadTriviaType
+import com.piriurna.domain.models.splash.SplashDestination
 import com.piriurna.domain.usecases.LoadTriviaDataUseCase
+import com.piriurna.domain.usecases.splash.GetSplashNextDestinationUseCase
 import com.piriurna.superquiz.SQBaseEventViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -15,7 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    private val loadTriviaDataUseCase: LoadTriviaDataUseCase
+    private val loadTriviaDataUseCase: LoadTriviaDataUseCase,
+    private val getSplashNextDestinationUseCase: GetSplashNextDestinationUseCase
 ) : SQBaseEventViewModel<SplashEvents>(){
 
     private val _state: MutableState<SplashState> = mutableStateOf(SplashState())
@@ -38,9 +41,24 @@ class SplashViewModel @Inject constructor(
         loadTriviaDataUseCase().onEach { result ->
             when(result) {
                 is Resource.Success -> {
+                    getSplashDestination(result.data?:LoadTriviaType.NO_STATE)
+                }
+                is Resource.Loading -> {
                     _state.value = _state.value.copy(
-                        isLoading = false,
-                        loadTriviaState = result.data?:LoadTriviaType.UNDEFINED
+                        isLoading = true
+                    )
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun getSplashDestination(loadTriviaType: LoadTriviaType) {
+        getSplashNextDestinationUseCase(loadTriviaType).onEach { result ->
+            when(result) {
+                is Resource.Success -> {
+                    _state.value = _state.value.copy(
+                        isLoading = true,
+                        destination = result.data?:SplashDestination.UNDEFINED
                     )
                 }
                 is Resource.Loading -> {
