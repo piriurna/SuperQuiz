@@ -25,10 +25,11 @@ import androidx.navigation.compose.rememberNavController
 import com.piriurna.common.composables.scaffold.SQScaffold
 import com.piriurna.domain.models.Category
 import com.piriurna.superquiz.presentation.navigation.HomeDestinationScreen
+import com.piriurna.superquiz.presentation.onboarding.OnboardingEvents
+import com.piriurna.superquiz.presentation.onboarding.OnboardingState
 import com.piriurna.superquiz.presentation.playgames.composables.CategoryCard
 import com.piriurna.superquiz.ui.theme.*
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PlayGamesScreen(
     navController: NavController = rememberNavController()
@@ -37,6 +38,17 @@ fun PlayGamesScreen(
 
     val state = playGamesViewModel.state.value
 
+    BuildPlayGamesScreen(state = state, navController = navController, events = playGamesViewModel::onTriggerEvent)
+}
+
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun BuildPlayGamesScreen(
+    state: PlayGamesState,
+    events: ((PlayGamesEvents) -> Unit)? = null,
+    navController: NavController,
+) {
     SQScaffold(isLoading = state.isLoading, hasToolbar = false) {
         Box(
             modifier = Modifier
@@ -105,13 +117,13 @@ fun PlayGamesScreen(
     }
 }
 
-
-private fun getCategories() : List<Category> {
-    return Category.mockCategoryList
-}
-
 @Preview(showBackground = true)
 @Composable
 private fun PlayGamesScreenPreview() {
-    PlayGamesScreen()
+    BuildPlayGamesScreen(
+        state = PlayGamesState(
+            categories = Category.mockCategoryList
+        ),
+        navController = rememberNavController()
+    )
 }
