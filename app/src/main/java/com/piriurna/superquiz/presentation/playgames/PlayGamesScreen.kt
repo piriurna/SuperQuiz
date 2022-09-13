@@ -37,7 +37,7 @@ fun PlayGamesScreen(
 
     val state = playGamesViewModel.state.value
 
-    SQScaffold(isLoading = state.isLoading) {
+    SQScaffold(isLoading = state.isLoading, hasToolbar = false) {
         Box(
             modifier = Modifier
                 .background(

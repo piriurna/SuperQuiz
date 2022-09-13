@@ -21,7 +21,7 @@ fun ChartScreen() {
 
     val state = viewModel.state.value
 
-    SQScaffold(isLoading = state.isLoading) {
+    SQScaffold(isLoading = state.isLoading, hasToolbar = false) {
         Box(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center,

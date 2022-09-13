@@ -1,17 +1,18 @@
 package com.piriurna.common.composables.scaffold
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.piriurna.common.composables.button.SQAppBarIcon
 import com.piriurna.common.composables.loading.SQLoading
 import com.piriurna.common.composables.navigation.SQBottomNavigation
@@ -32,6 +33,7 @@ fun SQScaffold(
     isLoading: Boolean = false,
     bottomBarItems: List<BottomNavigationItem> = emptyList(),
     onItemSelected: (BottomNavigationItem) -> Unit = {},
+    hasToolbar: Boolean,
     appBarTitle: String? = null,
     appBarBackIcon: @Composable () -> Unit = {},
     appBarOptionsIcon: @Composable () -> Unit = {},
@@ -40,6 +42,7 @@ fun SQScaffold(
 
     Box(
         modifier = Modifier
+            .background(Color.Black)
             .fillMaxSize()
     ) {
         val scaffoldModifier = modifier.fillMaxSize()
@@ -47,11 +50,7 @@ fun SQScaffold(
             modifier = scaffoldModifier,
             content = content,
             topBar = {
-                SQAppBar(
-                    title = appBarTitle,
-                    backIcon = appBarBackIcon,
-                    optionsIcon = appBarOptionsIcon,
-                )
+
             },
             bottomBar = {
                 if(bottomBarItems.isNotEmpty()) {
@@ -66,6 +65,14 @@ fun SQScaffold(
             }
         )
 
+        if(hasToolbar)
+            SQAppBar(
+                modifier = Modifier.padding(top = 20.dp).align(Alignment.TopCenter),
+                title = appBarTitle,
+                backIcon = appBarBackIcon,
+                optionsIcon = appBarOptionsIcon,
+            )
+
         SQLoading(isLoading = isLoading)
     }
 }
@@ -77,6 +84,7 @@ fun SQScaffoldPreview() {
     SQScaffold(
         isLoading = false,
         bottomBarItems = listOf(BottomNavigationItem.PlayGames, BottomNavigationItem.Profile),
+        hasToolbar = true,
         appBarTitle = "This is the toolbar",
         appBarBackIcon = {},
         appBarOptionsIcon = {

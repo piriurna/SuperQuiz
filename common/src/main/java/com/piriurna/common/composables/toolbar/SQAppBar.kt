@@ -33,6 +33,7 @@ fun SQAppBar(
 ) {
     Box(modifier = modifier
         .background(color = backgroundColor)
+        .height(88.dp)
         .padding(10.dp)
         .fillMaxWidth()
     ) {
@@ -59,13 +60,34 @@ fun SQAppBar(
 fun SQAppBarPreview() {
     Column(
         Modifier
-            .fillMaxSize()
-            .background(color = incompleteGray)) {
+            .fillMaxWidth()
+            .background(color = incompleteGray),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
+    ) {
         SQAppBar(
             title = "App Bar Title",
-            backIcon = {},
+            backIcon = {
+                SQAppBarIcon(onClick = { }, icon = Icons.Default.Menu)
+           },
             optionsIcon = {
                 SQAppBarIcon(onClick = { }, icon = Icons.Default.Menu)
+            },
+        )
+
+        SQAppBar(
+            title = "App Bar Title",
+            backIcon = {
+                SQAppBarIcon(onClick = { }, icon = Icons.Default.Menu)
+            },
+            optionsIcon = {
+            },
+        )
+
+        SQAppBar(
+            title = "App Bar Title",
+            backIcon = {
+            },
+            optionsIcon = {
             },
         )
     }
