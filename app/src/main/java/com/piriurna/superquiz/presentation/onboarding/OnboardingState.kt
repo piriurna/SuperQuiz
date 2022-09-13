@@ -1,8 +1,8 @@
 package com.piriurna.superquiz.presentation.onboarding
 
-import com.piriurna.superquiz.presentation.onboarding.models.OnboardingPage
+import com.piriurna.superquiz.presentation.onboarding.models.OnboardingUI
 
 data class OnboardingState(
     val isLoading : Boolean = false,
-    val onboardingPages: List<OnboardingPage> = emptyList()
+    val onboardingPages: List<OnboardingUI> = emptyList()
 )

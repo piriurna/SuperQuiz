@@ -1,6 +1,6 @@
 package com.piriurna.domain.models
 
-data class Color(
+data class ColorPalette(
     val red : Int,
     val green : Int,
     val blue : Int,

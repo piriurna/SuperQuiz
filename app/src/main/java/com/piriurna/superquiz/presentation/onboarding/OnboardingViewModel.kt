@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.piriurna.domain.Resource
 import com.piriurna.domain.usecases.GetOnboardingPagesUseCase
 import com.piriurna.superquiz.SQBaseEventViewModel
-import com.piriurna.superquiz.mappers.toOnboardingPage
+import com.piriurna.superquiz.mappers.toOnboardingUI
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -50,7 +50,7 @@ class OnboardingViewModel @Inject constructor(
                 is Resource.Success -> {
                     _state.value = _state.value.copy(
                         isLoading = false,
-                        onboardingPages = result.data?.toOnboardingPage()?: emptyList()
+                        onboardingPages = result.data?.toOnboardingUI()?: emptyList()
                     )
                 }
 

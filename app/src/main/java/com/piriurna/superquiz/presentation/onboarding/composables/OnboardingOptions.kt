@@ -1,28 +1,20 @@
 package com.piriurna.superquiz.presentation.onboarding.composables
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import com.google.accompanist.pager.ExperimentalPagerApi
 import com.piriurna.common.composables.button.SQButton
 import com.piriurna.common.composables.button.SQRoundButton
 import com.piriurna.common.composables.text.SQText
-import com.piriurna.common.theme.SQStyle.TextLatoBold
-import com.piriurna.superquiz.presentation.onboarding.models.OnboardingPage
+import com.piriurna.superquiz.presentation.onboarding.models.OnboardingUI
 
 @Composable
 fun OnboardingOptions(
-    onboardingPage: OnboardingPage,
+    onboardingPage: OnboardingUI,
     isLastPage : Boolean,
     onSkipClick: () -> Unit,
     onNextClick: () -> Unit,
@@ -43,12 +35,12 @@ fun OnboardingOptions(
 @Preview(showBackground = true)
 @Composable
 private fun OnboardingOptionsPreview() {
-    OnboardingOptions(OnboardingPage.getOnboardingMockList[0], true, {}, {}, {})
+    OnboardingOptions(OnboardingUI.getOnboardingMockList[0], true, {}, {}, {})
 }
 
 @Composable
 fun OnboardingSkipOption(
-    pageModel: OnboardingPage,
+    pageModel: OnboardingUI,
     onSkipClick: () -> Unit,
     onNextClick: () -> Unit,
 ) {
@@ -76,7 +68,7 @@ fun OnboardingSkipOption(
 @Composable
 private fun OnboardingSkipOptionPreview() {
     OnboardingSkipOption(
-        pageModel = OnboardingPage.getOnboardingMockList[0],
+        pageModel = OnboardingUI.getOnboardingMockList[0],
         onSkipClick = {},
         onNextClick = {}
     )
@@ -84,7 +76,7 @@ private fun OnboardingSkipOptionPreview() {
 
 @Composable
 fun OnboardingStartOption(
-    onboardingPage: OnboardingPage,
+    onboardingPage: OnboardingUI,
     onFinishClick: () -> Unit
 ) {
     SQButton(
@@ -97,6 +89,6 @@ fun OnboardingStartOption(
 @Preview(showBackground = true)
 @Composable
 private fun OnboardingStartOptionPreview() {
-    OnboardingStartOption(OnboardingPage.getOnboardingMockList[2], {})
+    OnboardingStartOption(OnboardingUI.getOnboardingMockList[2], {})
 }
 

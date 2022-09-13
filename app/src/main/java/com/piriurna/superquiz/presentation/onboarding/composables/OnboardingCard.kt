@@ -3,12 +3,10 @@ package com.piriurna.superquiz.presentation.onboarding.composables
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -17,11 +15,11 @@ import com.piriurna.common.composables.text.SQText
 import com.piriurna.common.composables.viewpager.SQViewPagerIndicator
 import com.piriurna.common.theme.SQStyle.TextLato
 import com.piriurna.common.theme.SQStyle.TextLatoBold24
-import com.piriurna.superquiz.presentation.onboarding.models.OnboardingPage
+import com.piriurna.superquiz.presentation.onboarding.models.OnboardingUI
 
 @Composable
 fun OnboardingCard(
-    onboardingPage: OnboardingPage,
+    onboardingPage: OnboardingUI,
     pageCount: Int,
     selectedPageIndex : Int,
     onSkipClick: () -> Unit = {},
@@ -109,7 +107,7 @@ fun OnboardingCard(
 private fun OnboardingCardPreview() {
     Box(modifier = Modifier.fillMaxSize()) {
         OnboardingCard(
-            onboardingPage = OnboardingPage.getOnboardingMockList[0],
+            onboardingPage = OnboardingUI.getOnboardingMockList[0],
             onSkipClick = {},
             onNextClick = {},
             onFinishClick = {},

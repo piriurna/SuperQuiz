@@ -15,22 +15,17 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import coil.ImageLoader
 import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
-import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
 import coil.decode.SvgDecoder
 import coil.request.ImageRequest
-import coil.size.Size
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
-import com.piriurna.superquiz.R
+import com.piriurna.common.composables.scaffold.SQScaffold
 import com.piriurna.superquiz.presentation.navigation.RootDestinationScreen
 import com.piriurna.superquiz.presentation.onboarding.composables.OnboardingCard
-import com.piriurna.superquiz.presentation.onboarding.models.OnboardingPage
+import com.piriurna.superquiz.presentation.onboarding.models.OnboardingUI
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.lang.Integer.min
@@ -55,64 +50,62 @@ fun BuildOnboardingScreen(
     val pagerState = rememberPagerState()
     val scope = rememberCoroutineScope()
 
-    val pages by derivedStateOf {
-        state.onboardingPages
-    }
+    val pages = state.onboardingPages
 
-    if(pages.isNotEmpty()) {
-        HorizontalPager(count = pages.size, state = pagerState) { page ->
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .background(pages[page].backgroundColor)
-            ) {
+    SQScaffold(isLoading = state.isLoading, hasToolbar = false) {
+            HorizontalPager(count = pages.size, state = pagerState) { page ->
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(pages[page].backgroundColor)
+                ) {
 
-                if(asyncImage) {
-                    AsyncImage(
-                        modifier = Modifier
-                            .align(Alignment.TopCenter)
-                            .padding(horizontal = 36.dp)
-                            .padding(top = 36.dp),
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(pages[page].mainImageUrl)
-                            .fallback(pages[page].mainImage)
-                            .placeholder(pages[page].mainImage)
-                            .error(pages[page].mainImage)
-                            .decoderFactory(SvgDecoder.Factory())
-                            .crossfade(true)
-                            .build(),
-                        contentDescription = "Page Image"
-                    )
-                } else {
-                    Image(
-                        painter = painterResource(id = pages[page].mainImage),
-                        contentDescription = "Page Image",
-                        modifier = Modifier
-                            .align(Alignment.TopCenter)
-                            .padding(horizontal = 36.dp)
-                            .padding(top = 36.dp)
-                    )
+                    if(asyncImage) {
+                        AsyncImage(
+                            modifier = Modifier
+                                .align(Alignment.TopCenter)
+                                .padding(horizontal = 36.dp)
+                                .padding(top = 36.dp),
+                            model = ImageRequest.Builder(LocalContext.current)
+                                .data(pages[page].mainImageUrl)
+                                .fallback(pages[page].mainImage)
+                                .error(pages[page].mainImage)
+                                .decoderFactory(SvgDecoder.Factory())
+                                .crossfade(true)
+                                .build(),
+                            contentDescription = "Page Image"
+                        )
+                    } else {
+                        Image(
+                            painter = painterResource(id = pages[page].mainImage),
+                            contentDescription = "Page Image",
+                            modifier = Modifier
+                                .align(Alignment.TopCenter)
+                                .padding(horizontal = 36.dp)
+                                .padding(top = 36.dp)
+                        )
+                    }
                 }
             }
-        }
-        Box(modifier = Modifier.fillMaxSize()) {
-            OnboardingCard(
-                onboardingPage = pages[pagerState.currentPage],
-                onNextClick = { nextClicked(scope, pagerState) },
-                onSkipClick = {
-                    navigateTo(scope, pagerState, pagerState.pageCount - 1)
-                },
-                onFinishClick = {
-                    navController.navigate(RootDestinationScreen.Home.route)
-                },
-                modifier = Modifier
-                    .align(Alignment.BottomCenter),
-                selectedPageIndex = pagerState.currentPage,
-                pageCount = pages.size
-            )
+        if(pages.isNotEmpty()) {
+            Box(modifier = Modifier.fillMaxSize()) {
+                OnboardingCard(
+                    onboardingPage = pages[pagerState.currentPage],
+                    onNextClick = { nextClicked(scope, pagerState) },
+                    onSkipClick = {
+                        navigateTo(scope, pagerState, pagerState.pageCount - 1)
+                    },
+                    onFinishClick = {
+                        navController.navigate(RootDestinationScreen.Home.route)
+                    },
+                    modifier = Modifier
+                        .align(Alignment.BottomCenter),
+                    selectedPageIndex = pagerState.currentPage,
+                    pageCount = pages.size
+                )
+            }
         }
     }
-
 
 }
 
@@ -139,8 +132,8 @@ private fun OnboardingPreview() {
     BuildOnboardingScreen(
         navController = rememberNavController(),
         state = OnboardingState(
-            onboardingPages = OnboardingPage.getOnboardingMockList
+            onboardingPages = OnboardingUI.getOnboardingMockList
         ),
-        asyncImage = true
+        asyncImage = false
     )
 }
