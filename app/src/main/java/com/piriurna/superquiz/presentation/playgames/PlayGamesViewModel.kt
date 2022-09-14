@@ -24,29 +24,25 @@ class PlayGamesViewModel @Inject constructor(
 
 
     init {
-        onTriggerEvent(PlayGamesEvents.GetCategories)
-        onTriggerEvent(PlayGamesEvents.GetUserInfo)
+        onTriggerEvent(PlayGamesEvents.GetData)
     }
 
     override fun onTriggerEvent(event: PlayGamesEvents) {
         when(event) {
-            is PlayGamesEvents.GetCategories -> {
-                getCategories()
-            }
-
-            is PlayGamesEvents.GetUserInfo -> {
+            is PlayGamesEvents.GetData -> {
                 getUserData()
             }
         }
     }
 
 
-    private fun getCategories() {
+    private fun getCategories(userName : String) {
         getCategoriesUseCase().onEach { result ->
             when(result) {
                 is Resource.Success -> {
                     _state.value = _state.value.copy(
                         categories = result.data ?: emptyList(),
+                        userName = userName,
                         isLoading = false
                     )
                 }
@@ -65,10 +61,7 @@ class PlayGamesViewModel @Inject constructor(
         getProfileSettingsUseCase().onEach { result ->
             when(result) {
                 is Resource.Success -> {
-                    _state.value = _state.value.copy(
-                        isLoading = false,
-                        userName = result.data?.userName?:""
-                    )
+                    getCategories(result.data?.userName?:"")
                 }
 
                 is Resource.Loading -> {
