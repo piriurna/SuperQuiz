@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.piriurna.domain.Resource
 import com.piriurna.domain.models.Answer
+import com.piriurna.domain.models.questions.CategoryInformation
 import com.piriurna.domain.usecases.GetCategoryQuestionsUseCase
 import com.piriurna.domain.usecases.SaveAnswerUseCase
 import com.piriurna.superquiz.SQBaseEventViewModel
@@ -23,11 +24,6 @@ class QuestionsViewModel @Inject constructor(
 
     private val _state: MutableState<QuestionsState> = mutableStateOf(QuestionsState())
     val state: State<QuestionsState> = _state
-
-
-    fun setCategoryId(categoryId: Int){
-        onTriggerEvent(QuestionsEvents.GetQuestions(categoryId))
-    }
 
     override fun onTriggerEvent(event: QuestionsEvents) {
         when(event) {
@@ -60,7 +56,7 @@ class QuestionsViewModel @Inject constructor(
                 is Resource.Success -> {
                     _state.value = _state.value.copy(
                         isLoading = false,
-                        questions = result.data?: emptyList()
+                        categoryInformation = result.data?: CategoryInformation()
                     )
                 }
             }

@@ -41,12 +41,14 @@ fun QuestionsScreen(
     val viewModel : QuestionsViewModel = hiltViewModel()
 
     LaunchedEffect(Unit) {
-        viewModel.setCategoryId(categoryId)
+        viewModel.onTriggerEvent(QuestionsEvents.GetQuestions(categoryId))
     }
 
     val state = viewModel.state.value
 
-    val questions = state.questions
+    val questions = state.categoryInformation.questions
+
+    val numOfQuestions = state.categoryInformation.numberOfQuestions
 
     SQScaffold(isLoading = state.isLoading) {
         Column(
@@ -70,46 +72,50 @@ fun QuestionsScreen(
                 mutableStateOf(false)
             }
 
+
             Column(verticalArrangement = Arrangement.spacedBy(36.dp)) {
-                SQProgressBar(
-                    progress = percentage,
-                    percentageText = "${pagerState.currentPage + 1}/${questions.size}",
-                    textIncompleteColor = Color.Black,
-                    chipIcon = Icons.Default.Info,
-                    chipText = "5min 55s",
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
+                if(questions.isNotEmpty()) {
+                    val currentQuestion = questions[pagerState.currentPage]
+                    SQProgressBar(
+                        progress = percentage,
+                        percentageText = "${currentQuestion.index + 1}/${numOfQuestions}",
+                        textIncompleteColor = Color.Black,
+                        chipIcon = Icons.Default.Info,
+                        chipText = "5min 55s",
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    )
 
-                Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                    HorizontalPager(
-                        count = questions.size,
-                        state = pagerState,
-                        modifier = Modifier.disabledHorizontalPointerInputScroll()
-                    ) { index ->
-                        SQQuestionCard(
-                            question = questions[index],
-                            questionIndex = index + 1,
-                            onAnswerSelected = { answer ->
-                                selectedAnswer = answer
-                            },
-                            isEnabled = !isAnswered
-                        )
-                    }
+                    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                        HorizontalPager(
+                            count = questions.size,
+                            state = pagerState,
+                            modifier = Modifier.disabledHorizontalPointerInputScroll()
+                        ) { index ->
+                            SQQuestionCard(
+                                question = questions[index],
+                                questionIndex = currentQuestion.index + 1,
+                                onAnswerSelected = { answer ->
+                                    selectedAnswer = answer
+                                },
+                                isEnabled = !isAnswered
+                            )
+                        }
 
-                    Row(
-                        horizontalArrangement = Arrangement.End,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        SQChip(
-                            text = "Hints",
-                            icon = Icons.Default.Home,
-                            foregroundColor = purple,
-                            backgroundColor = lightPurple
-                        )
+                        Row(
+                            horizontalArrangement = Arrangement.End,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            SQChip(
+                                text = "Hints",
+                                icon = Icons.Default.Home,
+                                foregroundColor = purple,
+                                backgroundColor = lightPurple
+                            )
+                        }
                     }
                 }
-            }
 
+            }
             if(shouldShowAlert){
                 //GET THESE QUOTES FROM DOMAIN
                 AnswerAlertPanel(

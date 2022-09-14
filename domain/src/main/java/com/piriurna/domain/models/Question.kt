@@ -4,6 +4,7 @@ package com.piriurna.domain.models
 //TODO: Problema, nao temos id quando buscamos do servico, o id só é gerado quando inserimos na base de dados
 data class Question(
     val id : Int,
+    val index : Int,
     val categoryId: Int,
     val difficulty : DifficultyType,
     val allAnswers : List<Answer>,
@@ -24,6 +25,7 @@ data class Question(
         val mockQuestions = listOf(
             Question(
                 id = 0,
+                index = 0,
                 categoryId = 9,
                 type = QuestionType.MULTIPLE_CHOICE,
                 difficulty = DifficultyType.MEDIUM,
@@ -32,6 +34,7 @@ data class Question(
             ),
             Question(
                 id = 1,
+                index = 1,
                 categoryId = 9,
                 type = QuestionType.MULTIPLE_CHOICE,
                 difficulty = DifficultyType.MEDIUM,
@@ -40,6 +43,7 @@ data class Question(
             ),
             Question(
                 id = 2,
+                index = 2,
                 categoryId = 9,
                 type = QuestionType.MULTIPLE_CHOICE,
                 difficulty = DifficultyType.EASY,
@@ -48,6 +52,7 @@ data class Question(
             ),
             Question(
                 id = 3,
+                index = 3,
                 categoryId = 10,
                 type = QuestionType.MULTIPLE_CHOICE,
                 difficulty = DifficultyType.MEDIUM,
@@ -56,6 +61,7 @@ data class Question(
             ),
             Question(
                 id = 4,
+                index = 4,
                 categoryId = 11,
                 type = QuestionType.MULTIPLE_CHOICE,
                 difficulty = DifficultyType.EASY,

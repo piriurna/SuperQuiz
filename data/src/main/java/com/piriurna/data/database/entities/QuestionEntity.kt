@@ -28,6 +28,7 @@ data class QuestionEntity(
     val ownerCategoryId: Int,
     @PrimaryKey(autoGenerate = true)
     val questionId: Int = 0,
+    val index : Int,
     val difficulty: DifficultyType,
     val type: QuestionType,
     val description: String,

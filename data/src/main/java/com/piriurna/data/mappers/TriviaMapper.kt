@@ -42,13 +42,14 @@ fun List<Category>.toCategoryEntity() : List<CategoryEntity> {
 
 //TODO: REFACTOR
 fun QuizDto.toQuestions(categoryId: Int) : List<Question> {
-    return this.questions.map { questionDto ->
+    return this.questions.mapIndexed { index, questionDto ->
         val allAnswers = questionDto.incorrectAnswers.map { Answer(id = 0, description = it, isCorrectAnswer = false) }.toMutableList()
         allAnswers.add(Answer(id = 0, description = questionDto.correctAnswer, isCorrectAnswer = true))
         allAnswers.shuffle()
 
-        return@map Question(
+        return@mapIndexed Question(
             id = 0,
+            index = index,
             categoryId = categoryId,
             difficulty = DifficultyType.convertFromString(questionDto.difficulty),
             allAnswers = allAnswers,
@@ -62,6 +63,7 @@ fun QuizDto.toQuestions(categoryId: Int) : List<Question> {
 fun Question.toQuestionEntity() : QuestionEntity {
     return QuestionEntity(
         ownerCategoryId = this.categoryId,
+        index = this.index,
         difficulty = this.difficulty,
         type = this.type,
         description = this.description,
@@ -78,6 +80,7 @@ fun List<Question>.toQuestionEntity() : List<QuestionEntity> {
 fun QuestionWithAnswers.toQuestion() : Question {
     return Question(
         id = this.question.questionId,
+        index = this.question.index,
         categoryId = this.question.ownerCategoryId,
         difficulty = this.question.difficulty,
         type = this.question.type,

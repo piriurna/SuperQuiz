@@ -1,8 +1,8 @@
 package com.piriurna.superquiz.presentation.questions
 
-import com.piriurna.domain.models.Question
+import com.piriurna.domain.models.questions.CategoryInformation
 
 data class QuestionsState(
     val isLoading : Boolean = false,
-    val questions: List<Question> = emptyList()
+    val categoryInformation: CategoryInformation = CategoryInformation()
 )
