@@ -19,6 +19,8 @@ import com.piriurna.common.composables.text.SQText
 import com.piriurna.common.theme.SQStyle.TextLato27Bold
 import com.piriurna.common.theme.SQStyle.TextLatoThin18
 import com.piriurna.superquiz.R
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -43,19 +45,14 @@ fun SQSuccessScreen() {
     LaunchedEffect(true) {
         titleVisible = true
 
-        Handler().postDelayed({
-            subtitleVisible = true
+        delay(200)
+        subtitleVisible = true
 
-            Handler().postDelayed({
-                buttonVisible = true
+        delay(200)
+        buttonVisible = true
 
-                Handler().postDelayed({
-                    imageVisible = true
-                }, 400)
-
-            }, 200)
-
-        }, 200)
+        delay(400)
+        imageVisible = true
     }
 
 
@@ -82,10 +79,10 @@ fun SQSuccessScreen() {
         Column(
             modifier = Modifier
                 .align(Center)
+                .size(350.dp)
                 .padding(top = 240.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             AnimatedVisibility(
                 visible = titleVisible,
                 enter = slideInVertically(initialOffsetY = { 100 }),
@@ -93,8 +90,9 @@ fun SQSuccessScreen() {
             ) {
                 SQText(text = "Congratulations!", style = TextLato27Bold)
             }
+
             AnimatedVisibility(
-                visible = titleVisible,
+                visible = subtitleVisible,
                 enter = slideInVertically(initialOffsetY = { 100 }),
                 exit = slideOutVertically()
 
@@ -106,8 +104,8 @@ fun SQSuccessScreen() {
                     textAlign = TextAlign.Center
                 )
             }
-        }
 
+        }
 
         AnimatedVisibility(
             modifier = Modifier.align(BottomCenter).padding(bottom = 32.dp),
