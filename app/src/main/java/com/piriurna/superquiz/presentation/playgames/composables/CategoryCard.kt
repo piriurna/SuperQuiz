@@ -2,19 +2,19 @@ package com.piriurna.superquiz.presentation.playgames.composables
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.piriurna.common.composables.cards.SQCard
+import com.piriurna.common.composables.progress.SQProgressBar
+import com.piriurna.common.composables.text.SQText
+import com.piriurna.common.theme.SQStyle.TextLatoBold20
 import com.piriurna.domain.models.Category
 import com.piriurna.superquiz.mappers.getImage
-import com.piriurna.common.composables.progress.SQProgressBar
 
 @Composable
 fun CategoryCard(
@@ -45,10 +45,9 @@ fun CategoryCard(
                         .size(64.dp)
                 )
 
-                Text(
+                SQText(
                     text = category.name,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
+                    style = TextLatoBold20,
                     lineHeight = 28.sp
                 )
             }
