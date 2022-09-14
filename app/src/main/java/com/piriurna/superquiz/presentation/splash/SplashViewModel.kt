@@ -57,7 +57,7 @@ class SplashViewModel @Inject constructor(
             when(result) {
                 is Resource.Success -> {
                     _state.value = _state.value.copy(
-                        isLoading = true,
+                        isLoading = false,
                         destination = result.data?:SplashDestination.UNDEFINED
                     )
                 }

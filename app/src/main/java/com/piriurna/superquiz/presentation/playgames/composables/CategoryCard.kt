@@ -19,12 +19,14 @@ import com.piriurna.common.composables.progress.SQProgressBar
 @Composable
 fun CategoryCard(
     modifier: Modifier = Modifier,
-    category: Category
+    category: Category,
+    onClick : () -> Unit
 ) {
 
     SQCard(
         modifier = modifier
-            .padding(all = 8.dp)
+            .padding(all = 8.dp),
+        onClick = onClick
     ) {
         Column(
             modifier = Modifier
@@ -66,7 +68,8 @@ fun CategoryCard(
 private fun CategoryCardPreview() {
     Box(modifier = Modifier.fillMaxSize()) {
         CategoryCard(
-            category = Category.mockCategoryList[1]
+            category = Category.mockCategoryList[1],
+            onClick = {}
         )
     }
 }

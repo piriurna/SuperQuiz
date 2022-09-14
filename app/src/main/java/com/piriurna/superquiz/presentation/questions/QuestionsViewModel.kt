@@ -29,10 +29,6 @@ class QuestionsViewModel @Inject constructor(
         onTriggerEvent(QuestionsEvents.GetQuestions(categoryId))
     }
 
-    fun triggerSaveAnswer(questionId: Int, answer: Answer) {
-        onTriggerEvent(QuestionsEvents.SaveAnswer(questionId, answer))
-    }
-
     override fun onTriggerEvent(event: QuestionsEvents) {
         when(event) {
             is QuestionsEvents.GetQuestions -> {

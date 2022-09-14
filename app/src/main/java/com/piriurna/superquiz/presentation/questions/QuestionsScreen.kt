@@ -16,6 +16,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.piriurna.common.composables.button.SQButton
 import com.piriurna.common.composables.scaffold.SQScaffold
 import com.piriurna.domain.models.Answer
 import com.piriurna.superquiz.presentation.composables.AnswerAlertPanel
@@ -43,17 +44,11 @@ fun QuestionsScreen(
         viewModel.setCategoryId(categoryId)
     }
 
-    val state = viewModel.state
+    val state = viewModel.state.value
 
-    val questions by derivedStateOf {
-        state.value.questions
-    }
+    val questions = state.questions
 
-    val isLoading by derivedStateOf {
-        state.value.isLoading
-    }
-
-    SQScaffold(isLoading = isLoading) {
+    SQScaffold(isLoading = state.isLoading) {
         Column(
             modifier = modifier
                 .padding(16.dp)
@@ -93,7 +88,7 @@ fun QuestionsScreen(
                     ) { index ->
                         SQQuestionCard(
                             question = questions[index],
-                            questionIndex = index,
+                            questionIndex = index + 1,
                             onAnswerSelected = { answer ->
                                 selectedAnswer = answer
                             },
@@ -126,7 +121,7 @@ fun QuestionsScreen(
             }
 
 
-            Button(
+            SQButton(
                 onClick = {
                     scope.launch {
                         if(isAnswered) {
@@ -134,18 +129,20 @@ fun QuestionsScreen(
                             val nextPage = min(pagerState.pageCount - 1, pagerState.currentPage + 1)
                             pagerState.animateScrollToPage(nextPage)
                         } else {
-                            viewModel.triggerSaveAnswer(questions[pagerState.currentPage].id, selectedAnswer!!)
-                            isAnswered = true
+                            selectedAnswer?.let { answer ->
+                                val question = questions[pagerState.currentPage]
+                                viewModel.onTriggerEvent(QuestionsEvents.SaveAnswer(question.id, answer))
+                                isAnswered = true
+                            }
                         }
                         shouldShowAlert = questions[pagerState.currentPage].getCorrectAnswer() == selectedAnswer
                     }
                 },
+                buttonText = if(isAnswered) "NEXT" else "SEND",
                 enabled = selectedAnswer != null,
                 modifier= Modifier
                     .fillMaxWidth(),
-            ) {
-                Text(text = if(isAnswered) "NEXT" else "SEND")
-            }
+            )
         }
     }
 }

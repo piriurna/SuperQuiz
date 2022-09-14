@@ -25,10 +25,10 @@ import androidx.navigation.compose.rememberNavController
 import com.piriurna.common.composables.scaffold.SQScaffold
 import com.piriurna.domain.models.Category
 import com.piriurna.superquiz.presentation.navigation.HomeDestinationScreen
-import com.piriurna.superquiz.presentation.onboarding.OnboardingEvents
-import com.piriurna.superquiz.presentation.onboarding.OnboardingState
 import com.piriurna.superquiz.presentation.playgames.composables.CategoryCard
-import com.piriurna.superquiz.ui.theme.*
+import com.piriurna.superquiz.ui.theme.gradientCentralColor
+import com.piriurna.superquiz.ui.theme.gradientInnerColor
+import com.piriurna.superquiz.ui.theme.gradientOuterColor
 
 @Composable
 fun PlayGamesScreen(
@@ -104,7 +104,8 @@ fun BuildPlayGamesScreen(
                         items(state.categories.size) { index ->
                             val category = state.categories[index]
                             CategoryCard(
-                                modifier = Modifier.clickable {
+                                modifier = Modifier,
+                                onClick = {
                                     navController.navigate(route = HomeDestinationScreen.CategoryQuestions.route + "/${category.id}")
                                 },
                                 category = category
