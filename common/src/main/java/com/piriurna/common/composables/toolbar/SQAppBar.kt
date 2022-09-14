@@ -30,7 +30,7 @@ fun SQAppBar(
     appBarOptions: AppBarOptions,
     backgroundColor : Color = Color.Transparent
 ) {
-    val backButton : @Composable (() -> Unit)? = if(appBarOptions is BackAppbar) appBarOptions.getBackButton() else null
+    val backButton = if(appBarOptions is BackAppbar) appBarOptions.getBackButton() else null
     val title = if(appBarOptions is TitleAppbar) appBarOptions.getTitle() else null
     val optionsButton = if(appBarOptions is OptionsAppbar) appBarOptions.getOptionsButton() else null
 

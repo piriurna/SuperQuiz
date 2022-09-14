@@ -22,13 +22,7 @@ import com.piriurna.common.composables.toolbar.SQAppBar
 import com.piriurna.common.theme.purple
 import com.piriurna.common.models.BottomNavigationItem
 
-/**
- * @param appBarBackIcon should typically be an [SQAppBarIcon], using an icon from
- * [androidx.compose.material.icons.Icons]
- *
- * @param appBarOptionsIcon should typically be an [SQAppBarIcon], using an icon from
- * [androidx.compose.material.icons.Icons]
- */
+
 @Composable
 fun SQScaffold(
     modifier: Modifier = Modifier,
