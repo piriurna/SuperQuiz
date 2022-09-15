@@ -73,7 +73,7 @@ fun SQScaffold(
 @Composable
 fun SQScaffoldPreview() {
     SQScaffold(
-        isLoading = false,
+        isLoading = true,
         bottomBarItems = listOf(BottomNavigationItem.PlayGames, BottomNavigationItem.Profile),
         appBarOptions = AppBarOptions.AppBarWithTitleBackAndOptions(
             appBarTitle = "This is the Appbar Title",

@@ -2,6 +2,9 @@ package com.piriurna.common.composables.loading
 
 import androidx.annotation.RawRes
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -15,6 +18,7 @@ import com.piriurna.common.R
 import com.piriurna.common.composables.animations.SQLottieLoading
 import com.piriurna.common.theme.secondaryBackground
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun SQLoading(
     isLoading: Boolean,
@@ -23,7 +27,9 @@ fun SQLoading(
 
     AnimatedVisibility(
         modifier = Modifier.fillMaxSize(),
-        visible = isLoading
+        visible = isLoading,
+        enter = scaleIn(),
+        exit = scaleOut()
     ) {
         Box(
             modifier = Modifier
