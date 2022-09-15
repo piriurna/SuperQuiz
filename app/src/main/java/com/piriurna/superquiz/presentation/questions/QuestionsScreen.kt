@@ -44,6 +44,7 @@ import com.piriurna.superquiz.presentation.playgames.PlayGamesEvents
 import com.piriurna.superquiz.presentation.questions.composables.SQQuestionCard
 import com.piriurna.superquiz.ui.theme.lightPurple
 import com.piriurna.superquiz.ui.theme.purple
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.min
 
@@ -83,6 +84,45 @@ fun BuildQuestionsScreen(
 
     val numOfQuestions = state.categoryInformation.numberOfQuestions
 
+    val questionIndex = questions.getOrNull(pagerState.currentPage)?.index?:0
+    val percentage = (questionIndex.toFloat() / numOfQuestions.toFloat()) * 100
+
+    var selectedAnswer by remember {
+        mutableStateOf<Answer?>(null)
+    }
+
+    var disabledAnswers by remember {
+        mutableStateOf<List<Answer>>(emptyList())
+    }
+
+    var shouldShowAlert by remember {
+        mutableStateOf(false)
+    }
+
+    var isAnswered by remember {
+        mutableStateOf(false)
+    }
+
+    // create variable for current time
+    var currentMinute by remember {
+        mutableStateOf(0)
+    }
+
+    // create variable for current time
+    var currentSec by remember {
+        mutableStateOf(0L)
+    }
+
+    LaunchedEffect(key1 = currentSec) {
+        if(currentSec < 60000) {
+            delay(100L)
+            currentSec += 100L
+        } else {
+            currentMinute++
+            currentSec = 0L
+        }
+    }
+
     SQScaffold(isLoading = state.isLoading) {
         Column(
             modifier = Modifier
@@ -91,27 +131,6 @@ fun BuildQuestionsScreen(
                 .fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            val questionIndex = questions.getOrNull(pagerState.currentPage)?.index?:0
-            val percentage = (questionIndex.toFloat() / numOfQuestions.toFloat()) * 100
-
-            var selectedAnswer by remember {
-                mutableStateOf<Answer?>(null)
-            }
-
-            var disabledAnswers by remember {
-                mutableStateOf<List<Answer>>(emptyList())
-            }
-
-            var shouldShowAlert by remember {
-                mutableStateOf(false)
-            }
-
-            var isAnswered by remember {
-                mutableStateOf(false)
-            }
-
-
-
             Column(verticalArrangement = Arrangement.spacedBy(36.dp)) {
                 if(questions.isNotEmpty()) {
                     val currentQuestion = questions[pagerState.currentPage]
@@ -126,7 +145,7 @@ fun BuildQuestionsScreen(
                         chipIcon = ImageVector.vectorResource(R.drawable.ic_timer),
                         chipForegroundColor = orange,
                         chipBackgroundColor = lightOrange,
-                        chipText = "5min 55s",
+                        chipText = "${currentMinute}min ${currentSec/1000L}s",
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
 
