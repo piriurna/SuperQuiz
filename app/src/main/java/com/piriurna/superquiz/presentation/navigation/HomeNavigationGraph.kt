@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navArgument
 import com.piriurna.superquiz.presentation.chart.ChartScreen
+import com.piriurna.superquiz.presentation.information.SuccessScreen
 import com.piriurna.superquiz.presentation.navigation.models.Graph
 import com.piriurna.superquiz.presentation.playgames.PlayGamesScreen
 import com.piriurna.superquiz.presentation.profile.ProfileScreen
@@ -40,7 +41,17 @@ fun HomeNavigationGraph(navController: NavHostController) {
             })
         ) {
                 val categoryId = it.arguments?.getString("categoryId")!!.toInt()
-                QuestionsScreen(categoryId = categoryId)
+                QuestionsScreen(categoryId = categoryId, navController)
+        }
+
+        composable(
+            route = HomeDestinationScreen.CategoryEnd.route + "/{categoryId}",
+            arguments = listOf(navArgument("categoryId"){
+                type = NavType.StringType
+            })
+        ) {
+            val categoryId = it.arguments?.getString("categoryId")!!.toInt()
+            SuccessScreen(categoryId = categoryId)
         }
 
 
@@ -66,4 +77,5 @@ sealed class HomeDestinationScreen(val route: String, val arguments : String = "
     object QuestionSettings : HomeDestinationScreen(route = "QUESTION_SETTINGS")
     object UserSettings : HomeDestinationScreen(route = "USER_SETTINGS")
     object CategoryQuestions : HomeDestinationScreen(route = "QUESTIONS", arguments = "categoryId")
+    object CategoryEnd : HomeDestinationScreen(route = "CATEGORY_END", arguments = "categoryId")
 }

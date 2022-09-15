@@ -17,9 +17,9 @@ import com.piriurna.superquiz.mappers.toSelectableItem
 
 @Composable
 fun ChartScreen() {
-    val viewModel : ChartViewModel = hiltViewModel()
+//    val viewModel : ChartViewModel = hiltViewModel()
 
-    val state = viewModel.state.value
+    val state = ChartState()
 
     SQScaffold(isLoading = state.isLoading) {
         Box(
@@ -29,7 +29,7 @@ fun ChartScreen() {
             SQSelector(
                 items = state.categories.toSelectableItem(),
                 onItemChanged = { category ->
-                    viewModel.setSelectedCategory(category.id)
+//                    viewModel.setSelectedCategory(category.id)
                 },
                 modifier = Modifier
                     .align(Alignment.TopCenter)

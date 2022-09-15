@@ -4,6 +4,7 @@ import BaseUseCaseTest
 import com.piriurna.domain.Resource
 import com.piriurna.domain.models.Answer
 import com.piriurna.domain.models.Category
+import com.piriurna.domain.models.CategoryStatistics
 import com.piriurna.domain.models.Question
 import com.piriurna.domain.repositories.TriviaRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -14,15 +15,15 @@ import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
-class GetQuestionsStatisticsForCategoryUseCaseTest : BaseUseCaseTest() {
+class GetCategoryStatisticsUseCaseTest : BaseUseCaseTest() {
 
-    private lateinit var getQuestionsStatisticsForCategoryUseCase: GetQuestionsStatisticsForCategoryUseCase
+    private lateinit var getCategoryStatisticsUseCase: GetCategoryStatisticsUseCase
     private lateinit var triviaRepository: TriviaRepository
 
     @Before
     fun setUp() {
         triviaRepository = mock()
-        getQuestionsStatisticsForCategoryUseCase = GetQuestionsStatisticsForCategoryUseCase(triviaRepository = triviaRepository)
+        getCategoryStatisticsUseCase = GetCategoryStatisticsUseCase(triviaRepository = triviaRepository)
     }
 
 
@@ -42,14 +43,13 @@ class GetQuestionsStatisticsForCategoryUseCaseTest : BaseUseCaseTest() {
 
 
         // Execute the use-case
-        val emissions = getQuestionsStatisticsForCategoryUseCase(category.id).toList()
+        val emissions = getCategoryStatisticsUseCase(category.id).toList()
         var result = (emissions[0] as Resource)
 
         assert(result is Resource.Loading)
 
         result = (emissions[1] as Resource)
-        val resultAnswers = (result.data as List<Answer>)
-        assert(resultAnswers.size == 4)
-        assert(resultAnswers[0].isCorrectAnswer)
+        val categoryStatistics = (result.data as CategoryStatistics)
+        assert(categoryStatistics.categoryId == category.id)
     }
 }

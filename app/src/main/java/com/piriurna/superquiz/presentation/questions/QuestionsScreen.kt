@@ -25,6 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -40,6 +41,7 @@ import com.piriurna.domain.models.Question
 import com.piriurna.domain.models.questions.CategoryInformation
 import com.piriurna.superquiz.R
 import com.piriurna.superquiz.presentation.composables.models.disabledHorizontalPointerInputScroll
+import com.piriurna.superquiz.presentation.navigation.HomeDestinationScreen
 import com.piriurna.superquiz.presentation.playgames.PlayGamesEvents
 import com.piriurna.superquiz.presentation.questions.composables.SQQuestionCard
 import com.piriurna.superquiz.ui.theme.lightPurple
@@ -52,7 +54,8 @@ const val NUMBER_OF_QUESTIONS_DISABLED_ON_HINT = 2
 
 @Composable
 fun QuestionsScreen(
-    categoryId : Int
+    categoryId : Int,
+    navController: NavController
 ) {
 
     val viewModel : QuestionsViewModel = hiltViewModel()
@@ -60,7 +63,8 @@ fun QuestionsScreen(
     BuildQuestionsScreen(
         categoryId = categoryId,
         state = viewModel.state.value,
-        events = viewModel::onTriggerEvent
+        events = viewModel::onTriggerEvent,
+        navController
     )
 }
 
@@ -70,6 +74,7 @@ fun BuildQuestionsScreen(
     categoryId : Int,
     state: QuestionsState,
     events : ((QuestionsEvents) -> Unit)? = null,
+    navController: NavController = rememberNavController()
 ) {
 
     val pagerState = rememberPagerState()
@@ -211,9 +216,14 @@ fun BuildQuestionsScreen(
                     scope.launch {
                         if(isAnswered) {
                             isAnswered = false
-                            val nextPage = min(pagerState.pageCount - 1, pagerState.currentPage + 1)
-                            pagerState.animateScrollToPage(nextPage)
-                            disabledAnswers = emptyList()
+
+                            if(pagerState.currentPage == pagerState.pageCount - 1) {
+                                navController.navigate(HomeDestinationScreen.CategoryEnd.route+ "/$categoryId")
+                            } else {
+                                val nextPage = min(pagerState.pageCount - 1, pagerState.currentPage + 1)
+                                pagerState.animateScrollToPage(nextPage)
+                                disabledAnswers = emptyList()
+                            }
                         } else {
                             selectedAnswer?.let { answer ->
                                 val question = questions[pagerState.currentPage]
