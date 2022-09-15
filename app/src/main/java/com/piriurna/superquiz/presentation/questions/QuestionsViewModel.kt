@@ -6,6 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.piriurna.domain.Resource
 import com.piriurna.domain.models.Answer
+import com.piriurna.domain.models.Question
 import com.piriurna.domain.models.questions.CategoryInformation
 import com.piriurna.domain.usecases.GetCategoryQuestionsUseCase
 import com.piriurna.domain.usecases.SaveAnswerUseCase
@@ -33,6 +34,10 @@ class QuestionsViewModel @Inject constructor(
 
             is QuestionsEvents.SaveAnswer -> {
                 saveAnswer(event.questionId, event.answer)
+            }
+
+            is QuestionsEvents.PerformHintAction -> {
+
             }
         }
     }
@@ -84,5 +89,10 @@ class QuestionsViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+
+    private fun performHint(question: Question) {
+
     }
 }

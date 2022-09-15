@@ -1,5 +1,6 @@
 package com.piriurna.common.composables.chip
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,18 +27,17 @@ import com.piriurna.common.theme.purple
 
 @Composable
 fun SQChip(
+    modifier: Modifier = Modifier,
     text: String,
     icon: ImageVector,
     backgroundColor: Color = Color.Red,
     foregroundColor: Color = Color.White,
-    modifier: Modifier = Modifier
+    onClick : () -> Unit = {}
 ) {
     Surface(
-//        modifier = Modifier.padding(end = 8.dp, bottom = 8.dp),
-//        elevation = 8.dp,
         shape = RoundedCornerShape(40.dp),
         color = backgroundColor,
-        modifier = modifier
+        modifier = modifier.clickable { onClick() }
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,

@@ -1,5 +1,6 @@
 package com.piriurna.superquiz.presentation.questions
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -22,12 +23,15 @@ import com.piriurna.domain.models.Answer
 import com.piriurna.superquiz.presentation.composables.AnswerAlertPanel
 import com.piriurna.common.composables.chip.SQChip
 import com.piriurna.common.composables.progress.SQProgressBar
+import com.piriurna.domain.models.Question
 import com.piriurna.superquiz.presentation.composables.models.disabledHorizontalPointerInputScroll
 import com.piriurna.superquiz.presentation.questions.composables.SQQuestionCard
 import com.piriurna.superquiz.ui.theme.lightPurple
 import com.piriurna.superquiz.ui.theme.purple
 import kotlinx.coroutines.launch
 import kotlin.math.min
+
+const val NUMBER_OF_QUESTIONS_DISABLED_ON_HINT = 2
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -64,6 +68,10 @@ fun QuestionsScreen(
                 mutableStateOf<Answer?>(null)
             }
 
+            var disabledAnswers by remember {
+                mutableStateOf<List<Answer>>(emptyList())
+            }
+
             var shouldShowAlert by remember {
                 mutableStateOf(false)
             }
@@ -73,8 +81,12 @@ fun QuestionsScreen(
             }
 
 
+
             Column(verticalArrangement = Arrangement.spacedBy(36.dp)) {
                 if(questions.isNotEmpty()) {
+                    var isHintVisible by remember {
+                        mutableStateOf(true)
+                    }
                     val currentQuestion = questions[pagerState.currentPage]
                     SQProgressBar(
                         progress = percentage,
@@ -97,7 +109,9 @@ fun QuestionsScreen(
                                 onAnswerSelected = { answer ->
                                     selectedAnswer = answer
                                 },
-                                isEnabled = !isAnswered
+                                disabledAnswers = disabledAnswers,
+                                contentEnabled = !isAnswered,
+                                enabled = false
                             )
                         }
 
@@ -105,12 +119,18 @@ fun QuestionsScreen(
                             horizontalArrangement = Arrangement.End,
                             modifier = Modifier.fillMaxWidth()
                         ) {
-                            SQChip(
-                                text = "Hints",
-                                icon = Icons.Default.Home,
-                                foregroundColor = purple,
-                                backgroundColor = lightPurple
-                            )
+
+                            AnimatedVisibility(visible = isHintVisible) {
+                                SQChip(
+                                    text = "Hints",
+                                    icon = Icons.Default.Home,
+                                    onClick = {
+                                        if(disabledAnswers.isEmpty()) disabledAnswers = performHint(currentQuestion)
+                                    },
+                                    foregroundColor = purple,
+                                    backgroundColor = lightPurple
+                                )
+                            }
                         }
                     }
                 }
@@ -134,6 +154,7 @@ fun QuestionsScreen(
                             isAnswered = false
                             val nextPage = min(pagerState.pageCount - 1, pagerState.currentPage + 1)
                             pagerState.animateScrollToPage(nextPage)
+                            disabledAnswers = emptyList()
                         } else {
                             selectedAnswer?.let { answer ->
                                 val question = questions[pagerState.currentPage]
@@ -153,6 +174,18 @@ fun QuestionsScreen(
     }
 }
 
+private fun performHint(currentQuestion : Question) : List<Answer> {
+    val mutableList = mutableListOf<Answer>()
+    val isMultipleChoice = currentQuestion.allAnswers.size > 2
+    if(isMultipleChoice){
+        repeat(NUMBER_OF_QUESTIONS_DISABLED_ON_HINT) {
+            val enabledAnswers = currentQuestion.getIncorrectAnswers().filterNot { mutableList.contains(it) }
+            mutableList.add(enabledAnswers.random())
+        }
+    }
+
+    return mutableList
+}
 
 @Preview(showBackground = true)
 @Composable

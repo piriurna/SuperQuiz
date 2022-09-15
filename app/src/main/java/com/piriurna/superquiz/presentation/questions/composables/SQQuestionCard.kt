@@ -18,7 +18,10 @@ fun SQQuestionCard(
     question: Question,
     questionIndex : Int,
     onAnswerSelected : (Answer) -> Unit = {},
-    isEnabled : Boolean
+    disabledAnswers : List<Answer> = emptyList(),
+    enabled : Boolean = true,
+    contentEnabled : Boolean,
+    onClick : (() -> Unit)? = null
 ) {
     val answers = question.allAnswers
 
@@ -29,12 +32,16 @@ fun SQQuestionCard(
 
         SQQuestion(index = questionIndex, question = question)
 
-        SQCard {
+        SQCard(
+            enabled = enabled,
+            onClick = { onClick?.invoke() }
+        ) {
             SQToggleRadioGroup(
                 modifier = Modifier.padding(8.dp),
                 options = answers,
                 onAnswerSelected = onAnswerSelected,
-                isEnabled = isEnabled
+                disabledAnswers = disabledAnswers,
+                isEnabled = contentEnabled
             )
         }
     }
@@ -44,5 +51,5 @@ fun SQQuestionCard(
 @Preview(showBackground = true)
 @Composable
 private fun SQQuestionCardPreview() {
-    SQQuestionCard(question = Question.mockQuestions[0], questionIndex = 0, isEnabled = true)
+    SQQuestionCard(question = Question.mockQuestions[0], questionIndex = 0, contentEnabled = true)
 }

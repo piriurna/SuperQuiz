@@ -10,12 +10,14 @@ data class Question(
     val allAnswers : List<Answer>,
     val description : String,
     val type : QuestionType,
-    val chosenAnswer: Answer? = null
+    val chosenAnswer: Answer? = null,
 ) {
 
     fun getCorrectAnswer() : Answer? {
         return allAnswers.firstOrNull { it.isCorrectAnswer }
     }
+
+    fun getIncorrectAnswers() = allAnswers.filterNot { it.isCorrectAnswer }
 
     fun isQuestionAnswered() = chosenAnswer != null
 

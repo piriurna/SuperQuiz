@@ -22,6 +22,7 @@ fun SQCard(
     strokeColor : Color = Color.LightGray,
     strokeWidth : Dp = 1.dp,
     onClick : () -> Unit ={},
+    enabled : Boolean = true,
     content: @Composable () -> Unit
 ) {
 
@@ -34,6 +35,7 @@ fun SQCard(
         elevation = elevation,
         border = BorderStroke(strokeWidth, strokeColor),
         content = content,
+        enabled = enabled,
         onClick = onClick
     )
 }

@@ -13,10 +13,12 @@ fun SQToggleRadioGroup(
     modifier: Modifier = Modifier,
     options: List<Answer>,
     onAnswerSelected : (Answer) -> Unit = {},
-    isEnabled: Boolean
+    isEnabled: Boolean,
+    disabledAnswers : List<Answer> = emptyList()
 ) {
 
     var selected by remember { mutableStateOf<Answer?>(null) }
+
 
     val onSelectionChange = { answer: Answer ->
         if(isEnabled) {
@@ -31,7 +33,7 @@ fun SQToggleRadioGroup(
                 answer = it,
                 selected = selected == it,
                 onClick = onSelectionChange,
-                isEnabled = true
+                isEnabled = !disabledAnswers.contains(it)
             )
         }
     }
