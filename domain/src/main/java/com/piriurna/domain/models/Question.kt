@@ -21,6 +21,8 @@ data class Question(
 
     fun isQuestionAnswered() = chosenAnswer != null
 
+    fun isMultipleChoice() = allAnswers.size > 2
+
     fun isQuestionAnsweredCorrectly() = chosenAnswer == getCorrectAnswer()
 
     companion object {

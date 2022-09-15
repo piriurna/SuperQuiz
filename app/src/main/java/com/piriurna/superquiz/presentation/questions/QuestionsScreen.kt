@@ -1,6 +1,12 @@
 package com.piriurna.superquiz.presentation.questions
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -11,9 +17,14 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -23,8 +34,13 @@ import com.piriurna.domain.models.Answer
 import com.piriurna.superquiz.presentation.composables.AnswerAlertPanel
 import com.piriurna.common.composables.chip.SQChip
 import com.piriurna.common.composables.progress.SQProgressBar
+import com.piriurna.common.theme.lightOrange
+import com.piriurna.common.theme.orange
 import com.piriurna.domain.models.Question
+import com.piriurna.domain.models.questions.CategoryInformation
+import com.piriurna.superquiz.R
 import com.piriurna.superquiz.presentation.composables.models.disabledHorizontalPointerInputScroll
+import com.piriurna.superquiz.presentation.playgames.PlayGamesEvents
 import com.piriurna.superquiz.presentation.questions.composables.SQQuestionCard
 import com.piriurna.superquiz.ui.theme.lightPurple
 import com.piriurna.superquiz.ui.theme.purple
@@ -33,22 +49,35 @@ import kotlin.math.min
 
 const val NUMBER_OF_QUESTIONS_DISABLED_ON_HINT = 2
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun QuestionsScreen(
-    modifier: Modifier = Modifier,
     categoryId : Int
 ) {
-    val pagerState = rememberPagerState()
-    val scope = rememberCoroutineScope()
 
     val viewModel : QuestionsViewModel = hiltViewModel()
 
-    LaunchedEffect(Unit) {
-        viewModel.onTriggerEvent(QuestionsEvents.GetQuestions(categoryId))
-    }
+    BuildQuestionsScreen(
+        categoryId = categoryId,
+        state = viewModel.state.value,
+        events = viewModel::onTriggerEvent
+    )
+}
 
-    val state = viewModel.state.value
+@OptIn(ExperimentalPagerApi::class, ExperimentalAnimationApi::class)
+@Composable
+fun BuildQuestionsScreen(
+    categoryId : Int,
+    state: QuestionsState,
+    events : ((QuestionsEvents) -> Unit)? = null,
+) {
+
+    val pagerState = rememberPagerState()
+
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(Unit) {
+        events?.invoke(QuestionsEvents.GetQuestions(categoryId))
+    }
 
     val questions = state.categoryInformation.questions
 
@@ -56,13 +85,14 @@ fun QuestionsScreen(
 
     SQScaffold(isLoading = state.isLoading) {
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .padding(16.dp)
                 .padding(bottom = 60.dp)
                 .fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            val percentage = ((pagerState.currentPage.toFloat()/(questions.size-1)) * 100).toInt()
+            val questionIndex = questions.getOrNull(pagerState.currentPage)?.index?:0
+            val percentage = (questionIndex.toFloat() / numOfQuestions.toFloat()) * 100
 
             var selectedAnswer by remember {
                 mutableStateOf<Answer?>(null)
@@ -84,15 +114,18 @@ fun QuestionsScreen(
 
             Column(verticalArrangement = Arrangement.spacedBy(36.dp)) {
                 if(questions.isNotEmpty()) {
-                    var isHintVisible by remember {
-                        mutableStateOf(true)
-                    }
                     val currentQuestion = questions[pagerState.currentPage]
+
+                    val isHintVisible by derivedStateOf {
+                        disabledAnswers.isEmpty() && currentQuestion.isMultipleChoice()
+                    }
                     SQProgressBar(
-                        progress = percentage,
+                        progress = percentage.toInt(),
                         percentageText = "${currentQuestion.index + 1}/${numOfQuestions}",
                         textIncompleteColor = Color.Black,
-                        chipIcon = Icons.Default.Info,
+                        chipIcon = ImageVector.vectorResource(R.drawable.ic_timer),
+                        chipForegroundColor = orange,
+                        chipBackgroundColor = lightOrange,
                         chipText = "5min 55s",
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
@@ -120,10 +153,14 @@ fun QuestionsScreen(
                             modifier = Modifier.fillMaxWidth()
                         ) {
 
-                            AnimatedVisibility(visible = isHintVisible) {
+                            AnimatedVisibility(
+                                visible = isHintVisible,
+                                enter = scaleIn(animationSpec = spring(Spring.DampingRatioHighBouncy)),
+                                exit = scaleOut()
+                            ) {
                                 SQChip(
                                     text = "Hints",
-                                    icon = Icons.Default.Home,
+                                    icon = ImageVector.vectorResource(id = R.drawable.ic_light_bulb_hint),
                                     onClick = {
                                         if(disabledAnswers.isEmpty()) disabledAnswers = performHint(currentQuestion)
                                     },
@@ -136,8 +173,11 @@ fun QuestionsScreen(
                 }
 
             }
-            if(shouldShowAlert){
-                //GET THESE QUOTES FROM DOMAIN
+            AnimatedVisibility(
+                visible = shouldShowAlert,
+                enter = scaleIn(animationSpec = spring(Spring.DampingRatioLowBouncy)),
+                exit = scaleOut()
+            ) {
                 AnswerAlertPanel(
                     topText = "Correct Answer",
                     topBadge = Icons.Default.Done,
@@ -158,7 +198,7 @@ fun QuestionsScreen(
                         } else {
                             selectedAnswer?.let { answer ->
                                 val question = questions[pagerState.currentPage]
-                                viewModel.onTriggerEvent(QuestionsEvents.SaveAnswer(question.id, answer))
+                                events?.invoke(QuestionsEvents.SaveAnswer(question.id, answer))
                                 isAnswered = true
                             }
                         }
@@ -176,8 +216,7 @@ fun QuestionsScreen(
 
 private fun performHint(currentQuestion : Question) : List<Answer> {
     val mutableList = mutableListOf<Answer>()
-    val isMultipleChoice = currentQuestion.allAnswers.size > 2
-    if(isMultipleChoice){
+    if(currentQuestion.isMultipleChoice()){
         repeat(NUMBER_OF_QUESTIONS_DISABLED_ON_HINT) {
             val enabledAnswers = currentQuestion.getIncorrectAnswers().filterNot { mutableList.contains(it) }
             mutableList.add(enabledAnswers.random())
@@ -191,7 +230,9 @@ private fun performHint(currentQuestion : Question) : List<Answer> {
 @Composable
 private fun QuestionScreenPreview() {
     Column(Modifier.fillMaxSize()) {
-        QuestionsScreen(categoryId = 9)
+        BuildQuestionsScreen(categoryId = 9, state = QuestionsState(
+            categoryInformation = CategoryInformation(questions = Question.mockQuestions, numberOfQuestions = Question.mockQuestions.size)
+        ))
 
     }
 }

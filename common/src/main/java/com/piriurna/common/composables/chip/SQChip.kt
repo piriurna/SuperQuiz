@@ -1,11 +1,9 @@
 package com.piriurna.common.composables.chip
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
@@ -25,6 +23,7 @@ import com.piriurna.common.theme.lightPurple
 import com.piriurna.common.theme.orange
 import com.piriurna.common.theme.purple
 
+@OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun SQChip(
     modifier: Modifier = Modifier,
@@ -34,10 +33,12 @@ fun SQChip(
     foregroundColor: Color = Color.White,
     onClick : () -> Unit = {}
 ) {
+    print(Icons.Default.AccountBox.defaultHeight)
     Surface(
         shape = RoundedCornerShape(40.dp),
         color = backgroundColor,
-        modifier = modifier.clickable { onClick() }
+        modifier = modifier,
+        onClick = onClick
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -50,7 +51,8 @@ fun SQChip(
             Icon(
                 imageVector = icon,
                 tint = foregroundColor,
-                contentDescription = "chip icon"
+                contentDescription = "chip icon",
+                modifier = Modifier.size(24.dp)
             )
 
             Text(
