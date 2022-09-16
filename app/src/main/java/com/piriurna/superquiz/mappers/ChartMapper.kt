@@ -3,39 +3,21 @@ package com.piriurna.superquiz.mappers
 import androidx.compose.ui.graphics.Color
 import com.piriurna.common.models.PieChartSection
 import com.piriurna.domain.models.Answer
+import com.piriurna.domain.models.CategoryStatistics
 import com.piriurna.domain.models.Question
 
-fun List<Question>.toPieChartSections() : List<PieChartSection> {
-
-    var notAnsweredQuestionsCount = 0
-
-    var correctAnswersCount = 0
-
-    var incorrectAnswersCount = 0
-
-    this.forEach {
-        if (it.isQuestionAnswered()) {
-            if(it.chosenAnswer?.isCorrectAnswer == true)
-                correctAnswersCount++
-             else
-                incorrectAnswersCount++
-        } else {
-            notAnsweredQuestionsCount++
-        }
-    }
-
-
+fun CategoryStatistics.toPieChartSections() : List<PieChartSection> {
     return listOf(
         PieChartSection(
-            notAnsweredQuestionsCount.toFloat(),
+            getNotAnsweredQuestions().toFloat(),
             Color.Gray
         ),
         PieChartSection(
-            correctAnswersCount.toFloat(),
+            correctAnswers.toFloat(),
             Color.Green,
         ),
         PieChartSection(
-            incorrectAnswersCount.toFloat(),
+            incorrectAnswers.toFloat(),
             Color.Red,
         ),
     )

@@ -64,7 +64,7 @@ fun BuildSuccessScreen(
     val correctAnswers = state.categoryStatistics.correctAnswers.toFloat()
     val totalNumberOfQuestions = state.categoryStatistics.totalNumberOfQuestions.toFloat()
     val percentage by animateIntAsState(
-        animationSpec = tween(5 * 200),
+        animationSpec = tween(1000),
         targetValue = ((correctAnswers/totalNumberOfQuestions) * 100).toInt()
     )
 

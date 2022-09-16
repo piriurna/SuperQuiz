@@ -17,13 +17,15 @@ data class Question(
         return allAnswers.firstOrNull { it.isCorrectAnswer }
     }
 
-    fun getIncorrectAnswers() = allAnswers.filterNot { it.isCorrectAnswer }
+    fun getIncorrectAnswers() = allAnswers.filter { !it.isCorrectAnswer }
 
     fun isQuestionAnswered() = chosenAnswer != null
 
     fun isMultipleChoice() = allAnswers.size > 2
 
     fun isQuestionAnsweredCorrectly() = chosenAnswer == getCorrectAnswer()
+
+    fun isQuestionAnsweredIncorrectly() = chosenAnswer != null && chosenAnswer != getCorrectAnswer()
 
     companion object {
         val mockQuestions = listOf(

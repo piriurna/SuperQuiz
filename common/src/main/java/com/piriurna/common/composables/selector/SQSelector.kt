@@ -23,8 +23,8 @@ fun SQSelector(
     items: List<SelectableItem>,
     initialItemIndex: Int = 0,
     onItemChanged : (SelectableItem) -> Unit = {},
-    onNextPressed : () -> Unit = {},
-    onPreviousPressed : () -> Unit = {}
+    onNextPressed : (Int) -> Unit = {},
+    onPreviousPressed : (Int) -> Unit = {}
 ) {
     var selectedIndex by remember {
         mutableStateOf(initialItemIndex)
@@ -42,7 +42,7 @@ fun SQSelector(
                 modifier = Modifier.clickable {
                     selectedIndex = max(0, selectedIndex - 1)
                     onItemChanged(items[selectedIndex])
-                    onPreviousPressed
+                    onPreviousPressed(selectedIndex)
                 },
                 imageVector = Icons.Default.ArrowBack,
                 contentDescription = "Previous Button"
@@ -54,7 +54,7 @@ fun SQSelector(
                 modifier = Modifier.clickable {
                     selectedIndex = min(items.size - 1, selectedIndex + 1)
                     onItemChanged(items[selectedIndex])
-                    onNextPressed()
+                    onNextPressed(selectedIndex)
                 },
                 imageVector = Icons.Default.ArrowForward,
                 contentDescription = "Next Button"

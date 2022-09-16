@@ -18,12 +18,8 @@ class GetCategoryStatisticsUseCase @Inject constructor(
 
         val questions : List<Question> = triviaRepository.getCategoryQuestionsFromDb(categoryId)
 
-        val categoryStatistics = CategoryStatistics(
-            categoryId = categoryId,
-            totalNumberOfQuestions = questions.size,
-            correctAnswers = questions.count { it.chosenAnswer == it.getCorrectAnswer() },
-            incorrectAnswers = questions.count { it.chosenAnswer != it.getCorrectAnswer() }
-        )
+        val categoryStatistics = CategoryStatistics(categoryId = categoryId, questions = questions)
+        
         emit(Resource.Success(categoryStatistics))
     }
 }
