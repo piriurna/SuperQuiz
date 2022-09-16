@@ -51,6 +51,7 @@ class LoadTriviaDataUseCaseTest : BaseUseCaseTest(){
         val questionsFromServer = listOf(
             Question(
                 id = 0,
+                index = 0,
                 categoryId = 9,
                 type = QuestionType.MULTIPLE_CHOICE,
                 difficulty = DifficultyType.MEDIUM,
@@ -59,6 +60,7 @@ class LoadTriviaDataUseCaseTest : BaseUseCaseTest(){
             ),
             Question(
                 id = 0,
+                index = 0,
                 categoryId = 10,
                 type = QuestionType.MULTIPLE_CHOICE,
                 difficulty = DifficultyType.MEDIUM,
@@ -70,6 +72,7 @@ class LoadTriviaDataUseCaseTest : BaseUseCaseTest(){
         val questionsFromDb = listOf(
             Question(
                 id = 5,
+                index = 0,
                 categoryId = 9,
                 type = QuestionType.MULTIPLE_CHOICE,
                 difficulty = DifficultyType.MEDIUM,
@@ -78,6 +81,7 @@ class LoadTriviaDataUseCaseTest : BaseUseCaseTest(){
             ),
             Question(
                 id = 6,
+                index = 0,
                 categoryId = 10,
                 type = QuestionType.MULTIPLE_CHOICE,
                 difficulty = DifficultyType.MEDIUM,
