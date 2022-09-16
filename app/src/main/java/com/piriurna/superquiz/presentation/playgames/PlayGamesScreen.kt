@@ -24,6 +24,7 @@ import com.piriurna.common.composables.text.SQText
 import com.piriurna.common.theme.SQStyle.TextLato36
 import com.piriurna.domain.models.Category
 import com.piriurna.superquiz.presentation.navigation.HomeDestinationScreen
+import com.piriurna.superquiz.presentation.navigation.PlayGamesDestinations
 import com.piriurna.superquiz.presentation.playgames.composables.CategoryCard
 import com.piriurna.superquiz.ui.theme.gradientCentralColor
 import com.piriurna.superquiz.ui.theme.gradientInnerColor
@@ -104,7 +105,7 @@ fun BuildPlayGamesScreen(
                             CategoryCard(
                                 modifier = Modifier,
                                 onClick = {
-                                    navController.navigate(route = HomeDestinationScreen.CategoryQuestions.route + "/${category.id}")
+                                    navController.navigate(route = PlayGamesDestinations.Questions.withArgs(category.id))
                                 },
                                 category = category
                             )

@@ -2,18 +2,14 @@ package com.piriurna.superquiz.presentation.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.navArgument
 import com.piriurna.superquiz.presentation.chart.ChartScreen
-import com.piriurna.superquiz.presentation.information.SuccessScreen
 import com.piriurna.superquiz.presentation.navigation.models.Graph
 import com.piriurna.superquiz.presentation.playgames.PlayGamesScreen
 import com.piriurna.superquiz.presentation.profile.ProfileScreen
 import com.piriurna.superquiz.presentation.profile.questions.QuestionsSettingsScreen
 import com.piriurna.superquiz.presentation.profile.user.UserSettingsScreen
-import com.piriurna.superquiz.presentation.questions.QuestionsScreen
 
 @Composable
 fun HomeNavigationGraph(navController: NavHostController) {
@@ -24,7 +20,7 @@ fun HomeNavigationGraph(navController: NavHostController) {
         startDestination = HomeDestinationScreen.PlayGames.route
     ) {
 
-        //--authenticationNavGraph(navController = navController)
+        playGamesNavigationGraph(navController = navController)
 
         composable(route = HomeDestinationScreen.PlayGames.route) {
             PlayGamesScreen(navController)
@@ -32,26 +28,6 @@ fun HomeNavigationGraph(navController: NavHostController) {
 
         composable(route = HomeDestinationScreen.Chart.route) {
             ChartScreen()
-        }
-
-        composable(
-            route = HomeDestinationScreen.CategoryQuestions.route + "/{categoryId}",
-            arguments = listOf(navArgument("categoryId"){
-                type = NavType.StringType
-            })
-        ) {
-                val categoryId = it.arguments?.getString("categoryId")!!.toInt()
-                QuestionsScreen(categoryId = categoryId, navController)
-        }
-
-        composable(
-            route = HomeDestinationScreen.CategoryEnd.route + "/{categoryId}",
-            arguments = listOf(navArgument("categoryId"){
-                type = NavType.StringType
-            })
-        ) {
-            val categoryId = it.arguments?.getString("categoryId")!!.toInt()
-            SuccessScreen(categoryId = categoryId)
         }
 
 

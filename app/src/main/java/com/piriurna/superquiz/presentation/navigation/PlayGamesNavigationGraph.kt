@@ -8,17 +8,20 @@ import com.piriurna.common.composables.navigation.BaseDestinations
 import com.piriurna.common.composables.navigation.CustomArguments
 import com.piriurna.superquiz.presentation.information.SuccessScreen
 import com.piriurna.superquiz.presentation.navigation.models.Graph
-import com.piriurna.superquiz.presentation.playgames.PlayGamesScreen
+import com.piriurna.superquiz.presentation.questions.QuestionsScreen
 
 fun NavGraphBuilder.playGamesNavigationGraph(navController: NavHostController) {
 
     navigation(
         route = Graph.PLAY_GAMES_GRAPH,
-        startDestination = PlayGamesDestinations.PlayGames.route
+        startDestination = PlayGamesDestinations.Questions.route
     ) {
 
-        composable(route = PlayGamesDestinations.PlayGames.route) {
-            PlayGamesScreen(navController)
+        composable(
+            route = PlayGamesDestinations.Questions.fullRoute,
+            arguments = PlayGamesDestinations.Questions.arguments
+        ) {
+            QuestionsScreen(it, navController)
         }
 
         composable(
@@ -37,6 +40,6 @@ sealed class PlayGamesDestinations(
     val route: String,
     customArguments: List<CustomArguments> = emptyList()
 ) : BaseDestinations(route = route, customArguments = customArguments) {
-    object PlayGames : PlayGamesDestinations(route = "PLAY_GAMES")
+    object Questions : PlayGamesDestinations(route = "QUESTIONS", listOf(CustomArguments(NavigationArguments.CATEGORY_ID)))
     object CategoryCompleted : PlayGamesDestinations(route = "CATEGORY_COMPLETED", listOf(CustomArguments(NavigationArguments.CATEGORY_ID)))
 }

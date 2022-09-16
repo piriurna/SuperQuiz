@@ -16,6 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavBackStackEntry
 import com.piriurna.common.composables.button.SQButton
 import com.piriurna.common.composables.text.SQText
 import com.piriurna.common.theme.SQStyle.TextLato27Bold
@@ -26,13 +27,16 @@ import com.piriurna.domain.models.Question
 import com.piriurna.superquiz.R
 import com.piriurna.superquiz.presentation.information.models.SuccessEvents
 import com.piriurna.superquiz.presentation.information.models.SuccessState
+import com.piriurna.superquiz.presentation.navigation.NavigationArguments
 import kotlinx.coroutines.delay
 
 @Composable
 fun SuccessScreen(
-    categoryId: Int
+    navBackStackEntry: NavBackStackEntry
 ) {
     val viewModel : SuccessViewModel = hiltViewModel()
+
+    val categoryId = navBackStackEntry.arguments!!.getString(NavigationArguments.CATEGORY_ID)!!.toInt()
 
     BuildSuccessScreen(categoryId,viewModel.state.value, viewModel::onTriggerEvent)
 }
