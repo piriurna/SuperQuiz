@@ -10,8 +10,14 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.compose.rememberNavController
+import com.piriurna.superquiz.presentation.navigation.RootNavigationGraph
+import com.piriurna.superquiz.presentation.playgames.PlayGamesScreen
+import com.piriurna.superquiz.presentation.splash.SplashScreen
 import com.piriurna.superquiz.ui.theme.SuperQuizTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,7 +28,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting("Android")
+                    RootNavigationGraph(navController = rememberNavController())
                 }
             }
         }
