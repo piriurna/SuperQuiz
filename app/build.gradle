@@ -47,6 +47,8 @@ android {
             manifestPlaceholders variant: 'SuperQuiz - Dev'
             buildConfigField("Boolean", "IS_REDIRECT_URL", "false")
             buildConfigField("String", "BASE_URL", "\"https://opentdb.com/\"")
+            buildConfigField("Long", "READ_TIMEOUT", "15L")
+            buildConfigField("Long", "CONNECT_TIMEOUT", "15L")
         }
 
         free {
@@ -54,12 +56,16 @@ android {
             applicationIdSuffix ".free"
             manifestPlaceholders variant: 'SuperQuiz - Free'
             buildConfigField("String", "BASE_URL", "\"https://opentdb.com/\"")
+            buildConfigField("Long", "READ_TIMEOUT", "15L")
+            buildConfigField("Long", "CONNECT_TIMEOUT", "15L")
         }
 
         prod {
             dimension "env"
             manifestPlaceholders variant: 'SuperQuiz'
             buildConfigField("String", "BASE_URL", "\"https://opentdb.com/\"")
+            buildConfigField("Long", "READ_TIMEOUT", "15L")
+            buildConfigField("Long", "CONNECT_TIMEOUT", "15L")
         }
     }
     compileOptions {
@@ -100,7 +106,7 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
-    implementation "com.google.accompanist:accompanist-pager:0.23.1"
+    implementation rootProject.libraries.accompanist
 
     implementation rootProject.libraries.hiltAndroid
     kapt rootProject.libraries.hiltAndroidCompiler

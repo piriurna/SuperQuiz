@@ -2,8 +2,6 @@ package com.piriurna.superquiz.presentation.profile
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.runtime.Composable
@@ -13,9 +11,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.piriurna.common.composables.selector.SQRow
+import com.piriurna.common.composables.selector.SQMenuRow
 import com.piriurna.common.composables.text.SQText
-import com.piriurna.common.theme.SQStyle
 import com.piriurna.common.theme.SQStyle.TextLato35
 import com.piriurna.superquiz.presentation.navigation.HomeDestinationScreen
 
@@ -40,7 +37,7 @@ fun ProfileScreen(
             SQText(text = "Profile", style = TextLato35)
         }
 
-        SQRow(
+        SQMenuRow(
             modifier = Modifier.padding(top = 32.dp),
             label = "Settings",
             onClick = {
@@ -48,7 +45,7 @@ fun ProfileScreen(
             }
         )
 
-        SQRow(
+        SQMenuRow(
             modifier = Modifier.padding(top = 32.dp),
             label = "Questions",
             onClick = {

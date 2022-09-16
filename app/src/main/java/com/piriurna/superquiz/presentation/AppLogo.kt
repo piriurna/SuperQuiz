@@ -85,7 +85,6 @@ fun AppLogo(
                         rotationZ = angle
 
                     },
-//                colorFilter = ColorFilter.tint(color)
             )
         }
 
@@ -103,7 +102,6 @@ fun AppLogo(
                         rotationZ = angle
 
                     },
-                //                colorFilter = ColorFilter.tint(color)
             )
         }
 
@@ -121,7 +119,6 @@ fun AppLogo(
                         rotationZ = angle
 
                     },
-                //                colorFilter = ColorFilter.tint(color)
             )
         }
     }

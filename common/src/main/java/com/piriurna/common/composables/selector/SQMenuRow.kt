@@ -3,10 +3,8 @@ package com.piriurna.common.composables.selector
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Card
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Face
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -14,12 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.piriurna.common.composables.cards.SQCard
 import com.piriurna.common.composables.text.SQText
 import com.piriurna.common.theme.SQStyle.TextLato22
 
 @Composable
-fun SQRow(
+fun SQMenuRow(
     modifier: Modifier = Modifier,
     label : String,
     onClick : () -> Unit,
@@ -64,7 +61,7 @@ fun SQRow(
 @Composable
 fun SQRowPreview() {
     Column() {
-        SQRow(
+        SQMenuRow(
             label = "Teste",
             onClick = {},
             startIcon = Icons.Default.Face,

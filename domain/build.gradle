@@ -11,7 +11,7 @@ java {
 dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1'
 
-    implementation("com.google.dagger:dagger:2.26")
+    implementation rootProject.libraries.dagger
 
     testImplementation 'org.jetbrains.kotlin:kotlin-test-junit:1.5.10'
     testImplementation 'junit:junit:4.+'

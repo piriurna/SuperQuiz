@@ -18,6 +18,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.piriurna.common.composables.text.SQText
 import com.piriurna.common.theme.lightOrange
 import com.piriurna.common.theme.lightPurple
 import com.piriurna.common.theme.orange
@@ -55,7 +56,7 @@ fun SQChip(
                 modifier = Modifier.size(24.dp)
             )
 
-            Text(
+            SQText(
                 text = text,
                 color = foregroundColor,
                 textAlign = TextAlign.Center,

@@ -2,8 +2,6 @@ package com.piriurna.superquiz.di
 
 import com.piriurna.data.remote.TriviaApi
 import com.piriurna.data.remote.sources.TriviaApiSource
-import com.piriurna.superquiz.ApiConstants.CONNECT_TIMEOUT
-import com.piriurna.superquiz.ApiConstants.READ_TIMEOUT
 import com.piriurna.superquiz.BuildConfig
 import dagger.Module
 import dagger.Provides
@@ -31,8 +29,8 @@ object NetworkModule {
 
         return OkHttpClient.Builder()
             .addInterceptor(logging)
-            .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
-            .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
+            .readTimeout(BuildConfig.READ_TIMEOUT, TimeUnit.SECONDS)
+            .connectTimeout(BuildConfig.CONNECT_TIMEOUT, TimeUnit.SECONDS)
             .build()
     }
 

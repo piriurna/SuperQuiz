@@ -34,10 +34,9 @@ fun SQBadgeText(
             tint = foregroundColor
         )
 
-        Text(
+        SQText(
             text = text,
             color = foregroundColor,
-            fontWeight = FontWeight.W500
         )
     }
 }

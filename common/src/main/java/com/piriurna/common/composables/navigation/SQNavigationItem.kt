@@ -15,6 +15,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.piriurna.common.composables.text.SQText
+import com.piriurna.common.theme.SQStyle.TextLatoBold
 import com.piriurna.common.theme.orange
 import com.piriurna.common.theme.purple
 
@@ -52,10 +54,10 @@ fun RowScope.SQNavigationItem(
                 tint = iconColor
             )
 
-            Text(
+            SQText(
                 text = text,
                 color = textColor,
-                fontWeight = FontWeight.Black
+                style = TextLatoBold
             )
         }
 

@@ -42,16 +42,12 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
-    //TODO: COLOCAR NO CONFIG
-    def retrofitVersion = '2.9.0'
-    def okhttpVersion = '5.0.0-alpha.2'
+    api rootProject.libraries.retrofit
+    api rootProject.libraries.coverterGson
+    api rootProject.libraries.okHttp
+    api rootProject.libraries.loggingInterceptor
 
-    api "com.squareup.retrofit2:retrofit:$retrofitVersion"
-    api "com.squareup.retrofit2:converter-gson:$retrofitVersion"
-    api "com.squareup.okhttp3:okhttp:$okhttpVersion"
-    api "com.squareup.okhttp3:logging-interceptor:$okhttpVersion"
-
-    implementation("com.google.dagger:dagger:2.26")
+    implementation rootProject.libraries.dagger
 
 
     // Room
