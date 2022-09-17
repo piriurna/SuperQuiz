@@ -100,7 +100,8 @@ fun Answer.toAnswerEntity(questionId: Int) : AnswerEntity {
     return AnswerEntity(
         text = this.description,
         isCorrectAnswer = this.isCorrectAnswer,
-        ownerQuestionId = questionId
+        ownerQuestionId = questionId,
+        isEnabled = this.isEnabled
     )
 }
 
@@ -114,7 +115,8 @@ fun AnswerEntity.toAnswer() : Answer {
     return Answer(
         id = this.answerId,
         description = this.text,
-        isCorrectAnswer = this.isCorrectAnswer
+        isCorrectAnswer = this.isCorrectAnswer,
+        isEnabled = this.isEnabled
     )
 }
 

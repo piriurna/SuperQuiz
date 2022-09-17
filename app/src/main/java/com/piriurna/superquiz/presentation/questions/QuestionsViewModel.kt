@@ -7,9 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.piriurna.domain.Resource
 import com.piriurna.domain.models.Answer
 import com.piriurna.domain.models.Question
-import com.piriurna.domain.models.questions.CategoryInformation
+import com.piriurna.domain.models.questions.CategoryQuestions
 import com.piriurna.domain.usecases.GetCategoryQuestionsUseCase
 import com.piriurna.domain.usecases.SaveAnswerUseCase
+import com.piriurna.domain.usecases.questions.DisableSelectedAnswersUseCase
 import com.piriurna.superquiz.SQBaseEventViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -19,7 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class QuestionsViewModel @Inject constructor(
     private val getCategoryQuestionsUseCase: GetCategoryQuestionsUseCase,
-    private val saveAnswerUseCase: SaveAnswerUseCase
+    private val saveAnswerUseCase: SaveAnswerUseCase,
+    private val disableSelectedAnswersUseCase: DisableSelectedAnswersUseCase
 ) : SQBaseEventViewModel<QuestionsEvents>(){
 
 
@@ -37,7 +39,7 @@ class QuestionsViewModel @Inject constructor(
             }
 
             is QuestionsEvents.PerformHintAction -> {
-
+                performHint(event.question)
             }
         }
     }
@@ -61,7 +63,7 @@ class QuestionsViewModel @Inject constructor(
                 is Resource.Success -> {
                     _state.value = _state.value.copy(
                         isLoading = false,
-                        categoryInformation = result.data?: CategoryInformation()
+                        categoryQuestions = result.data?: CategoryQuestions()
                     )
                 }
             }
@@ -79,7 +81,7 @@ class QuestionsViewModel @Inject constructor(
                 }
                 is Resource.Error -> {
                     _state.value = _state.value.copy(
-                        isLoading = false
+
                     )
                 }
                 is Resource.Success -> {
@@ -93,6 +95,18 @@ class QuestionsViewModel @Inject constructor(
 
 
     private fun performHint(question: Question) {
+        disableSelectedAnswersUseCase(question, _state.value.categoryQuestions!!).onEach { result ->
+            when(result) {
+                is Resource.Success -> {
+                    _state.value = _state.value.copy(
+                        isLoading = false,
+                        categoryQuestions = result.data?:CategoryQuestions()
+                    )
+                }
+                else -> {}
+            }
 
+
+        }.launchIn(viewModelScope)
     }
 }

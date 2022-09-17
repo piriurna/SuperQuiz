@@ -18,7 +18,6 @@ fun SQQuestionCard(
     question: Question,
     questionIndex : Int,
     onAnswerSelected : (Answer) -> Unit = {},
-    disabledAnswers : List<Answer> = emptyList(),
     enabled : Boolean = true,
     contentEnabled : Boolean,
     onClick : (() -> Unit)? = null
@@ -40,7 +39,6 @@ fun SQQuestionCard(
                 modifier = Modifier.padding(8.dp),
                 options = answers,
                 onAnswerSelected = onAnswerSelected,
-                disabledAnswers = disabledAnswers,
                 isEnabled = contentEnabled
             )
         }

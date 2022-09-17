@@ -9,8 +9,13 @@ interface AnswerDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAnswers(answers: List<AnswerEntity>)
 
-    @Update
-    suspend fun updateAnswer(updatedAnswer : AnswerEntity)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAnswer(answer: AnswerEntity)
+
+    @Query("UPDATE answer SET isEnabled =:enabled WHERE answerId =:answerId")
+    suspend fun disableAnswer(answerId : Int, enabled: Boolean)
+
+
 
 //    @Transaction
 //    @Query("SELECT * FROM ANSWER")

@@ -27,6 +27,10 @@ data class Question(
 
     fun isQuestionAnsweredIncorrectly() = chosenAnswer != null && chosenAnswer != getCorrectAnswer()
 
+    fun getDisabledQuestions() = allAnswers.filter { !it.isEnabled }
+
+    fun isHintAvailable() = isMultipleChoice() && allAnswers.none { !it.isEnabled }
+
     companion object {
         val mockQuestions = listOf(
             Question(
