@@ -31,16 +31,9 @@ fun HomeNavigationGraph(navController: NavHostController) {
         }
 
 
+        settingsNavigationGraph(navController = navController)
         composable(route = HomeDestinationScreen.Profile.route) {
             ProfileScreen(navController = navController)
-        }
-
-        composable(route = HomeDestinationScreen.QuestionSettings.route) {
-            QuestionsSettingsScreen()
-        }
-
-        composable(route = HomeDestinationScreen.UserSettings.route) {
-            UserSettingsScreen()
         }
     }
 
@@ -52,6 +45,4 @@ sealed class HomeDestinationScreen(val route: String, val arguments : String = "
     object Profile : HomeDestinationScreen(route = "PROFILE")
     object QuestionSettings : HomeDestinationScreen(route = "QUESTION_SETTINGS")
     object UserSettings : HomeDestinationScreen(route = "USER_SETTINGS")
-    object CategoryQuestions : HomeDestinationScreen(route = "QUESTIONS", arguments = "categoryId")
-    object CategoryEnd : HomeDestinationScreen(route = "CATEGORY_END", arguments = "categoryId")
 }
