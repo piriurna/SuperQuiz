@@ -23,6 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
+import com.piriurna.common.composables.alert.SQAlertDialog
 import com.piriurna.common.composables.button.SQButton
 import com.piriurna.common.composables.scaffold.SQScaffold
 import com.piriurna.domain.models.Answer
@@ -192,6 +193,8 @@ fun BuildQuestionsScreen(
                             }
                         }
                     }
+                } else {
+                    SQAlertDialog(title = "You ran out of questions",description = "Would you like to get more questions for this category?", okLabel = "Get Questions", okClick = { /*TODO*/ }, themeColor = Color.Green.copy(alpha = 0.5f))
                 }
 
             }
