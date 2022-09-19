@@ -28,6 +28,7 @@ import com.piriurna.superquiz.R
 import com.piriurna.superquiz.presentation.information.models.SuccessEvents
 import com.piriurna.superquiz.presentation.information.models.SuccessState
 import com.piriurna.superquiz.presentation.navigation.NavigationArguments
+import com.piriurna.superquiz.presentation.navigation.utils.getArgument
 import kotlinx.coroutines.delay
 
 @Composable
@@ -36,9 +37,14 @@ fun SuccessScreen(
 ) {
     val viewModel : SuccessViewModel = hiltViewModel()
 
-    val categoryId = navBackStackEntry.arguments!!.getString(NavigationArguments.CATEGORY_ID)!!.toInt()
+    val categoryId = navBackStackEntry.getArgument(NavigationArguments.CATEGORY_ID)?.toInt()
 
-    BuildSuccessScreen(categoryId,viewModel.state.value, viewModel::onTriggerEvent)
+    if(categoryId != null) {
+        BuildSuccessScreen(categoryId,viewModel.state.value, viewModel::onTriggerEvent)
+    } else {
+        //Todo: 404 screen or similar
+    }
+
 }
 
 @OptIn(ExperimentalAnimationApi::class)

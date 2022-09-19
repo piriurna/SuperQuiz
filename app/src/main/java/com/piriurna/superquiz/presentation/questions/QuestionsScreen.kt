@@ -45,6 +45,7 @@ import com.piriurna.superquiz.presentation.composables.models.disabledHorizontal
 import com.piriurna.superquiz.presentation.navigation.HomeDestinationScreen
 import com.piriurna.superquiz.presentation.navigation.NavigationArguments
 import com.piriurna.superquiz.presentation.navigation.PlayGamesDestinations
+import com.piriurna.superquiz.presentation.navigation.utils.getArgument
 import com.piriurna.superquiz.presentation.playgames.PlayGamesEvents
 import com.piriurna.superquiz.presentation.questions.composables.SQQuestionCard
 import com.piriurna.superquiz.ui.theme.lightPurple
@@ -64,14 +65,19 @@ fun QuestionsScreen(
     val viewModel : QuestionsViewModel = hiltViewModel()
 
 
-    val categoryId = navBackStackEntry.arguments!!.getString(NavigationArguments.CATEGORY_ID)!!.toInt()
+    val categoryId = navBackStackEntry.getArgument(NavigationArguments.CATEGORY_ID)?.toInt()
 
-    BuildQuestionsScreen(
-        categoryId = categoryId,
-        state = viewModel.state.value,
-        events = viewModel::onTriggerEvent,
-        navController
-    )
+    if(categoryId != null) {
+        BuildQuestionsScreen(
+            categoryId = categoryId,
+            state = viewModel.state.value,
+            events = viewModel::onTriggerEvent,
+            navController
+        )
+    } else {
+        //todo: show a 404 screen or similar
+    }
+
 }
 
 @OptIn(ExperimentalPagerApi::class, ExperimentalAnimationApi::class)
