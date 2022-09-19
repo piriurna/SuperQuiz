@@ -1,4 +1,4 @@
-package com.piriurna.superquiz.presentation.information
+package com.piriurna.superquiz.presentation.information.categories.end
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -8,26 +8,26 @@ import com.piriurna.domain.Resource
 import com.piriurna.domain.models.CategoryStatistics
 import com.piriurna.domain.usecases.GetCategoryStatisticsUseCase
 import com.piriurna.superquiz.SQBaseEventViewModel
-import com.piriurna.superquiz.presentation.information.models.SuccessEvents
-import com.piriurna.superquiz.presentation.information.models.SuccessState
+import com.piriurna.superquiz.presentation.information.categories.end.models.CategoryEndEvents
+import com.piriurna.superquiz.presentation.information.categories.end.models.CategoryEndState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
-class SuccessViewModel @Inject constructor(
+class CategoryEndViewModel @Inject constructor(
     private val getCategoryStatisticsUseCase: GetCategoryStatisticsUseCase
-) : SQBaseEventViewModel<SuccessEvents>(){
+) : SQBaseEventViewModel<CategoryEndEvents>(){
 
-    private val _state: MutableState<SuccessState> = mutableStateOf(SuccessState())
-    val state: State<SuccessState> = _state
+    private val _state: MutableState<CategoryEndState> = mutableStateOf(CategoryEndState())
+    val state: State<CategoryEndState> = _state
 
 
 
-    override fun onTriggerEvent(event: SuccessEvents) {
+    override fun onTriggerEvent(event: CategoryEndEvents) {
         when(event) {
-            is SuccessEvents.GetCategoryStatistics -> {
+            is CategoryEndEvents.GetCategoryStatistics -> {
                 getCategoryStatistics(categoryId = event.categoryId)
             }
         }

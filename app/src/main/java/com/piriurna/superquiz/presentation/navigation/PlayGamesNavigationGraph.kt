@@ -6,7 +6,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.piriurna.common.composables.navigation.BaseDestinations
 import com.piriurna.common.composables.navigation.CustomArguments
-import com.piriurna.superquiz.presentation.information.SuccessScreen
+import com.piriurna.superquiz.presentation.information.categories.end.CategoryEndScreen
 import com.piriurna.superquiz.presentation.navigation.models.Graph
 import com.piriurna.superquiz.presentation.questions.QuestionsScreen
 
@@ -28,7 +28,7 @@ fun NavGraphBuilder.playGamesNavigationGraph(navController: NavHostController) {
             route = PlayGamesDestinations.CategoryCompleted.fullRoute,
             arguments = PlayGamesDestinations.CategoryCompleted.arguments
         ) {
-            SuccessScreen(it)
+            CategoryEndScreen(it)
         }
 
 

@@ -1,4 +1,4 @@
-package com.piriurna.superquiz.presentation.information
+package com.piriurna.superquiz.presentation.information.categories.end
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateIntAsState
@@ -25,22 +25,22 @@ import com.piriurna.domain.models.Category
 import com.piriurna.domain.models.CategoryStatistics
 import com.piriurna.domain.models.Question
 import com.piriurna.superquiz.R
-import com.piriurna.superquiz.presentation.information.models.SuccessEvents
-import com.piriurna.superquiz.presentation.information.models.SuccessState
+import com.piriurna.superquiz.presentation.information.categories.end.models.CategoryEndEvents
+import com.piriurna.superquiz.presentation.information.categories.end.models.CategoryEndState
 import com.piriurna.superquiz.presentation.navigation.NavigationArguments
 import com.piriurna.superquiz.presentation.navigation.utils.getArgument
 import kotlinx.coroutines.delay
 
 @Composable
-fun SuccessScreen(
+fun CategoryEndScreen(
     navBackStackEntry: NavBackStackEntry
 ) {
-    val viewModel : SuccessViewModel = hiltViewModel()
+    val viewModel : CategoryEndViewModel = hiltViewModel()
 
     val categoryId = navBackStackEntry.getArgument(NavigationArguments.CATEGORY_ID)?.toInt()
 
     if(categoryId != null) {
-        BuildSuccessScreen(categoryId,viewModel.state.value, viewModel::onTriggerEvent)
+        BuildCategoryEndScreen(categoryId,viewModel.state.value, viewModel::onTriggerEvent)
     } else {
         //Todo: 404 screen or similar
     }
@@ -49,10 +49,10 @@ fun SuccessScreen(
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun BuildSuccessScreen(
+fun BuildCategoryEndScreen(
     categoryId : Int,
-    state : SuccessState,
-    events: ((SuccessEvents) -> Unit)? = null
+    state : CategoryEndState,
+    events: ((CategoryEndEvents) -> Unit)? = null
 ) {
     
     var imageVisible by remember {
@@ -79,7 +79,7 @@ fun BuildSuccessScreen(
     )
 
     LaunchedEffect(Unit) {
-        events?.invoke(SuccessEvents.GetCategoryStatistics(categoryId))
+        events?.invoke(CategoryEndEvents.GetCategoryStatistics(categoryId))
         titleVisible = true
 
         delay(200)
@@ -165,9 +165,9 @@ fun BuildSuccessScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun SuccessScreenPreview() {
+fun CategoryEndScreenPreview() {
     var state by remember {
-        mutableStateOf(SuccessState(isLoading = true))
+        mutableStateOf(CategoryEndState(isLoading = true))
     }
 
     LaunchedEffect(Unit) {
@@ -181,5 +181,5 @@ fun SuccessScreenPreview() {
             )
         )
     }
-    BuildSuccessScreen(Category.mockCategoryList[0].id, state)
+    BuildCategoryEndScreen(Category.mockCategoryList[0].id, state)
 }
