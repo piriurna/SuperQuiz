@@ -16,6 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavBackStackEntry
 import com.piriurna.common.composables.button.SQButton
 import com.piriurna.common.composables.text.SQText
 import com.piriurna.common.theme.SQStyle.TextLato27Bold
@@ -26,15 +27,24 @@ import com.piriurna.domain.models.Question
 import com.piriurna.superquiz.R
 import com.piriurna.superquiz.presentation.information.models.SuccessEvents
 import com.piriurna.superquiz.presentation.information.models.SuccessState
+import com.piriurna.superquiz.presentation.navigation.NavigationArguments
+import com.piriurna.superquiz.presentation.navigation.utils.getArgument
 import kotlinx.coroutines.delay
 
 @Composable
 fun SuccessScreen(
-    categoryId: Int
+    navBackStackEntry: NavBackStackEntry
 ) {
     val viewModel : SuccessViewModel = hiltViewModel()
 
-    BuildSuccessScreen(categoryId,viewModel.state.value, viewModel::onTriggerEvent)
+    val categoryId = navBackStackEntry.getArgument(NavigationArguments.CATEGORY_ID)?.toInt()
+
+    if(categoryId != null) {
+        BuildSuccessScreen(categoryId,viewModel.state.value, viewModel::onTriggerEvent)
+    } else {
+        //Todo: 404 screen or similar
+    }
+
 }
 
 @OptIn(ExperimentalAnimationApi::class)

@@ -60,4 +60,6 @@ dependencies {
 
     implementation rootProject.libraries.lottie
 
+    implementation rootProject.libraries.navigationCompose
+
 }
