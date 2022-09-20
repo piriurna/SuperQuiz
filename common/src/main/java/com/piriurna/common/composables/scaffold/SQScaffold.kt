@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.piriurna.common.composables.button.SQAppBarIcon
 import com.piriurna.common.composables.loading.SQLoading
 import com.piriurna.common.composables.navigation.SQBottomNavigation
@@ -30,6 +31,7 @@ fun SQScaffold(
     bottomBarItems: List<BottomNavigationItem> = emptyList(),
     onItemSelected: (BottomNavigationItem) -> Unit = {},
     appBarOptions: AppBarOptions? = null,
+    navController: NavHostController? = null,
     content: @Composable (PaddingValues) -> Unit,
 ) {
 
@@ -46,14 +48,17 @@ fun SQScaffold(
 
             },
             bottomBar = {
-                if(bottomBarItems.isNotEmpty()) {
-                    SQBottomNavigation(
-                        selectedColor = purple,
-                        unselectedColor = Color.LightGray,
-                        items = bottomBarItems,
-                        selectedRoute = bottomBarItems[0].route,
-                        onItemSelected = onItemSelected
-                    )
+                navController?.let { navController ->
+                    if(bottomBarItems.isNotEmpty()) {
+                        SQBottomNavigation(
+                            selectedColor = purple,
+                            unselectedColor = Color.LightGray,
+                            items = bottomBarItems,
+                            selectedRoute = bottomBarItems[0].route,
+                            onItemSelected = onItemSelected,
+                            navController = navController
+                        )
+                    }
                 }
             }
         )

@@ -13,7 +13,7 @@ sealed class BottomNavigationItem(
 ) {
 
     object PlayGames : BottomNavigationItem(
-        route = "play_games",
+        route = "PLAY_GAMES",
         title = "Play Games",
         icon = Icons.Default.PlayArrow
     )

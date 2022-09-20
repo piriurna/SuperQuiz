@@ -16,7 +16,8 @@ fun HomeScreen(
         bottomBarItems = listOf(BottomNavigationItem.PlayGames, BottomNavigationItem.Profile, BottomNavigationItem.Chart),
         onItemSelected = { item ->
             navController.navigate(item.route)
-        }
+        },
+        navController = navController
     ) {
         HomeNavigationGraph(navController = navController)
     }
