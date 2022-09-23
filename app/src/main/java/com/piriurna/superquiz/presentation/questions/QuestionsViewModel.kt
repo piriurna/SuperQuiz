@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.piriurna.domain.Resource
 import com.piriurna.domain.models.Answer
 import com.piriurna.domain.models.Question
-import com.piriurna.domain.models.questions.CategoryQuestions
 import com.piriurna.domain.usecases.GetCategoryQuestionsUseCase
 import com.piriurna.domain.usecases.SaveAnswerUseCase
 import com.piriurna.domain.usecases.questions.DisableSelectedAnswersUseCase
@@ -63,7 +62,7 @@ class QuestionsViewModel @Inject constructor(
                 is Resource.Success -> {
                     _state.value = _state.value.copy(
                         isLoading = false,
-                        categoryQuestions = result.data?: CategoryQuestions()
+                        categoryQuestions = result.data?: emptyList()
                     )
                 }
             }
@@ -95,12 +94,19 @@ class QuestionsViewModel @Inject constructor(
 
 
     private fun performHint(question: Question) {
-        disableSelectedAnswersUseCase(question, _state.value.categoryQuestions!!).onEach { result ->
+        disableSelectedAnswersUseCase(question).onEach { result ->
             when(result) {
                 is Resource.Success -> {
+                    val newCategoryQuestions = result.data?.let { resultData ->
+                        val questions = _state.value.categoryQuestions.toMutableList()
+                        val questionIndex = questions.indexOf(question)
+                        questions[questionIndex] = resultData
+                        return@let questions
+                    }?:run { return@run emptyList() }
+
                     _state.value = _state.value.copy(
                         isLoading = false,
-                        categoryQuestions = result.data?:CategoryQuestions()
+                        categoryQuestions = newCategoryQuestions
                     )
                 }
                 else -> {}

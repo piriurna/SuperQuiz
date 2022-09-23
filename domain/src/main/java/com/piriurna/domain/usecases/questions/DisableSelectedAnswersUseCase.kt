@@ -3,7 +3,6 @@ package com.piriurna.domain.usecases.questions
 import com.piriurna.domain.Resource
 import com.piriurna.domain.models.Answer
 import com.piriurna.domain.models.Question
-import com.piriurna.domain.models.questions.CategoryQuestions
 import com.piriurna.domain.repositories.TriviaRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -14,41 +13,29 @@ class DisableSelectedAnswersUseCase @Inject constructor(
 ) {
 
 
-    operator fun invoke(question: Question, categoryQuestions: CategoryQuestions) : Flow<Resource<CategoryQuestions>> = flow {
+    operator fun invoke(question: Question) : Flow<Resource<Question>> = flow {
 
         emit(Resource.Loading())
 
-        val disabledAnswers = mutableListOf<Answer>()
+        val answersToDisable = mutableListOf<Answer>()
 
         repeat(2) {
-            val enabledAnswers = question.getIncorrectAnswers().filter { answer -> answer.isEnabled && disabledAnswers.none { it.id == answer.id } }
+            val possibleAnswersToDisable = question.getIncorrectAnswers().filter { answer -> answersToDisable.none { it.id == answer.id } }
 
-            val disabledAnswer = enabledAnswers.random().copy(
+            val disabledAnswer = possibleAnswersToDisable.random().copy(
                 isEnabled = false
             )
 
-            disabledAnswers.add(disabledAnswer)
+            answersToDisable.add(disabledAnswer)
         }
 
-        disabledAnswers.forEach {
-            triviaRepository.updateAnswer(question.id, it.copy(
-                isEnabled = false
-            ))
+        answersToDisable.forEach {
+            triviaRepository.disableAnswer(it.id)
         }
 
         val updatedQuestion = triviaRepository.getQuestionFromDb(question.id)
 
-        val newList = categoryQuestions.questions.map {
-            if(it.id == updatedQuestion?.id) {
-                return@map updatedQuestion
-            }
 
-            return@map it
-        }
-
-        emit(Resource.Success(CategoryQuestions(
-            questions = newList,
-            numberOfQuestions = categoryQuestions.numberOfQuestions
-        )))
+        emit(Resource.Success(updatedQuestion!!))
     }
 }

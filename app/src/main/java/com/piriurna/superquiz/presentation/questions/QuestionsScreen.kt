@@ -25,16 +25,15 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.piriurna.common.composables.alert.SQAlertDialog
 import com.piriurna.common.composables.button.SQButton
-import com.piriurna.common.composables.scaffold.SQScaffold
-import com.piriurna.domain.models.Answer
-import com.piriurna.superquiz.presentation.composables.AnswerAlertPanel
 import com.piriurna.common.composables.chip.SQChip
 import com.piriurna.common.composables.progress.SQProgressBar
+import com.piriurna.common.composables.scaffold.SQScaffold
 import com.piriurna.common.theme.lightOrange
 import com.piriurna.common.theme.orange
+import com.piriurna.domain.models.Answer
 import com.piriurna.domain.models.Question
-import com.piriurna.domain.models.questions.CategoryQuestions
 import com.piriurna.superquiz.R
+import com.piriurna.superquiz.presentation.composables.AnswerAlertPanel
 import com.piriurna.superquiz.presentation.composables.models.disabledHorizontalPointerInputScroll
 import com.piriurna.superquiz.presentation.navigation.NavigationArguments
 import com.piriurna.superquiz.presentation.navigation.PlayGamesDestinations
@@ -89,9 +88,9 @@ fun BuildQuestionsScreen(
         events?.invoke(QuestionsEvents.GetQuestions(categoryId))
     }
 
-    val questions = state.categoryQuestions.questions.sortedBy { it.index }
+    val questions = state.categoryQuestions.sortedBy { it.index }
 
-    val numOfQuestions = state.categoryQuestions.numberOfQuestions
+    val numOfQuestions = state.categoryQuestions.size
 
     val questionIndex = questions.getOrNull(pagerState.currentPage)?.index?:0
     val percentage = ((questionIndex + 1).toFloat() / numOfQuestions.toFloat()) * 100
@@ -185,7 +184,7 @@ fun BuildQuestionsScreen(
                                     text = "Hints",
                                     icon = ImageVector.vectorResource(id = R.drawable.ic_light_bulb_hint),
                                     onClick = {
-                                        if(currentQuestion.isMultipleChoice()) events?.invoke(QuestionsEvents.PerformHintAction(currentQuestion))
+                                        events?.invoke(QuestionsEvents.PerformHintAction(currentQuestion))
                                     },
                                     foregroundColor = purple,
                                     backgroundColor = lightPurple
@@ -243,24 +242,12 @@ fun BuildQuestionsScreen(
     }
 }
 
-private fun performHint(currentQuestion : Question) : List<Answer> {
-    val mutableList = mutableListOf<Answer>()
-    if(currentQuestion.isMultipleChoice()){
-        repeat(NUMBER_OF_QUESTIONS_DISABLED_ON_HINT) {
-            val enabledAnswers = currentQuestion.getIncorrectAnswers().filterNot { mutableList.contains(it) }
-            mutableList.add(enabledAnswers.random())
-        }
-    }
-
-    return mutableList
-}
-
 @Preview(showBackground = true)
 @Composable
 private fun QuestionScreenPreview() {
     Column(Modifier.fillMaxSize()) {
         BuildQuestionsScreen(categoryId = 9, state = QuestionsState(
-            categoryQuestions = CategoryQuestions(questions = Question.mockQuestions, numberOfQuestions = Question.mockQuestions.size)
+            categoryQuestions = Question.mockQuestions
         ))
 
     }
