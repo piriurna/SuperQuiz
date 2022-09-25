@@ -1,11 +1,8 @@
 package com.piriurna.superquiz.presentation.questions
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.*
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
@@ -118,6 +115,14 @@ fun BuildQuestionsScreen(
         mutableStateOf(0L)
     }
 
+    var isCategoryEmpty by remember {
+        mutableStateOf(false)
+    }
+
+    LaunchedEffect(key1 = state.categoryQuestions, key2 = state.isLoading) {
+        isCategoryEmpty = !state.isLoading && state.categoryQuestions.isEmpty()
+    }
+
     LaunchedEffect(key1 = currentSec) {
         if(currentSec < 60000) {
             delay(100L)
@@ -132,7 +137,7 @@ fun BuildQuestionsScreen(
         Column(
             modifier = Modifier
                 .padding(16.dp)
-                .padding(bottom = 60.dp)
+                .padding(bottom = 32.dp)
                 .fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
@@ -193,9 +198,8 @@ fun BuildQuestionsScreen(
                             }
                         }
                     }
-                } else {
-                    SQAlertDialog(title = "You ran out of questions", description = "Would you like to get more questions for this category?", okLabel = "Get Questions", okClick = { navController.navigate(HomeDestinationScreen.PlayGames.route) }, themeColor = Color.Green.copy(alpha = 0.5f))
                 }
+
 
             }
             AnimatedVisibility(
@@ -239,6 +243,20 @@ fun BuildQuestionsScreen(
                 modifier= Modifier
                     .fillMaxWidth(),
             )
+            AnimatedVisibility(
+                visible = isCategoryEmpty,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                SQAlertDialog(
+                    title = "You ran out of questions",
+                    description = "Would you like to get more questions for this category?",
+                    okLabel = "Get Questions",
+                    okClick = {
+                        events?.invoke(QuestionsEvents.FetchQuestionsForCategory(categoryId))
+                    },
+                    themeColor = Color.Green.copy(alpha = 0.5f))
+            }
         }
     }
 }

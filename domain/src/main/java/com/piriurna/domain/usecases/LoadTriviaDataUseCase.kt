@@ -7,6 +7,7 @@ import com.piriurna.domain.repositories.AppDataStoreRepository
 import com.piriurna.domain.repositories.ProfileDataStoreRepository
 import com.piriurna.domain.repositories.TriviaRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -34,23 +35,7 @@ class LoadTriviaDataUseCase @Inject constructor(
                     val questionsResult : ApiNetworkResponse<List<Question>> = triviaRepository.getCategoryQuestions(category.id, profileSettings.numberOfQuestions)
 
                     questionsResult.data?.let { questionsData ->
-                        val answersForQuestions : Map<String, List<Answer>> = questionsData.map {
-                            return@map (it.description to it.allAnswers)
-                        }.toMap() //TODO: REFACTOR HOW TO SAVE ANSWERS FOR QUESTIONS
-
-                        val ids = triviaRepository.insertCategoryQuestionsInDb(questionsData)
-
-                        val questionsFromDb = triviaRepository.getQuestionsFromIdList(ids)
-
-                        answersForQuestions.forEach { (questionText, answers) ->
-
-                            val questionId = questionsFromDb.firstOrNull { it.description == questionText }?.id
-
-                            if(questionId != null) {
-                                triviaRepository.insertAnswersInDb(answers, questionId)
-                            }
-                        }
-
+                       insertQuestionAndRespectiveAnswersInDb(questionsData)
                     }?: kotlin.run {
                         emit(Resource.Error(message = questionsResult.error.message!!))
                         return@flow
@@ -81,21 +66,7 @@ class LoadTriviaDataUseCase @Inject constructor(
                             val questionsResult : ApiNetworkResponse<List<Question>> = triviaRepository.getCategoryQuestions(category.id, profileSettings.numberOfQuestions)
 
                             questionsResult.data?.let { questionsData ->
-                                val answersForQuestions : Map<String, List<Answer>> = questionsData.map {
-                                    return@map (it.description to it.allAnswers)
-                                }.toMap()
-                                val ids = triviaRepository.insertCategoryQuestionsInDb(questionsData)
-
-                                val questionsFromDb = triviaRepository.getQuestionsFromIdList(ids)
-
-                                answersForQuestions.forEach { (questionText, answers) ->
-
-                                    val questionId = questionsFromDb.firstOrNull { it.description == questionText }?.id
-
-                                    if(questionId != null) {
-                                        triviaRepository.insertAnswersInDb(answers, questionId)
-                                    }
-                                }
+                                insertQuestionAndRespectiveAnswersInDb(questionsData)
                             }?: kotlin.run {
                                 emit(Resource.Error(message = questionsResult.error.message?:"error"))
                             }
@@ -121,22 +92,7 @@ class LoadTriviaDataUseCase @Inject constructor(
                             val questionsResult : ApiNetworkResponse<List<Question>> = triviaRepository.getCategoryQuestions(category.id, profileSettings.numberOfQuestions)
 
                             questionsResult.data?.let { questionsData ->
-                                val answersForQuestions : Map<String, List<Answer>> = questionsData.map {
-                                    return@map (it.description to it.allAnswers)
-                                }.toMap() //TODO: REFACTOR
-
-                                val ids = triviaRepository.insertCategoryQuestionsInDb(questionsData)
-
-                                val questionsFromDb = triviaRepository.getQuestionsFromIdList(ids)
-
-                                answersForQuestions.forEach { (questionText, answers) ->
-
-                                    val questionId = questionsFromDb.firstOrNull { it.description == questionText }?.id
-
-                                    if(questionId != null) {
-                                        triviaRepository.insertAnswersInDb(answers, questionId)
-                                    }
-                                }
+                                insertQuestionAndRespectiveAnswersInDb(questionsData)
                             }?: kotlin.run {
                                 emit(Resource.Error(message = questionsResult.error.message?:"error"))
                             }
@@ -152,4 +108,13 @@ class LoadTriviaDataUseCase @Inject constructor(
             }
         }
 }
+
+
+    suspend fun insertQuestionAndRespectiveAnswersInDb(questions: List<Question>){
+        val questionIds = triviaRepository.insertCategoryQuestionsInDb(questions)
+
+        questions.forEachIndexed { index, question ->
+            triviaRepository.insertAnswersInDb(question.allAnswers, questionIds[index].toInt())
+        }
+    }
 }

@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class GetCategoryQuestionsUseCase @Inject constructor(
+class GetDatabaseNotAnsweredCategoryQuestionsUseCase @Inject constructor(
     private val triviaRepository: TriviaRepository
 ) {
 
