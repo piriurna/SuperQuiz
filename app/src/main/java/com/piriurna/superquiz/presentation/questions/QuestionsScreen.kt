@@ -203,15 +203,13 @@ fun BuildQuestionsScreen(
 
             }
             AnimatedVisibility(
-                visible = shouldShowAlert,
+                visible = answerAlreadySent,
                 enter = scaleIn(animationSpec = spring(Spring.DampingRatioLowBouncy)),
                 exit = scaleOut()
             ) {
                 AnswerAlertPanel(
-                    topText = "Correct Answer",
-                    topBadge = Icons.Default.Done,
-                    middleText = "\"All good things come to those who wait.\"",
-                    bottomText = "- Paulina Simons"
+                    isCorrect = selectedAnswer == currentQuestion?.getCorrectAnswer(),
+                    quote = state.quotes[pagerState.currentPage]
                 )
             }
 
