@@ -1,5 +1,7 @@
 package com.piriurna.data.mappers
 
+import android.text.Html
+import androidx.core.text.parseAsHtml
 import com.piriurna.data.database.entities.AnswerEntity
 import com.piriurna.data.database.entities.CategoryEntity
 import com.piriurna.data.database.entities.QuestionEntity
@@ -53,7 +55,7 @@ fun QuizDto.toQuestions(categoryId: Int) : List<Question> {
             categoryId = categoryId,
             difficulty = DifficultyType.convertFromString(questionDto.difficulty),
             allAnswers = allAnswers,
-            description = questionDto.question,
+            description = Html.fromHtml(questionDto.question, Html.FROM_HTML_MODE_COMPACT).toString(),
             type = QuestionType.convertFromString(questionDto.type)
         )
     }
@@ -84,7 +86,7 @@ fun QuestionWithAnswers.toQuestion() : Question {
         categoryId = this.question.ownerCategoryId,
         difficulty = this.question.difficulty,
         type = this.question.type,
-        description = this.question.description,
+        description = Html.fromHtml(this.question.description, Html.FROM_HTML_MODE_COMPACT).toString(),
         allAnswers = this.answers.toAnswer(),
         chosenAnswer = this.chosenAnswer?.toAnswer()
     )
@@ -114,7 +116,7 @@ fun List<Answer>.toAnswerEntity(questionId: Int) : List<AnswerEntity> {
 fun AnswerEntity.toAnswer() : Answer {
     return Answer(
         id = this.answerId,
-        description = this.text,
+        description = Html.fromHtml(this.text, Html.FROM_HTML_MODE_COMPACT).toString(),
         isCorrectAnswer = this.isCorrectAnswer,
         isEnabled = this.isEnabled
     )
