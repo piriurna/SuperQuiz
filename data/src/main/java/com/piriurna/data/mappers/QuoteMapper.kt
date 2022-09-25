@@ -1,6 +1,7 @@
 package com.piriurna.data.mappers
 
 import com.piriurna.data.remote.dto.quotes.QuoteDto
+import com.piriurna.data.remote.dto.quotes.QuoteListDto
 import com.piriurna.domain.models.quotes.Quote
 
 fun QuoteDto.toQuote() : Quote {
@@ -30,4 +31,11 @@ fun Quote.toQuoteDto() : QuoteDto {
         length = this.length,
         tags = this.tags
     )
+}
+
+
+fun QuoteListDto.toQuote() : List<Quote> {
+    return this.results.map {
+        it.toQuote()
+    }
 }

@@ -11,6 +11,7 @@ import com.piriurna.data.repositories.QuoteRepositoryImpl
 import com.piriurna.data.repositories.TriviaRepositoryImpl
 import com.piriurna.domain.repositories.AppDataStoreRepository
 import com.piriurna.domain.repositories.ProfileDataStoreRepository
+import com.piriurna.domain.repositories.QuoteRepository
 import com.piriurna.domain.repositories.TriviaRepository
 import dagger.Module
 import dagger.Provides
@@ -44,7 +45,7 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideQuoteRepository(quoteApiSource: QuoteApiSource) : QuoteRepositoryImpl {
+    fun provideQuoteRepository(quoteApiSource: QuoteApiSource) : QuoteRepository {
         return QuoteRepositoryImpl(quoteApiSource)
     }
 
