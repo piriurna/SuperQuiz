@@ -35,6 +35,7 @@ import com.piriurna.domain.models.Question
 import com.piriurna.superquiz.R
 import com.piriurna.superquiz.presentation.composables.AnswerAlertPanel
 import com.piriurna.superquiz.presentation.composables.models.disabledHorizontalPointerInputScroll
+import com.piriurna.superquiz.presentation.navigation.HomeDestinationScreen
 import com.piriurna.superquiz.presentation.navigation.NavigationArguments
 import com.piriurna.superquiz.presentation.navigation.PlayGamesDestinations
 import com.piriurna.superquiz.presentation.navigation.utils.getArgument
@@ -193,7 +194,7 @@ fun BuildQuestionsScreen(
                         }
                     }
                 } else {
-                    SQAlertDialog(title = "You ran out of questions",description = "Would you like to get more questions for this category?", okLabel = "Get Questions", okClick = { /*TODO*/ }, themeColor = Color.Green.copy(alpha = 0.5f))
+                    SQAlertDialog(title = "You ran out of questions", description = "Would you like to get more questions for this category?", okLabel = "Get Questions", okClick = { navController.navigate(HomeDestinationScreen.PlayGames.route) }, themeColor = Color.Green.copy(alpha = 0.5f))
                 }
 
             }

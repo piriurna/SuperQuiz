@@ -2,6 +2,7 @@ package com.piriurna.common.composables.alert
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -51,7 +52,7 @@ fun SQAlertDialog(
                 modifier = Modifier
                     .background(MaterialTheme.colors.background, shape = RoundedCornerShape(5))
                     .clip(RoundedCornerShape(5)),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
+                verticalArrangement = Arrangement.spacedBy(32.dp),
             ) {
                 Column(
                     modifier = Modifier
@@ -63,7 +64,7 @@ fun SQAlertDialog(
                     Image(imageVector = Icons.Default.Refresh, contentDescription = "Refresh", modifier = Modifier.size(90.dp), colorFilter = ColorFilter.tint(themeColor.copy(alpha = 0.5f)))
 
                     title?.let {
-                        SQText(text = it, style = SQStyle.TextLato27Bold, color = textColor)
+                        SQText(text = it, style = SQStyle.TextLato27Bold, color = textColor, textAlign = TextAlign.Center)
                     }
 
                     SQText(
@@ -77,14 +78,39 @@ fun SQAlertDialog(
                     modifier = Modifier
                         .background(themeColor.copy(alpha = 0.5f))
                         .fillMaxWidth()
+                        .height(50.dp),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     laterLabel?.let {
-                        Button(onClick = { laterClick?.invoke() }, modifier = Modifier.fillMaxWidth(0.5f), elevation = ButtonDefaults.elevation(0.dp), colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent, contentColor = Color.White)){
-                            SQText(it, color = buttonTextColor)
+                        Box(
+                            modifier = Modifier
+                                .fillMaxHeight()
+                                .clickable { laterClick?.invoke() }
+                                .align(Alignment.CenterVertically)
+                                .fillMaxWidth(0.5f),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            SQText(
+                                it,
+                                color = buttonTextColor,
+                                textAlign = TextAlign.Center
+                            )
                         }
                     }
-                    Button(onClick = { okClick() }, modifier = Modifier.fillMaxWidth(), elevation = ButtonDefaults.elevation(0.dp), colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent, contentColor = Color.White)){
-                        SQText(okLabel, color = buttonTextColor)
+
+                    Box(
+                        modifier = Modifier
+                            .fillMaxHeight()
+                            .clickable { okClick.invoke() }
+                            .align(Alignment.CenterVertically)
+                            .fillMaxWidth(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        SQText(
+                            okLabel,
+                            color = buttonTextColor,
+                            textAlign = TextAlign.Center,
+                        )
                     }
                 }
             }
