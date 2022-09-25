@@ -2,10 +2,9 @@ package com.piriurna.superquiz.presentation.questions
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,7 +31,6 @@ import com.piriurna.domain.models.Question
 import com.piriurna.superquiz.R
 import com.piriurna.superquiz.presentation.composables.AnswerAlertPanel
 import com.piriurna.superquiz.presentation.composables.models.disabledHorizontalPointerInputScroll
-import com.piriurna.superquiz.presentation.navigation.HomeDestinationScreen
 import com.piriurna.superquiz.presentation.navigation.NavigationArguments
 import com.piriurna.superquiz.presentation.navigation.PlayGamesDestinations
 import com.piriurna.superquiz.presentation.navigation.utils.getArgument
@@ -86,42 +84,39 @@ fun BuildQuestionsScreen(
         events?.invoke(QuestionsEvents.GetQuestions(categoryId))
     }
 
-    val questions = state.categoryQuestions.sortedBy { it.index }
+    val questions = state.categoryQuestions
 
     val numOfQuestions = state.categoryQuestions.size
 
-    val questionIndex = questions.getOrNull(pagerState.currentPage)?.index?:0
-    val percentage = ((questionIndex + 1).toFloat() / numOfQuestions.toFloat()) * 100
+
+    val currentQuestion by derivedStateOf {
+        questions.find { it.id == state.lastAnsweredQuestionId }
+    }
+
+    val questionIndex = questions.indexOf(currentQuestion)
+
+    val percentage by animateFloatAsState(((questionIndex + 1).toFloat() / numOfQuestions.toFloat()) * 100)
 
     var selectedAnswer by remember {
         mutableStateOf<Answer?>(null)
     }
 
-    var shouldShowAlert by remember {
+    var answerAlreadySent by remember {
         mutableStateOf(false)
     }
 
-    var isAnswered by remember {
-        mutableStateOf(false)
+    val isCategoryEmpty by derivedStateOf {
+        !state.isLoading && questionIndex == -1
     }
 
-    // create variable for current time
     var currentMinute by remember {
         mutableStateOf(0)
     }
 
-    // create variable for current time
     var currentSec by remember {
         mutableStateOf(0L)
     }
 
-    var isCategoryEmpty by remember {
-        mutableStateOf(false)
-    }
-
-    LaunchedEffect(key1 = state.categoryQuestions, key2 = state.isLoading) {
-        isCategoryEmpty = !state.isLoading && state.categoryQuestions.isEmpty()
-    }
 
     LaunchedEffect(key1 = currentSec) {
         if(currentSec < 60000) {
@@ -130,6 +125,15 @@ fun BuildQuestionsScreen(
         } else {
             currentMinute++
             currentSec = 0L
+        }
+    }
+
+    LaunchedEffect(key1 = questionIndex, key2 = pagerState.pageCount) {
+        scope.launch {
+            if(pagerState.pageCount != 0 && questionIndex != -1 && pagerState.pageCount > questionIndex){
+                pagerState.scrollToPage(questionIndex)
+                selectedAnswer = null
+            }
         }
     }
 
@@ -142,20 +146,19 @@ fun BuildQuestionsScreen(
             verticalArrangement = Arrangement.SpaceBetween
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(36.dp)) {
-                if(questions.isNotEmpty()) {
-                    val currentQuestion = questions[pagerState.currentPage]
+                currentQuestion?.let { question ->
 
                     val isHintVisible by derivedStateOf {
-                        currentQuestion.isHintAvailable()
+                        question.isHintAvailable() && !answerAlreadySent
                     }
                     SQProgressBar(
                         progress = percentage.toInt(),
-                        percentageText = "${currentQuestion.index + 1}/${numOfQuestions}",
+                        percentageText = "${questionIndex + 1}/${numOfQuestions}",
                         textIncompleteColor = Color.Black,
                         chipIcon = ImageVector.vectorResource(R.drawable.ic_timer),
                         chipForegroundColor = orange,
                         chipBackgroundColor = lightOrange,
-                        chipText = "${currentMinute}min ${currentSec/1000L}s",
+                        chipText = "${currentMinute}min ${currentSec / 1000L}s",
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
 
@@ -167,11 +170,11 @@ fun BuildQuestionsScreen(
                         ) { index ->
                             SQQuestionCard(
                                 question = questions[index],
-                                questionIndex = currentQuestion.index + 1,
+                                questionIndex = index + 1,
                                 onAnswerSelected = { answer ->
                                     selectedAnswer = answer
                                 },
-                                contentEnabled = !isAnswered,
+                                contentEnabled = !answerAlreadySent,
                                 enabled = false
                             )
                         }
@@ -190,7 +193,7 @@ fun BuildQuestionsScreen(
                                     text = "Hints",
                                     icon = ImageVector.vectorResource(id = R.drawable.ic_light_bulb_hint),
                                     onClick = {
-                                        events?.invoke(QuestionsEvents.PerformHintAction(currentQuestion))
+                                        events?.invoke(QuestionsEvents.PerformHintAction(question))
                                     },
                                     foregroundColor = purple,
                                     backgroundColor = lightPurple
@@ -217,26 +220,22 @@ fun BuildQuestionsScreen(
             SQButton(
                 onClick = {
                     scope.launch {
-                        if(isAnswered) {
-                            isAnswered = false
-
-                            if(pagerState.currentPage == pagerState.pageCount - 1) {
+                        if(answerAlreadySent) {
+                            answerAlreadySent = false
+                            if(state.isLastQuestion(pagerState.currentPage)) {
                                 navController.navigate(PlayGamesDestinations.CategoryCompleted.withArgs(categoryId))
                             } else {
-                                val nextPage = min(pagerState.pageCount - 1, pagerState.currentPage + 1)
-                                pagerState.animateScrollToPage(nextPage)
+                                events?.invoke(QuestionsEvents.GetQuestions(categoryId))
                             }
                         } else {
                             selectedAnswer?.let { answer ->
-                                val question = questions[pagerState.currentPage]
-                                events?.invoke(QuestionsEvents.SaveAnswer(question.id, answer))
-                                isAnswered = true
+                                events?.invoke(QuestionsEvents.SaveAnswer(currentQuestion!!.id, answer))
+                                answerAlreadySent = true
                             }
                         }
-                        shouldShowAlert = questions[pagerState.currentPage].getCorrectAnswer() == selectedAnswer
                     }
                 },
-                buttonText = if(isAnswered) "NEXT" else "SEND",
+                buttonText = if(answerAlreadySent) "NEXT" else "SEND",
                 enabled = selectedAnswer != null,
                 modifier= Modifier
                     .fillMaxWidth(),

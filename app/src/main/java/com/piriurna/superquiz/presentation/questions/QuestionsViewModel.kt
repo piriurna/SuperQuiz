@@ -7,10 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.piriurna.domain.Resource
 import com.piriurna.domain.models.Answer
 import com.piriurna.domain.models.Question
-import com.piriurna.domain.usecases.GetDatabaseNotAnsweredCategoryQuestionsUseCase
+import com.piriurna.domain.usecases.GetDbCategoryQuestionsUseCase
 import com.piriurna.domain.usecases.SaveAnswerUseCase
 import com.piriurna.domain.usecases.questions.DisableSelectedAnswersUseCase
 import com.piriurna.domain.usecases.questions.FetchQuestionsForCategoryUseCase
+import com.piriurna.domain.usecases.quotes.GetRandomQuoteListUseCase
 import com.piriurna.superquiz.SQBaseEventViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -19,10 +20,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class QuestionsViewModel @Inject constructor(
-    private val getDatabaseNotAnsweredCategoryQuestionsUseCase: GetDatabaseNotAnsweredCategoryQuestionsUseCase,
+    private val getDbCategoryQuestionsUseCase: GetDbCategoryQuestionsUseCase,
     private val saveAnswerUseCase: SaveAnswerUseCase,
     private val disableSelectedAnswersUseCase: DisableSelectedAnswersUseCase,
-    private val fetchQuestionsForCategoryUseCase: FetchQuestionsForCategoryUseCase
+    private val fetchQuestionsForCategoryUseCase: FetchQuestionsForCategoryUseCase,
+    private val getRandomQuoteListUseCase: GetRandomQuoteListUseCase
 ) : SQBaseEventViewModel<QuestionsEvents>(){
 
 
@@ -51,7 +53,35 @@ class QuestionsViewModel @Inject constructor(
 
 
     private fun getQuestions(categoryId: Int) {
-        getDatabaseNotAnsweredCategoryQuestionsUseCase(categoryId).onEach { result ->
+        getDbCategoryQuestionsUseCase(categoryId).onEach { result ->
+            when(result) {
+                is Resource.Loading -> {
+                    _state.value = _state.value.copy(
+                        isLoading = true
+                    )
+                }
+
+                is Resource.Error -> {
+                    _state.value = _state.value.copy(
+                        isLoading = false
+                    )
+                }
+
+                is Resource.Success -> {
+                    _state.value = _state.value.copy(
+                        categoryQuestions = result.data?: emptyList(),
+                        lastAnsweredQuestionId = result.data?.firstOrNull { !it.isQuestionAnswered() }?.id?:0,
+                        categoryId = categoryId
+                    )
+
+                    getQuotes(_state.value.categoryQuestions.size)
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun getQuotes(numOfQuotes : Int) {
+        getRandomQuoteListUseCase(numOfQuotes).onEach { result ->
             when(result) {
                 is Resource.Loading -> {
                     _state.value = _state.value.copy(
@@ -68,13 +98,12 @@ class QuestionsViewModel @Inject constructor(
                 is Resource.Success -> {
                     _state.value = _state.value.copy(
                         isLoading = false,
-                        categoryQuestions = result.data?: emptyList()
+                        quotes = result.data?: emptyList(),
                     )
                 }
             }
         }.launchIn(viewModelScope)
     }
-
 
     private fun saveAnswer(questionId: Int, answer: Answer) {
         saveAnswerUseCase.invoke(questionId, answer).onEach { result ->
@@ -86,7 +115,7 @@ class QuestionsViewModel @Inject constructor(
                 }
                 is Resource.Error -> {
                     _state.value = _state.value.copy(
-
+                        isLoading = false
                     )
                 }
                 is Resource.Success -> {
@@ -103,17 +132,7 @@ class QuestionsViewModel @Inject constructor(
         disableSelectedAnswersUseCase(question).onEach { result ->
             when(result) {
                 is Resource.Success -> {
-                    val newCategoryQuestions = result.data?.let { resultData ->
-                        val questions = _state.value.categoryQuestions.toMutableList()
-                        val questionIndex = questions.indexOf(question)
-                        questions[questionIndex] = resultData
-                        return@let questions
-                    }?:run { return@run emptyList() }
-
-                    _state.value = _state.value.copy(
-                        isLoading = false,
-                        categoryQuestions = newCategoryQuestions
-                    )
+                    getQuestions(question.categoryId)
                 }
                 else -> {}
             }
@@ -139,10 +158,7 @@ class QuestionsViewModel @Inject constructor(
                 }
 
                 is Resource.Success -> {
-                    _state.value = _state.value.copy(
-                        isLoading = false,
-                        categoryQuestions = result.data?: emptyList()
-                    )
+                    getQuestions(categoryId)
                 }
             }
         }.launchIn(viewModelScope)

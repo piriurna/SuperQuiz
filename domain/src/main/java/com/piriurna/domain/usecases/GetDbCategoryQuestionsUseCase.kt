@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class GetDatabaseNotAnsweredCategoryQuestionsUseCase @Inject constructor(
+class GetDbCategoryQuestionsUseCase @Inject constructor(
     private val triviaRepository: TriviaRepository
 ) {
 
@@ -17,8 +17,7 @@ class GetDatabaseNotAnsweredCategoryQuestionsUseCase @Inject constructor(
         val questions : List<Question> = triviaRepository.getCategoryQuestionsFromDb(categoryId)
 
         if(questions.isNotEmpty()) {
-            val notAnsweredQuestions = questions.filterNot { it.isQuestionAnswered() }
-            emit(Resource.Success(notAnsweredQuestions))
+            emit(Resource.Success(questions))
         } else {
             emit(Resource.Error("No questions found"))
         }
