@@ -5,6 +5,7 @@ import androidx.core.text.parseAsHtml
 import com.piriurna.data.database.entities.AnswerEntity
 import com.piriurna.data.database.entities.CategoryEntity
 import com.piriurna.data.database.entities.QuestionEntity
+import com.piriurna.data.database.models.CategoryStats
 import com.piriurna.data.database.models.QuestionWithAnswers
 import com.piriurna.data.remote.dto.CategoryDto
 import com.piriurna.data.remote.dto.QuizDto
@@ -23,6 +24,16 @@ fun CategoryEntity.toCategory() : Category {
     return Category(
         id = this.categoryId,
         name = this.name
+    )
+}
+
+fun CategoryStats.toCategory() : Category {
+    return Category(
+        id = this.categoryId,
+        name = this.name,
+        title = this.title,
+        subTitle = this.subTitle,
+        completionRate = this.completionRate
     )
 }
 
