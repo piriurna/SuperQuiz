@@ -16,11 +16,13 @@ class GetCategoryStatisticsForAllCategoriesUseCase @Inject constructor(
 
         val categories = triviaRepository.getDbCategories()
 
-        val listOfStatistics = categories.map { category ->
-            val categoryQuestions = triviaRepository.getCategoryQuestionsFromDb(category.id)
-
-            return@map CategoryStatistics(categoryId = category.id, questions = categoryQuestions)
-        }
+        //TODO: CORRIGIR - VEM DA BD
+        val listOfStatistics = emptyList<CategoryStatistics>()
+//        val listOfStatistics = categories.map { category ->
+//            val categoryQuestions = triviaRepository.getCategoryQuestionsFromDb(category.id)
+//
+//            return@map CategoryStatistics(categoryId = category.id, questions = categoryQuestions)
+//        }
 
         emit(Resource.Success(listOfStatistics))
     }

@@ -3,8 +3,6 @@ package com.piriurna.data.database.models
 import androidx.room.ColumnInfo
 
 
-
-
 data class CategoryStats(
 
     @ColumnInfo(name = "categoryId")

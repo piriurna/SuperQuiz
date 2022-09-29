@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.piriurna.data.database.entities.CategoryEntity
 import com.piriurna.data.database.models.CategoryStats
+import kotlinx.coroutines.flow.Flow
 
 
 @Dao
@@ -19,8 +20,6 @@ interface CategoryDao {
     @Query("DELETE FROM CATEGORIES")
     suspend fun deleteCategories()
 
-    @Query("SELECT * FROM CATEGORIES")
-    suspend fun getCategories(): List<CategoryEntity>?
 
     @Query(
         """
@@ -36,6 +35,6 @@ interface CategoryDao {
             ON table_categories.categoryId = table_completion.ownerCategoryId;
     """
     )
-    suspend fun getCategories_(): List<CategoryStats>?
+    fun getCategories(): Flow<List<CategoryStats>>
 
 }

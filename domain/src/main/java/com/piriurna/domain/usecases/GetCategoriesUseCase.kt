@@ -11,11 +11,6 @@ class GetCategoriesUseCase @Inject constructor(
     private val triviaRepository: TriviaRepository
 ) {
 
-    operator fun invoke() : Flow<Resource<List<Category>>> = flow {
-        emit(Resource.Loading())
+    operator fun invoke() : Flow<List<Category>> = triviaRepository.getDbCategories()
 
-        val categories_ : List<Category> = triviaRepository.getDbCategories()
-
-        emit(Resource.Success(categories_))
-    }
 }
