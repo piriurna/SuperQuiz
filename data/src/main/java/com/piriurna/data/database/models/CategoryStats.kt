@@ -17,8 +17,9 @@ data class CategoryStats(
     var name: String,
 
     @ColumnInfo(name = "subTitle")
-    var subTitle: String,
+    val subTitle: String,
 
     @ColumnInfo(name = "title")
-    var title: String
+    val title: String
 )
+

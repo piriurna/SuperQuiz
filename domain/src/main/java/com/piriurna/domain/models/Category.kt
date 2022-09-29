@@ -4,15 +4,12 @@ data class Category(
     val id: Int,
     val name: String,
     val completionRate : Int = 0, //0-100 in percentage
-    private val title : String = "",
-    private val subTitle : String = "",
+    val title : String = "",
+    private val description : String = "",
 ) {
 
-    val titleDesc: String
-        get() = if (subTitle == "") title else subTitle
-
-    val subTitleDesc: String?
-        get() = if (title == "") null else title
+    val subTitle: String?
+        get() = if (description == "") null else description
 
     companion object {
         val mockCategoryList = listOf(
@@ -21,7 +18,7 @@ data class Category(
                 name = "Physics",
                 completionRate = 0,
                 title = "Physics",
-                subTitle = "Astral"
+                description = "Astral"
 
             ),
             Category(
@@ -29,13 +26,13 @@ data class Category(
                 name = "General Knowledge",
                 completionRate = 80,
                 title = "General Knowledge",
-                subTitle = "Cooking"
+                description = "Cooking"
             ),
             Category(
                 id = 19,
                 name = "Mathematics",
                 completionRate = 100,
-                subTitle = "Mathematics"
+                description = "Mathematics"
             ),
             Category(
                 id = 23,

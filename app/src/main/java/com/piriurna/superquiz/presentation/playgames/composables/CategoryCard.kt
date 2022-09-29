@@ -47,12 +47,12 @@ fun CategoryCard(
                 )
 
                 SQText(
-                    text = category.titleDesc,
+                    text = category.title,
                     style = TextLatoBold20,
                     lineHeight = 28.sp
                 )
 
-                category.subTitleDesc?.let { subtitle->
+                category.subTitle?.let { subtitle->
                     SQText(
                         text = subtitle,
                         style = TextLato12,

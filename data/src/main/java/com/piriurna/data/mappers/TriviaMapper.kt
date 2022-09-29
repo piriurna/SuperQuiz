@@ -32,7 +32,7 @@ fun CategoryStats.toCategory() : Category {
         id = this.categoryId,
         name = this.name,
         title = this.title,
-        subTitle = this.subTitle,
+        description = this.subTitle,
         completionRate = this.completionRate
     )
 }

@@ -67,13 +67,13 @@ class TriviaRepositoryImpl @Inject constructor(
         return questionDao.getQuestions(ids)!!.toQuestion()
     }
 
+
     override suspend fun getDbCategories(): List<Category> {
-        return categoryDao.getCategories()?.map { categoryEntity ->
-            return@map categoryEntity.toCategory()
+        return categoryDao.getCategories_()?.map { categorystats ->
+            return@map categorystats.toCategory()
         } ?: kotlin.run {
             return emptyList()
         }
-
     }
 
     override suspend fun disableAnswer(answerId: Int) {

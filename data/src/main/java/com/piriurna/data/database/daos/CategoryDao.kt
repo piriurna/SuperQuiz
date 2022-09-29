@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.piriurna.data.database.entities.CategoryEntity
+import com.piriurna.data.database.models.CategoryStats
 
 
 @Dao
@@ -21,5 +22,20 @@ interface CategoryDao {
     @Query("SELECT * FROM CATEGORIES")
     suspend fun getCategories(): List<CategoryEntity>?
 
+    @Query(
+        """
+            SELECT categoryId, name, completionRate, 
+                    substr(name, 0, instr(name,':')) as subTitle, 
+                    substr(name, instr(name, ':') + 1, length(name)) as title
+            FROM CATEGORIES as table_categories
+            LEFT JOIN (
+                SELECT ownerCategoryId, COUNT(chosenAnswerId) , COUNT(questionId) , (COUNT(chosenAnswerId)  * 100  / COUNT(questionId)) as completionRate
+                FROM QUESTION  
+                GROUP BY ownerCategoryId
+            ) as table_completion
+            ON table_categories.categoryId = table_completion.ownerCategoryId;
+    """
+    )
+    suspend fun getCategories_(): List<CategoryStats>?
 
 }
