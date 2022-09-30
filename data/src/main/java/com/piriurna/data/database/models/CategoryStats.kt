@@ -23,6 +23,10 @@ data class CategoryStats(
     @ColumnInfo(name = "numberOWrongAnswers")
     var numberOfWrongAnswers: Int = 0,
 
+
+    @ColumnInfo(name = "numberOfNotAnsweredQuestions")
+    var numberOfNotAnsweredQuestions: Int = 0,
+
     @ColumnInfo(name = "subTitle")
     val subTitle: String,
 

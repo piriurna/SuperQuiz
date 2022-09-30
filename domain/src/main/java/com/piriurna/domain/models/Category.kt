@@ -9,6 +9,7 @@ data class Category(
     val totalNumberOfQuestions : Int = 0,
     val correctAnswers : Int = 0,
     val incorrectAnswers : Int = 0,
+    val notAnsweredQuestions : Int = 0,
 ) {
 
     val subTitle: String?

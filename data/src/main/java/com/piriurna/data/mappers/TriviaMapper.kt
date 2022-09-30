@@ -37,6 +37,7 @@ fun CategoryStats.toCategory() : Category {
         totalNumberOfQuestions = this.numberOfQuestions,
         correctAnswers = this.numberOfCorrectAnswers,
         incorrectAnswers = this.numberOfWrongAnswers,
+        notAnsweredQuestions = this.numberOfNotAnsweredQuestions
     )
 }
 
