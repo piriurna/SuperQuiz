@@ -97,4 +97,8 @@ class TriviaRepositoryImpl @Inject constructor(
         return 0
     }
 
+    override suspend fun getNumberOfCategories(): Int {
+        return categoryDao.getNUmberOfCategories()
+    }
+
 }

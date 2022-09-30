@@ -83,10 +83,9 @@ class LoadTriviaDataUseCase @Inject constructor(
                     emit(Resource.Error(message = categoriesResult.error.message!!))
                 }
             } else {
-                //TODO: CORRIGIR - VEM DA BD
-                val nonExistingCategories = emptyList<Category>()
-                if(nonExistingCategories.isEmpty()){
-                //if(triviaRepository.getDbCategories().isEmpty()){ //Should not go look for new categories but the app somehow doesn't have any data in the database
+
+                if(triviaRepository.getNumberOfCategories() == 0){ //Should not go look for new categories but the app somehow doesn't have any data in the database
+
                     val categoriesResult : ApiNetworkResponse<List<Category>> = triviaRepository.getCategories()
 
                     categoriesResult.data?.let { data ->
@@ -112,6 +111,7 @@ class LoadTriviaDataUseCase @Inject constructor(
             }
         }
 }
+
 
 
     suspend fun insertQuestionAndRespectiveAnswersInDb(questions: List<Question>){

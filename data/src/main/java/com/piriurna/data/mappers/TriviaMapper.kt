@@ -1,7 +1,6 @@
 package com.piriurna.data.mappers
 
 import android.text.Html
-import androidx.core.text.parseAsHtml
 import com.piriurna.data.database.entities.AnswerEntity
 import com.piriurna.data.database.entities.CategoryEntity
 import com.piriurna.data.database.entities.QuestionEntity
@@ -28,12 +27,16 @@ fun CategoryEntity.toCategory() : Category {
 }
 
 fun CategoryStats.toCategory() : Category {
+
     return Category(
-        id = this.categoryId,
-        name = this.name,
+        id = this.categoryEntity.categoryId,
+        name = this.categoryEntity.name,
         title = this.title,
         description = this.subTitle,
-        completionRate = this.completionRate
+        completionRate = this.completionRate,
+        totalNumberOfQuestions = this.numberOfQuestions,
+        correctAnswers = this.numberOfCorrectAnswers,
+        incorrectAnswers = this.numberOfWrongAnswers,
     )
 }
 

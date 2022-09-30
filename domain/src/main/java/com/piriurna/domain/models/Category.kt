@@ -6,6 +6,9 @@ data class Category(
     val completionRate : Int = 0, //0-100 in percentage
     val title : String = "",
     private val description : String = "",
+    val totalNumberOfQuestions : Int = 0,
+    val correctAnswers : Int = 0,
+    val incorrectAnswers : Int = 0,
 ) {
 
     val subTitle: String?
