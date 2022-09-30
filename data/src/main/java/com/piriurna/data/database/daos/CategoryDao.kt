@@ -66,7 +66,7 @@ interface CategoryDao {
               SELECT tbl_categories.*, 
                      completionRate, 
                      substr(name, 0, instr(name,':')) as subTitle, 
-                     substr(name, instr(name, ':')+1, length(name)) as title,
+                     trim(substr(name, instr(name, ':') + 1, length(name)) , ' ') as title,
                      numberOfQuestions, numberOfCorrectAnswers, numberOWrongAnswers,
                      (numberOfQuestions - numberOfCorrectAnswers - numberOWrongAnswers) as numberOfNotAnsweredQuestions
               FROM categories as tbl_categories
