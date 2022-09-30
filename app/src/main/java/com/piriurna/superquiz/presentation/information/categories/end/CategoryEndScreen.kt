@@ -71,8 +71,8 @@ fun BuildCategoryEndScreen(
         mutableStateOf(false)
     }
 
-    val correctAnswers = state.categoryStatistics.correctAnswers.toFloat()
-    val totalNumberOfQuestions = state.categoryStatistics.totalNumberOfQuestions.toFloat()
+    val correctAnswers = state.category?.correctAnswers?.toFloat() ?: 0F
+    val totalNumberOfQuestions = state.category?.totalNumberOfQuestions?.toFloat() ?: 0F
     val percentage by animateIntAsState(
         animationSpec = tween(1000),
         targetValue = ((correctAnswers/totalNumberOfQuestions) * 100).toInt()
@@ -173,9 +173,11 @@ fun CategoryEndScreenPreview() {
     LaunchedEffect(Unit) {
         state = state.copy(
             isLoading = false,
-            categoryStatistics = CategoryStatistics(
-                categoryId = Category.mockCategoryList[0].id,
+            category = Category(
+                id = Category.mockCategoryList[0].id,
+                name = Category.mockCategoryList[0].name,
                 totalNumberOfQuestions = 100,
+                title =Category.mockCategoryList[0].title,
                 correctAnswers = 80,
                 incorrectAnswers = Question.mockQuestions.count { !it.isQuestionAnsweredCorrectly() }
             )

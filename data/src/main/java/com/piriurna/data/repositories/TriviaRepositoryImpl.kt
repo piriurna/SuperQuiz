@@ -77,6 +77,10 @@ class TriviaRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getDbCategory(categoryId: Int): Category {
+        return categoryDao.getCategory(categoryId = categoryId).toCategory()
+    }
+
     override suspend fun disableAnswer(answerId: Int) {
         answerDao.disableAnswer(answerId, false)
     }

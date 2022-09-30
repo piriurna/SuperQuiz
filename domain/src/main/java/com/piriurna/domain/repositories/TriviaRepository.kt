@@ -21,6 +21,7 @@ interface TriviaRepository {
     suspend fun getQuestionsFromIdList(ids: List<Long>) : List<Question>
 
     fun getDbCategories(): Flow<List<Category>>
+    suspend fun getDbCategory(categoryId: Int): Category
 
     suspend fun disableAnswer(answerId: Int)
 
