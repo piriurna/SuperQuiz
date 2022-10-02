@@ -8,11 +8,19 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
+import androidx.compose.ui.input.nestedscroll.NestedScrollSource
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.piriurna.common.composables.button.SQAppBarIcon
@@ -22,6 +30,7 @@ import com.piriurna.common.composables.toolbar.AppBarOptions
 import com.piriurna.common.composables.toolbar.SQAppBar
 import com.piriurna.common.theme.purple
 import com.piriurna.common.models.BottomNavigationItem
+import kotlin.math.roundToInt
 
 
 @Composable
@@ -34,6 +43,25 @@ fun SQScaffold(
     navController: NavHostController? = null,
     content: @Composable (PaddingValues) -> Unit,
 ) {
+    val bottomBarHeight = 55.dp
+    val bottomBarHeightPx = with(LocalDensity.current) {
+        bottomBarHeight.roundToPx().toFloat()
+    }
+    val bottomBarOffsetHeightPx = remember { mutableStateOf(0f) }
+    val nestedScrollConnection = remember {
+        object : NestedScrollConnection {
+            override fun onPreScroll(
+                available: Offset,
+                source: NestedScrollSource
+            ): Offset {
+                val delta = available.y
+                val newOffset = bottomBarOffsetHeightPx.value + delta
+                bottomBarOffsetHeightPx.value =
+                    newOffset.coerceIn(-bottomBarHeightPx, 0f)
+                return Offset.Zero
+            }
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -42,15 +70,17 @@ fun SQScaffold(
     ) {
         val scaffoldModifier = modifier.fillMaxSize()
         Scaffold(
-            modifier = scaffoldModifier,
+            modifier = scaffoldModifier.nestedScroll(nestedScrollConnection),
             content = content,
-            topBar = {
-
-            },
             bottomBar = {
                 navController?.let { navController ->
                     if(bottomBarItems.isNotEmpty()) {
                         SQBottomNavigation(
+                            modifier = Modifier
+                                .height(bottomBarHeight)
+                                .offset {
+                                    IntOffset(x = 0, y = -bottomBarOffsetHeightPx.value.roundToInt())
+                                },
                             selectedColor = purple,
                             unselectedColor = Color.LightGray,
                             items = bottomBarItems,
