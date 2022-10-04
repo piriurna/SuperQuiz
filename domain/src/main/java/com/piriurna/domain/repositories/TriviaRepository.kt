@@ -32,4 +32,5 @@ interface TriviaRepository {
     suspend fun updateQuestion(question: Question) : Int
 
     suspend fun getNumberOfCategories() : Int
+    suspend fun getMissingCategories(values: List<Int>): List<Int>
 }

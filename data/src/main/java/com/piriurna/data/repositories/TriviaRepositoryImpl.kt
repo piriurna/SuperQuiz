@@ -12,7 +12,6 @@ import com.piriurna.domain.models.Question
 import com.piriurna.domain.repositories.TriviaRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.mapLatest
 import java.lang.Exception
 import javax.inject.Inject
 
@@ -102,7 +101,11 @@ class TriviaRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getNumberOfCategories(): Int {
-        return categoryDao.getNUmberOfCategories()
+        return categoryDao.getNumberOfCategories()
     }
 
+    override suspend fun getMissingCategories(values: List<Int>): List<Int> {
+        val ll = categoryDao.getMissingCategories(values)
+        return ll
+    }
 }

@@ -1,12 +1,10 @@
 package com.piriurna.data.database.daos
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
+import androidx.sqlite.db.SimpleSQLiteQuery
+import androidx.sqlite.db.SupportSQLiteQuery
 import com.piriurna.data.database.entities.CategoryEntity
 import com.piriurna.data.database.models.CategoryStats
-import com.piriurna.data.database.models.QuestionWithAnswers
 import kotlinx.coroutines.flow.Flow
 
 
@@ -103,5 +101,24 @@ interface CategoryDao {
 
 
     @Query("SELECT Count(categoryId) FROM CATEGORIES")
-    suspend fun getNUmberOfCategories(): Int
+    suspend fun getNumberOfCategories(): Int
+
+
+    @RawQuery
+    suspend fun getMissingCategoriesRawQuery(query: SupportSQLiteQuery): List<Int>
+
+    suspend fun getMissingCategories(values: List<Int>): List<Int> {
+
+        var sb = StringBuilder().append("VALUES ")
+        var ids = ""
+        for(id in values) {
+            ids += "($id),"
+        }
+
+        ids = ids.removeSuffix(",")
+        sb.append(ids)
+        sb.append("EXCEPT SELECT categoryId FROM categories;")
+        return getMissingCategoriesRawQuery(SimpleSQLiteQuery(sb.toString()))
+    }
+
 }
