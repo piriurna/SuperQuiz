@@ -33,9 +33,5 @@ class DisableSelectedAnswersUseCase @Inject constructor(
             triviaRepository.disableAnswer(it.id)
         }
 
-        val updatedQuestion = triviaRepository.getQuestionFromDb(question.id)
-
-
-        emit(Resource.Success(updatedQuestion!!))
     }
 }

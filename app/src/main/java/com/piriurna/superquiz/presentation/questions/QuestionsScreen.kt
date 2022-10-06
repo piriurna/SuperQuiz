@@ -51,13 +51,14 @@ fun QuestionsScreen(
 
     val viewModel : QuestionsViewModel = hiltViewModel()
 
+    val state = viewModel.state.collectAsState()
 
     val categoryId = navBackStackEntry.getArgument(NavigationArguments.CATEGORY_ID)?.toInt()
 
     if(categoryId != null) {
         BuildQuestionsScreen(
             categoryId = categoryId,
-            state = viewModel.state.value,
+            state = state.value,
             events = viewModel::onTriggerEvent,
             navController
         )
@@ -229,8 +230,13 @@ fun BuildQuestionsScreen(
                             }
                         } else {
                             selectedAnswer?.let { answer ->
-                                events?.invoke(QuestionsEvents.SaveAnswer(currentQuestion!!.id, answer))
-                                answerAlreadySent = true
+
+                                currentQuestion?.let { question ->
+
+                                    events?.invoke(QuestionsEvents.SaveAnswer(question, answer))
+                                    answerAlreadySent = true
+                                }
+
                             }
                         }
                     }

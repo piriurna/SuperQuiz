@@ -9,7 +9,7 @@ sealed class QuestionsEvents : SQBaseEvent() {
 
     class PerformHintAction(val question : Question) : QuestionsEvents()
 
-    class SaveAnswer(val questionId: Int, val answer: Answer) : QuestionsEvents()
+    class SaveAnswer(val question: Question, val answer: Answer) : QuestionsEvents()
 
     class FetchQuestionsForCategory(val categoryId : Int) : QuestionsEvents()
 }

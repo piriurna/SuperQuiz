@@ -28,12 +28,12 @@ class QuestionsViewModel @Inject constructor(
 ) : SQBaseEventViewModel<QuestionsEvents>(){
 
 
-    private val _state: MutableState<QuestionsState> = mutableStateOf(QuestionsState())
-    val state: State<QuestionsState> = _state
+//    private val _state: MutableState<QuestionsState> = mutableStateOf(QuestionsState())
+//    val state: State<QuestionsState> = _state
+//
 
-
-    private val _allTasks = MutableStateFlow<QuestionsState>(QuestionsState())
-    val allTasks: StateFlow<QuestionsState> = _allTasks
+    private val _state = MutableStateFlow(QuestionsState())
+    val state: StateFlow<QuestionsState> = _state
 
     private var fetchQuotes = true
 
@@ -45,7 +45,7 @@ class QuestionsViewModel @Inject constructor(
             }
 
             is QuestionsEvents.SaveAnswer -> {
-                saveAnswer(event.questionId, event.answer)
+                saveAnswer(event.question, event.answer)
             }
 
             is QuestionsEvents.PerformHintAction -> {
@@ -63,14 +63,14 @@ class QuestionsViewModel @Inject constructor(
 
         viewModelScope.launch {
             getDbCategoryQuestionsUseCase(categoryId).collectLatest{ questions->
-                _allTasks.value = _allTasks.value.copy(
+                _state.value = _state.value.copy(
                     categoryQuestions = questions,
                     lastAnsweredQuestionId = questions.firstOrNull { !it.isQuestionAnswered() }?.id?:0,
                     categoryId = categoryId,
                     isLoading = false
                 )
 
-                getQuotes(_allTasks.value.categoryQuestions.size)
+                getQuotes(_state.value.categoryQuestions.size)
             }
         }
 
@@ -109,8 +109,8 @@ class QuestionsViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    private fun saveAnswer(questionId: Int, answer: Answer) {
-        saveAnswerUseCase.invoke(questionId, answer).onEach { result ->
+    private fun saveAnswer(question: Question, answer: Answer) {
+        saveAnswerUseCase.invoke(question, answer).onEach { result ->
             when(result) {
                 is Resource.Loading -> {
                     _state.value = _state.value.copy(
