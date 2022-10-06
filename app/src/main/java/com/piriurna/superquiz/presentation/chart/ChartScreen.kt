@@ -19,6 +19,7 @@ import com.piriurna.common.composables.selector.SQSelector
 import com.piriurna.domain.models.CategoryStatistics
 import com.piriurna.superquiz.mappers.toPieChartSections
 import com.piriurna.superquiz.mappers.toSelectableItem
+import com.piriurna.superquiz.mappers.toSelectableItems
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
@@ -37,7 +38,7 @@ fun ChartScreen() {
             contentAlignment = Alignment.Center,
         ) {
             SQSelector(
-                items = state.categoryStatisticsList.toSelectableItem(),
+                items = state.categories.toSelectableItems(),
                 onNextPressed = { index ->
                     scope.launch {
                         pagerState.scrollToPage(index)
@@ -52,9 +53,14 @@ fun ChartScreen() {
                     .align(Alignment.TopCenter)
                     .padding(top = 16.dp, start = 16.dp, end = 16.dp)
             )
-            HorizontalPager(count = state.categoryStatisticsList.size, state = pagerState) { page ->
-                val currentPageStatistics = state.categoryStatisticsList.getOrElse(page) { CategoryStatistics() }
-                SQPieChart(sections = currentPageStatistics.toPieChartSections(), pieSize = 500f)
+            HorizontalPager(count = state.categories.size, state = pagerState) { page ->
+
+                val currentPageStatistics = state.categories.getOrElse(page) { null }
+
+                currentPageStatistics?.let {
+                    SQPieChart(sections = it.toPieChartSections(), pieSize = 500f)
+                }
+
             }
         }
     }

@@ -73,23 +73,21 @@ fun BuildCategoryEndScreen(
         mutableStateOf(false)
     }
 
-
-
-    val correctAnswers = state.categoryStatistics.correctAnswers.toFloat()
-    val totalNumberOfQuestions = state.categoryStatistics.totalNumberOfQuestions.toFloat()
+    val correctAnswers = state.category?.correctAnswers?.toFloat() ?: 0F
+    val totalNumberOfQuestions = state.category?.totalNumberOfQuestions?.toFloat() ?: 0F
     val percentage by animateIntAsState(
         animationSpec = tween(1000),
         targetValue = ((correctAnswers/totalNumberOfQuestions) * 100).toInt()
     )
 
     //TODO REFACTOR, PUT IT ALL IN THE STATISTICS MODEL OR THE NEW CATEGORY MODEL
-    val statusImage = if(state.categoryStatistics.isSuccess()) R.drawable.ic_checked_correct else R.drawable.ic_unchecked_incorrect
+    val statusImage = if(state.category?.isSuccess() == true) R.drawable.ic_checked_correct else R.drawable.ic_unchecked_incorrect
 
-    val statusTitle = if(state.categoryStatistics.isSuccess()) "You got $percentage% Correct!" else "You only got ${percentage}% Correct..."
+    val statusTitle = if(state.category?.isSuccess() == true) "You got $percentage% Correct!" else "You only got ${percentage}% Correct..."
 
-    val statusSubTitle = if(state.categoryStatistics.isSuccess()) "Now you can load new questions for the category or go back to the main screen." else "You can get more questions to try again or go back to the main screen."
+    val statusSubTitle = if(state.category?.isSuccess() == true) "Now you can load new questions for the category or go back to the main screen." else "You can get more questions to try again or go back to the main screen."
 
-    val buttonColor = if(state.categoryStatistics.isSuccess()) primaryGreen else errorColor
+    val buttonColor = if(state.category?.isSuccess() == true) primaryGreen else errorColor
 
     LaunchedEffect(Unit) {
         events?.invoke(CategoryEndEvents.GetCategoryStatistics(categoryId))
@@ -186,8 +184,9 @@ fun CategoryEndScreenPreview() {
     LaunchedEffect(Unit) {
         state = state.copy(
             isLoading = false,
-            categoryStatistics = CategoryStatistics(
-                categoryId = Category.mockCategoryList[0].id,
+            category = Category(
+                id = Category.mockCategoryList[0].id,
+                name = Category.mockCategoryList[0].name,
                 totalNumberOfQuestions = 100,
                 correctAnswers = 30,
                 incorrectAnswers = Question.mockQuestions.count { !it.isQuestionAnsweredCorrectly() }

@@ -6,7 +6,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.piriurna.domain.Resource
 import com.piriurna.domain.models.CategoryStatistics
-import com.piriurna.domain.usecases.GetCategoryStatisticsUseCase
+import com.piriurna.domain.usecases.GetCategoryUseCase
 import com.piriurna.superquiz.SQBaseEventViewModel
 import com.piriurna.superquiz.presentation.information.categories.end.models.CategoryEndEvents
 import com.piriurna.superquiz.presentation.information.categories.end.models.CategoryEndState
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CategoryEndViewModel @Inject constructor(
-    private val getCategoryStatisticsUseCase: GetCategoryStatisticsUseCase
+    private val getCategoryStatisticsUseCase: GetCategoryUseCase
 ) : SQBaseEventViewModel<CategoryEndEvents>(){
 
     private val _state: MutableState<CategoryEndState> = mutableStateOf(CategoryEndState())
@@ -45,7 +45,7 @@ class CategoryEndViewModel @Inject constructor(
                 is Resource.Success -> {
                     _state.value = _state.value.copy(
                         isLoading = false,
-                        categoryStatistics = result.data?: CategoryStatistics()
+                        category = result.data
                     )
                 }
                 is Resource.Error -> {

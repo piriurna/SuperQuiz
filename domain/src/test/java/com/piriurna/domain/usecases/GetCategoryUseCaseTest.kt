@@ -2,7 +2,6 @@ package com.piriurna.domain.usecases
 
 import BaseUseCaseTest
 import com.piriurna.domain.Resource
-import com.piriurna.domain.models.Answer
 import com.piriurna.domain.models.Category
 import com.piriurna.domain.models.CategoryStatistics
 import com.piriurna.domain.models.Question
@@ -15,15 +14,15 @@ import org.junit.Test
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 
-class GetCategoryStatisticsUseCaseTest : BaseUseCaseTest() {
+class GetCategoryUseCaseTest : BaseUseCaseTest() {
 
-    private lateinit var getCategoryStatisticsUseCase: GetCategoryStatisticsUseCase
+    private lateinit var getCategoryStatisticsUseCase: GetCategoryUseCase
     private lateinit var triviaRepository: TriviaRepository
 
     @Before
     fun setUp() {
         triviaRepository = mock()
-        getCategoryStatisticsUseCase = GetCategoryStatisticsUseCase(triviaRepository = triviaRepository)
+        getCategoryStatisticsUseCase = GetCategoryUseCase(triviaRepository = triviaRepository)
     }
 
 
