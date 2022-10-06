@@ -20,13 +20,18 @@ object SQStyle {
         fontSize = 14.sp
     )
 
+    val TextLatoBold = TextLato.copy(
+        fontWeight = FontWeight.Bold
+    )
+
     val TextLato12 = TextLato.copy(
         fontSize = 12.sp
     )
 
-    val TextLatoBold = TextLato.copy(
-        fontWeight = FontWeight.Bold
+    val TextLatoBold12 = TextLatoBold.copy(
+        fontSize = 12.sp
     )
+
 
     val TextLatoThin = TextLato.copy(
         fontWeight = FontWeight.W300
