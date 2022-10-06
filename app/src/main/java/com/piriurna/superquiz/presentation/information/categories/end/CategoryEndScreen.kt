@@ -85,7 +85,7 @@ fun BuildCategoryEndScreen(
     //TODO REFACTOR, PUT IT ALL IN THE STATISTICS MODEL OR THE NEW CATEGORY MODEL
     val statusImage = if(state.categoryStatistics.isSuccess()) R.drawable.ic_checked_correct else R.drawable.ic_unchecked_incorrect
 
-    val statusTitle = if(state.categoryStatistics.isSuccess()) "You got $percentage Correct!" else "You got ${percentage} Correct..."
+    val statusTitle = if(state.categoryStatistics.isSuccess()) "You got $percentage% Correct!" else "You only got ${percentage}% Correct..."
 
     val statusSubTitle = if(state.categoryStatistics.isSuccess()) "Now you can load new questions for the category or go back to the main screen." else "You can get more questions to try again or go back to the main screen."
 
