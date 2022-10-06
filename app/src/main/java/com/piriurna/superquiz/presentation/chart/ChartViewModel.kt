@@ -4,10 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
-import com.piriurna.domain.Resource
 import com.piriurna.domain.usecases.GetCategoriesUseCase
-import com.piriurna.domain.usecases.GetCategoryStatisticsUseCase
-import com.piriurna.domain.usecases.chart.GetCategoryStatisticsForAllCategoriesUseCase
 import com.piriurna.superquiz.SQBaseEventViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -16,7 +13,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ChartViewModel @Inject constructor(
-    private val getCategoryStatisticsForAllCategoriesUseCase: GetCategoryStatisticsForAllCategoriesUseCase,
     private val getCategoriesUseCase: GetCategoriesUseCase
 ) : SQBaseEventViewModel<ChartEvents>(){
 
@@ -36,25 +32,13 @@ class ChartViewModel @Inject constructor(
     }
 
     private fun getAnswersForCategory() {
-        getCategoryStatisticsForAllCategoriesUseCase().onEach { result ->
-            when(result) {
-                is Resource.Loading -> {
-                    _state.value = _state.value.copy(
-                        isLoading = true
-                    )
-                }
+        getCategoriesUseCase().onEach { result ->
 
-                is Resource.Success -> {
-                    _state.value = _state.value.copy(
-                        categoryStatisticsList = result.data?: emptyList(),
-                        isLoading = false
-                    )
-                }
+            _state.value = _state.value.copy(
+                categories = result,
+                isLoading = false
+            )
 
-                else -> {
-
-                }
-            }
         }.launchIn(viewModelScope)
     }
 }

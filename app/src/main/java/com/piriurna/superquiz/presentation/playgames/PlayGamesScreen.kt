@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -36,9 +37,9 @@ fun PlayGamesScreen(
 ) {
     val playGamesViewModel : PlayGamesViewModel = hiltViewModel()
 
-    val state = playGamesViewModel.state.value
+    val state = playGamesViewModel.state.collectAsState()
 
-    BuildPlayGamesScreen(state = state, navController = navController, events = playGamesViewModel::onTriggerEvent)
+    BuildPlayGamesScreen(state = state.value, navController = navController, events = playGamesViewModel::onTriggerEvent)
 }
 
 
