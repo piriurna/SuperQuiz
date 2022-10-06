@@ -3,6 +3,8 @@ package com.piriurna.data.database.daos
 import androidx.room.*
 import com.piriurna.data.database.entities.QuestionEntity
 import com.piriurna.data.database.models.QuestionWithAnswers
+import kotlinx.coroutines.flow.Flow
+
 
 @Dao
 interface QuestionDao {
@@ -11,7 +13,7 @@ interface QuestionDao {
 
     @Transaction
     @Query("SELECT * FROM QUESTION WHERE ownerCategoryId =:categoryId")
-    suspend fun getQuestions(categoryId: Int): List<QuestionWithAnswers>?
+    fun getQuestions(categoryId: Int): Flow<List<QuestionWithAnswers>>
 
     @Transaction
     @Query("SELECT * FROM QUESTION WHERE questionId IN (:ids)")

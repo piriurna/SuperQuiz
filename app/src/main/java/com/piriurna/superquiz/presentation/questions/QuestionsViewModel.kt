@@ -14,8 +14,8 @@ import com.piriurna.domain.usecases.questions.FetchQuestionsForCategoryUseCase
 import com.piriurna.domain.usecases.quotes.GetRandomQuoteListUseCase
 import com.piriurna.superquiz.SQBaseEventViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,6 +30,13 @@ class QuestionsViewModel @Inject constructor(
 
     private val _state: MutableState<QuestionsState> = mutableStateOf(QuestionsState())
     val state: State<QuestionsState> = _state
+
+
+    private val _allTasks = MutableStateFlow<QuestionsState>(QuestionsState())
+    val allTasks: StateFlow<QuestionsState> = _allTasks
+
+    private var fetchQuotes = true
+
 
     override fun onTriggerEvent(event: QuestionsEvents) {
         when(event) {
@@ -52,35 +59,31 @@ class QuestionsViewModel @Inject constructor(
     }
 
 
-    private fun getQuestions(categoryId: Int) {
-        getDbCategoryQuestionsUseCase(categoryId).onEach { result ->
-            when(result) {
-                is Resource.Loading -> {
-                    _state.value = _state.value.copy(
-                        isLoading = true
-                    )
-                }
+    private fun getQuestions(categoryId: Int){
 
-                is Resource.Error -> {
-                    _state.value = _state.value.copy(
-                        isLoading = false
-                    )
-                }
+        viewModelScope.launch {
+            getDbCategoryQuestionsUseCase(categoryId).collectLatest{ questions->
+                _allTasks.value = _allTasks.value.copy(
+                    categoryQuestions = questions,
+                    lastAnsweredQuestionId = questions.firstOrNull { !it.isQuestionAnswered() }?.id?:0,
+                    categoryId = categoryId,
+                    isLoading = false
+                )
 
-                is Resource.Success -> {
-                    _state.value = _state.value.copy(
-                        categoryQuestions = result.data?: emptyList(),
-                        lastAnsweredQuestionId = result.data?.firstOrNull { !it.isQuestionAnswered() }?.id?:0,
-                        categoryId = categoryId
-                    )
-
-                    getQuotes(_state.value.categoryQuestions.size)
-                }
+                getQuotes(_allTasks.value.categoryQuestions.size)
             }
-        }.launchIn(viewModelScope)
+        }
+
+
+
     }
 
+
+
     private fun getQuotes(numOfQuotes : Int) {
+
+        if(!fetchQuotes) return
+
         getRandomQuoteListUseCase(numOfQuotes).onEach { result ->
             when(result) {
                 is Resource.Loading -> {
@@ -100,6 +103,7 @@ class QuestionsViewModel @Inject constructor(
                         isLoading = false,
                         quotes = result.data?: emptyList(),
                     )
+                    fetchQuotes = false
                 }
             }
         }.launchIn(viewModelScope)
