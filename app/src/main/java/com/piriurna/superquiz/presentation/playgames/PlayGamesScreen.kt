@@ -32,6 +32,7 @@ import androidx.navigation.compose.rememberNavController
 import com.piriurna.common.composables.scaffold.SQBottomSheetScaffold
 import com.piriurna.common.composables.scaffold.SQScaffold
 import com.piriurna.common.composables.text.SQText
+import com.piriurna.common.composables.text.SQUserGreeting
 import com.piriurna.common.theme.SQStyle.TextLato36
 import com.piriurna.domain.models.Category
 import com.piriurna.superquiz.presentation.navigation.HomeDestinationScreen
@@ -72,8 +73,14 @@ fun BuildPlayGamesScreen(
         mutableStateOf(0)
     }
 
+    val titleTopPadding = 36.dp
+
+    val titleVerticalArrangementSpacing = 12.dp
+
+    val extraSpacing = 4.dp
+
     val titleSizeDp = with(LocalDensity.current) {
-        titleHeight.toDp() + 36.dp + 12.dp + 4.dp
+        titleHeight.toDp() + titleTopPadding + titleVerticalArrangementSpacing + extraSpacing
     }
 
     val cornerRadius = when(sheetState.progress.to){
@@ -133,29 +140,18 @@ fun BuildPlayGamesScreen(
                     .fillMaxSize()
             ) {
 
-                Column(
-                    verticalArrangement= Arrangement.spacedBy(12.dp),
+                SQUserGreeting(
                     modifier = Modifier
                         .align(Alignment.TopStart)
-                        .padding(top = 36.dp)
+                        .padding(top = titleTopPadding)
                         .padding(horizontal = 24.dp)
                         .onSizeChanged {
                             titleHeight = it.height
                             Log.i("Playgames", it.toString())
-                        }
-                ) {
-                    SQText(
-                        text = "\uD83D\uDC4B Hello, Dear ${state.userName}",
-                        color = Color.White
-                    )
-
-                    SQText(
-                        text = "What Do You Want To Improve?",
-                        color = Color.White,
-                        lineHeight = 48.sp,
-                        style = TextLato36
-                    )
-                }
+                        },
+                    verticalArrangement = Arrangement.spacedBy(titleVerticalArrangementSpacing),
+                    userName = state.userName
+                )
             }
         }
     }
