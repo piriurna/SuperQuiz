@@ -1,5 +1,6 @@
 package com.piriurna.common.composables.scaffold
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
@@ -18,6 +19,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
@@ -43,7 +45,8 @@ fun SQScaffold(
     navController: NavHostController? = null,
     content: @Composable (PaddingValues) -> Unit,
 ) {
-    val bottomBarHeight = 64.dp
+    val bottomBarHeight = 52.dp
+
     val bottomBarHeightPx = with(LocalDensity.current) {
         bottomBarHeight.roundToPx().toFloat()
     }

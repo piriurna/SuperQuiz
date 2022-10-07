@@ -1,6 +1,7 @@
 package com.piriurna.common.composables.navigation
 
 import androidx.compose.animation.core.*
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -42,13 +43,13 @@ fun RowScope.SQNavigationItem(
     val textColor = if(selected) Color.Black else Color.LightGray
 
     val top by animateDpAsState(
-        targetValue = if (selected) 56.dp else 0.dp,
+        targetValue = if (selected) 128.dp else 0.dp,
         animationSpec = tween(durationMillis = 600),
     )
 
     Box(
         modifier = modifier
-            .requiredHeight(56.dp)
+            .padding(vertical = 12.dp)
             .clickable(
                 interactionSource = interactionSource,
                 indication = null
@@ -63,14 +64,14 @@ fun RowScope.SQNavigationItem(
             tint = iconColor,
             contentDescription = null,
             modifier = Modifier
-                .height(56.dp)
+                .height(26.dp)
                 .width(26.dp)
-                .offset(y = 56.dp - top)
+                .offset(y = 128.dp - top)
         )
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
-                .height(56.dp)
+                .height(26.dp)
                 .offset(y = top)
 
         ) {
