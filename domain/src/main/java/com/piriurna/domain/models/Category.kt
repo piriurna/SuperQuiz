@@ -12,6 +12,8 @@ data class Category(
     val notAnsweredQuestions : Int = 0,
 ) {
 
+
+    fun isSuccess() = (correctAnswers * 100f)/totalNumberOfQuestions > 55
     val subTitle: String?
         get() = if (description == "") null else description
 

@@ -21,6 +21,7 @@ import com.piriurna.common.composables.button.SQButton
 import com.piriurna.common.composables.text.SQText
 import com.piriurna.common.theme.SQStyle.TextLato27Bold
 import com.piriurna.common.theme.SQStyle.TextLatoThin18
+import com.piriurna.common.theme.errorColor
 import com.piriurna.domain.models.Category
 import com.piriurna.domain.models.CategoryStatistics
 import com.piriurna.domain.models.Question
@@ -29,6 +30,7 @@ import com.piriurna.superquiz.presentation.information.categories.end.models.Cat
 import com.piriurna.superquiz.presentation.information.categories.end.models.CategoryEndState
 import com.piriurna.superquiz.presentation.navigation.NavigationArguments
 import com.piriurna.superquiz.presentation.navigation.utils.getArgument
+import com.piriurna.superquiz.ui.theme.primaryGreen
 import kotlinx.coroutines.delay
 
 @Composable
@@ -78,6 +80,15 @@ fun BuildCategoryEndScreen(
         targetValue = ((correctAnswers/totalNumberOfQuestions) * 100).toInt()
     )
 
+    //TODO REFACTOR, PUT IT ALL IN THE STATISTICS MODEL OR THE NEW CATEGORY MODEL
+    val statusImage = if(state.category?.isSuccess() == true) R.drawable.ic_checked_correct else R.drawable.ic_unchecked_incorrect
+
+    val statusTitle = if(state.category?.isSuccess() == true) "You got $percentage% Correct!" else "You only got ${percentage}% Correct..."
+
+    val statusSubTitle = if(state.category?.isSuccess() == true) "Now you can load new questions for the category or go back to the main screen." else "You can get more questions to try again or go back to the main screen."
+
+    val buttonColor = if(state.category?.isSuccess() == true) primaryGreen else errorColor
+
     LaunchedEffect(Unit) {
         events?.invoke(CategoryEndEvents.GetCategoryStatistics(categoryId))
         titleVisible = true
@@ -109,7 +120,7 @@ fun BuildCategoryEndScreen(
                 modifier = Modifier
                     .align(Center)
                     .size(250.dp),
-                painter = painterResource(id = R.drawable.ic_checked_correct),
+                painter = painterResource(id = statusImage),
                 contentDescription = "Congratulations image"
             )
         }
@@ -128,7 +139,7 @@ fun BuildCategoryEndScreen(
                 enter = slideInVertically(initialOffsetY = { 100 }),
                 exit = slideOutVertically()
             ) {
-                SQText(text = "You got ${percentage}% Correct!", style = TextLato27Bold)
+                SQText(text = statusTitle, style = TextLato27Bold)
             }
 
             AnimatedVisibility(
@@ -139,7 +150,7 @@ fun BuildCategoryEndScreen(
             ) {
                 SQText(
                     modifier = Modifier.padding(top = 12.dp),
-                    text = "Now you can load new questions for the category or go back to the main screen.",
+                    text = statusSubTitle,
                     style = TextLatoThin18,
                     textAlign = TextAlign.Center
                 )
@@ -156,7 +167,7 @@ fun BuildCategoryEndScreen(
             exit = slideOutVertically()
 
         ) {
-            SQButton(onClick = { /*TODO*/ }, buttonText = "Get more quizes")
+            SQButton(onClick = { /*TODO*/ }, buttonText = "Get more quizes", backgroundColor = buttonColor)
         }
 
 
@@ -177,8 +188,7 @@ fun CategoryEndScreenPreview() {
                 id = Category.mockCategoryList[0].id,
                 name = Category.mockCategoryList[0].name,
                 totalNumberOfQuestions = 100,
-                title =Category.mockCategoryList[0].title,
-                correctAnswers = 80,
+                correctAnswers = 30,
                 incorrectAnswers = Question.mockQuestions.count { !it.isQuestionAnsweredCorrectly() }
             )
         )
