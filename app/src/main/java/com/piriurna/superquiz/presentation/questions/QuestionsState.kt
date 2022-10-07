@@ -8,7 +8,8 @@ data class QuestionsState(
     val categoryQuestions: List<Question> = emptyList(),
     val quotes : List<Quote> = emptyList(),
     val lastAnsweredQuestionId : Int = 0,
-    val categoryId : Int = 0
+    val categoryId : Int = 0,
+    val currentUnaswerdQuestion: Question? = null
 ) {
 
     fun isLastQuestion(index : Int) = categoryQuestions.size - 1 == index

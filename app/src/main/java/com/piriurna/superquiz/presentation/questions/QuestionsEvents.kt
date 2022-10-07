@@ -12,4 +12,6 @@ sealed class QuestionsEvents : SQBaseEvent() {
     class SaveAnswer(val question: Question, val answer: Answer) : QuestionsEvents()
 
     class FetchQuestionsForCategory(val categoryId : Int) : QuestionsEvents()
+
+    class GetNextQuestion() : QuestionsEvents()
 }

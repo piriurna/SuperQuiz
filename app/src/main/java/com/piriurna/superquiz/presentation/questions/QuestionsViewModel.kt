@@ -36,7 +36,8 @@ class QuestionsViewModel @Inject constructor(
     val state: StateFlow<QuestionsState> = _state
 
     private var fetchQuotes = true
-
+    private var currentUnaswerdQuestionIndex = 0
+    private var isFirstTime = true
 
     override fun onTriggerEvent(event: QuestionsEvents) {
         when(event) {
@@ -55,6 +56,10 @@ class QuestionsViewModel @Inject constructor(
             is QuestionsEvents.FetchQuestionsForCategory -> {
                 fetchCategoryQuestions(event.categoryId)
             }
+
+            is QuestionsEvents.GetNextQuestion -> {
+                getUnaswerdQuestion()
+            }
         }
     }
 
@@ -63,6 +68,11 @@ class QuestionsViewModel @Inject constructor(
 
         viewModelScope.launch {
             getDbCategoryQuestionsUseCase(categoryId).collectLatest{ questions->
+
+                val id = questions.firstOrNull { !it.isQuestionAnswered() }?.id?:0
+                currentUnaswerdQuestionIndex = questions.indexOfFirst { it.id == id }
+
+
                 _state.value = _state.value.copy(
                     categoryQuestions = questions,
                     lastAnsweredQuestionId = questions.firstOrNull { !it.isQuestionAnswered() }?.id?:0,
@@ -70,11 +80,27 @@ class QuestionsViewModel @Inject constructor(
                     isLoading = false
                 )
 
+                if(isFirstTime){
+                    getUnaswerdQuestion()
+                }
+
                 getQuotes(_state.value.categoryQuestions.size)
             }
         }
 
 
+
+    }
+
+
+    private fun getUnaswerdQuestion(){
+        isFirstTime = false
+        viewModelScope.launch {
+            _state.value = _state.value.copy(
+                //lastAnsweredQuestionId = questions.firstOrNull { !it.isQuestionAnswered() }?.id?:0,
+                currentUnaswerdQuestion =  _state.value.categoryQuestions.get(currentUnaswerdQuestionIndex)
+            )
+        }
 
     }
 
