@@ -73,22 +73,20 @@ fun SQScaffold(
             modifier = scaffoldModifier.nestedScroll(nestedScrollConnection),
             content = content,
             bottomBar = {
-                navController?.let { navController ->
-                    if(bottomBarItems.isNotEmpty()) {
-                        SQBottomNavigation(
-                            modifier = Modifier
-                                .height(bottomBarHeight)
-                                .offset {
-                                    IntOffset(x = 0, y = -bottomBarOffsetHeightPx.value.roundToInt())
-                                },
-                            selectedColor = purple,
-                            unselectedColor = Color.LightGray,
-                            items = bottomBarItems,
-                            selectedRoute = bottomBarItems[0].route,
-                            onItemSelected = onItemSelected,
-                            navController = navController
-                        )
-                    }
+                if(bottomBarItems.isNotEmpty()) {
+                    SQBottomNavigation(
+                        modifier = Modifier
+                            .height(bottomBarHeight)
+                            .offset {
+                                IntOffset(x = 0, y = -bottomBarOffsetHeightPx.value.roundToInt())
+                            },
+                        selectedColor = purple,
+                        unselectedColor = Color.LightGray,
+                        items = bottomBarItems,
+                        selectedRoute = bottomBarItems[0].route,
+                        onItemSelected = onItemSelected,
+                        navController = navController
+                    )
                 }
             }
         )
