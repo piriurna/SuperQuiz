@@ -1,6 +1,8 @@
 package com.piriurna.superquiz.di
 
+import com.piriurna.data.remote.QuoteApi
 import com.piriurna.data.remote.TriviaApi
+import com.piriurna.data.remote.sources.QuoteApiSource
 import com.piriurna.data.remote.sources.TriviaApiSource
 import com.piriurna.superquiz.BuildConfig
 import dagger.Module
@@ -39,7 +41,7 @@ object NetworkModule {
     @Singleton
     fun provideTriviaApi(okHttpClient: OkHttpClient): TriviaApi {
         return Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_URL)
+            .baseUrl(BuildConfig.TRIVIA_BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
@@ -50,6 +52,23 @@ object NetworkModule {
     @Singleton
     fun provideTriviaApiSource(triviaApi: TriviaApi): TriviaApiSource {
         return TriviaApiSource(triviaApi)
+    }
+
+    @Provides
+    @Singleton
+    fun provideQuoteApi(okHttpClient: OkHttpClient): QuoteApi {
+        return Retrofit.Builder()
+            .baseUrl(BuildConfig.QUOTES_BASE_URL)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(QuoteApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideQuoteApiSource(quoteApi: QuoteApi): QuoteApiSource {
+        return QuoteApiSource(quoteApi)
     }
 
 }

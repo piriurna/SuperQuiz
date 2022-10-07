@@ -4,6 +4,7 @@ import com.piriurna.domain.ApiNetworkResponse
 import com.piriurna.domain.models.Answer
 import com.piriurna.domain.models.Category
 import com.piriurna.domain.models.Question
+import kotlinx.coroutines.flow.Flow
 
 interface TriviaRepository {
 
@@ -19,11 +20,17 @@ interface TriviaRepository {
 
     suspend fun getQuestionsFromIdList(ids: List<Long>) : List<Question>
 
-    suspend fun getDbCategories() : List<Category>
+    fun getDbCategories(): Flow<List<Category>>
+    suspend fun getDbCategory(categoryId: Int): Category
+
+    suspend fun disableAnswer(answerId: Int)
 
     suspend fun insertCategoriesInDb(categories: List<Category>)
 
     suspend fun insertAnswersInDb(answers: List<Answer>, questionId: Int)
 
     suspend fun updateQuestion(question: Question) : Int
+
+    suspend fun getNumberOfCategories() : Int
+    suspend fun getMissingCategories(values: List<Int>): List<Int>
 }

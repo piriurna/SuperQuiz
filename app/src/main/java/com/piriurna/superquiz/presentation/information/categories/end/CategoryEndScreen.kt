@@ -1,4 +1,4 @@
-package com.piriurna.superquiz.presentation.information
+package com.piriurna.superquiz.presentation.information.categories.end
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.animateIntAsState
@@ -21,26 +21,28 @@ import com.piriurna.common.composables.button.SQButton
 import com.piriurna.common.composables.text.SQText
 import com.piriurna.common.theme.SQStyle.TextLato27Bold
 import com.piriurna.common.theme.SQStyle.TextLatoThin18
+import com.piriurna.common.theme.errorColor
 import com.piriurna.domain.models.Category
 import com.piriurna.domain.models.CategoryStatistics
 import com.piriurna.domain.models.Question
 import com.piriurna.superquiz.R
-import com.piriurna.superquiz.presentation.information.models.SuccessEvents
-import com.piriurna.superquiz.presentation.information.models.SuccessState
+import com.piriurna.superquiz.presentation.information.categories.end.models.CategoryEndEvents
+import com.piriurna.superquiz.presentation.information.categories.end.models.CategoryEndState
 import com.piriurna.superquiz.presentation.navigation.NavigationArguments
 import com.piriurna.superquiz.presentation.navigation.utils.getArgument
+import com.piriurna.superquiz.ui.theme.primaryGreen
 import kotlinx.coroutines.delay
 
 @Composable
-fun SuccessScreen(
+fun CategoryEndScreen(
     navBackStackEntry: NavBackStackEntry
 ) {
-    val viewModel : SuccessViewModel = hiltViewModel()
+    val viewModel : CategoryEndViewModel = hiltViewModel()
 
     val categoryId = navBackStackEntry.getArgument(NavigationArguments.CATEGORY_ID)?.toInt()
 
     if(categoryId != null) {
-        BuildSuccessScreen(categoryId,viewModel.state.value, viewModel::onTriggerEvent)
+        BuildCategoryEndScreen(categoryId,viewModel.state.value, viewModel::onTriggerEvent)
     } else {
         //Todo: 404 screen or similar
     }
@@ -49,10 +51,10 @@ fun SuccessScreen(
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun BuildSuccessScreen(
+fun BuildCategoryEndScreen(
     categoryId : Int,
-    state : SuccessState,
-    events: ((SuccessEvents) -> Unit)? = null
+    state : CategoryEndState,
+    events: ((CategoryEndEvents) -> Unit)? = null
 ) {
     
     var imageVisible by remember {
@@ -71,15 +73,24 @@ fun BuildSuccessScreen(
         mutableStateOf(false)
     }
 
-    val correctAnswers = state.categoryStatistics.correctAnswers.toFloat()
-    val totalNumberOfQuestions = state.categoryStatistics.totalNumberOfQuestions.toFloat()
+    val correctAnswers = state.category?.correctAnswers?.toFloat() ?: 0F
+    val totalNumberOfQuestions = state.category?.totalNumberOfQuestions?.toFloat() ?: 0F
     val percentage by animateIntAsState(
         animationSpec = tween(1000),
         targetValue = ((correctAnswers/totalNumberOfQuestions) * 100).toInt()
     )
 
+    //TODO REFACTOR, PUT IT ALL IN THE STATISTICS MODEL OR THE NEW CATEGORY MODEL
+    val statusImage = if(state.category?.isSuccess() == true) R.drawable.ic_checked_correct else R.drawable.ic_unchecked_incorrect
+
+    val statusTitle = if(state.category?.isSuccess() == true) "You got $percentage% Correct!" else "You only got ${percentage}% Correct..."
+
+    val statusSubTitle = if(state.category?.isSuccess() == true) "Now you can load new questions for the category or go back to the main screen." else "You can get more questions to try again or go back to the main screen."
+
+    val buttonColor = if(state.category?.isSuccess() == true) primaryGreen else errorColor
+
     LaunchedEffect(Unit) {
-        events?.invoke(SuccessEvents.GetCategoryStatistics(categoryId))
+        events?.invoke(CategoryEndEvents.GetCategoryStatistics(categoryId))
         titleVisible = true
 
         delay(200)
@@ -109,7 +120,7 @@ fun BuildSuccessScreen(
                 modifier = Modifier
                     .align(Center)
                     .size(250.dp),
-                painter = painterResource(id = R.drawable.ic_checked_correct),
+                painter = painterResource(id = statusImage),
                 contentDescription = "Congratulations image"
             )
         }
@@ -128,7 +139,7 @@ fun BuildSuccessScreen(
                 enter = slideInVertically(initialOffsetY = { 100 }),
                 exit = slideOutVertically()
             ) {
-                SQText(text = "You got ${percentage}% Correct!", style = TextLato27Bold)
+                SQText(text = statusTitle, style = TextLato27Bold)
             }
 
             AnimatedVisibility(
@@ -139,7 +150,7 @@ fun BuildSuccessScreen(
             ) {
                 SQText(
                     modifier = Modifier.padding(top = 12.dp),
-                    text = "Now you can load new questions for the category or go back to the main screen.",
+                    text = statusSubTitle,
                     style = TextLatoThin18,
                     textAlign = TextAlign.Center
                 )
@@ -156,7 +167,7 @@ fun BuildSuccessScreen(
             exit = slideOutVertically()
 
         ) {
-            SQButton(onClick = { /*TODO*/ }, buttonText = "Get more quizes")
+            SQButton(onClick = { /*TODO*/ }, buttonText = "Get more quizes", backgroundColor = buttonColor)
         }
 
 
@@ -165,21 +176,22 @@ fun BuildSuccessScreen(
 
 @Preview(showBackground = true)
 @Composable
-fun SuccessScreenPreview() {
+fun CategoryEndScreenPreview() {
     var state by remember {
-        mutableStateOf(SuccessState(isLoading = true))
+        mutableStateOf(CategoryEndState(isLoading = true))
     }
 
     LaunchedEffect(Unit) {
         state = state.copy(
             isLoading = false,
-            categoryStatistics = CategoryStatistics(
-                categoryId = Category.mockCategoryList[0].id,
+            category = Category(
+                id = Category.mockCategoryList[0].id,
+                name = Category.mockCategoryList[0].name,
                 totalNumberOfQuestions = 100,
-                correctAnswers = 80,
+                correctAnswers = 30,
                 incorrectAnswers = Question.mockQuestions.count { !it.isQuestionAnsweredCorrectly() }
             )
         )
     }
-    BuildSuccessScreen(Category.mockCategoryList[0].id, state)
+    BuildCategoryEndScreen(Category.mockCategoryList[0].id, state)
 }

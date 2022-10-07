@@ -34,3 +34,5 @@ val incompleteGray = Color(red = 237, green = 234, blue = 255)
 val gradientInnerColor = Color(146, 68, 248)
 val gradientCentralColor = Color(138, 64, 249)
 val gradientOuterColor = Color(77, 40, 218)
+
+val errorColor = Color(192, 57, 43)

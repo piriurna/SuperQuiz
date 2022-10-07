@@ -21,135 +21,93 @@ class LoadTriviaDataUseCase @Inject constructor(
         emit(Resource.Loading())
 
         val appSettings = appDataStoreRepository.getAppSettings().first()
-
         val profileSettings = profileDataStoreRepository.getProfileSettings().first()
 
-        if(appSettings.firstInstall){ //First install user has no data in database
+        var categories = emptyList<Category>()
+
+        if(appSettings.firstInstall || appSettings.shouldFetchNewCategories || triviaRepository.getNumberOfCategories() == 0){ //Case where you need to load categories from the api
+
             val categoriesResult : ApiNetworkResponse<List<Category>> = triviaRepository.getCategories()
 
             categoriesResult.data?.let { data ->
-                triviaRepository.insertCategoriesInDb(data)
-
-                data.forEach { category ->
-                    val questionsResult : ApiNetworkResponse<List<Question>> = triviaRepository.getCategoryQuestions(category.id, profileSettings.numberOfQuestions)
-
-                    questionsResult.data?.let { questionsData ->
-                        val answersForQuestions : Map<String, List<Answer>> = questionsData.map {
-                            return@map (it.description to it.allAnswers)
-                        }.toMap() //TODO: REFACTOR HOW TO SAVE ANSWERS FOR QUESTIONS
-
-                        val ids = triviaRepository.insertCategoryQuestionsInDb(questionsData)
-
-                        val questionsFromDb = triviaRepository.getQuestionsFromIdList(ids)
-
-                        answersForQuestions.forEach { (questionText, answers) ->
-
-                            val questionId = questionsFromDb.firstOrNull { it.description == questionText }?.id
-
-                            if(questionId != null) {
-                                triviaRepository.insertAnswersInDb(answers, questionId)
-                            }
-                        }
-
-                    }?: kotlin.run {
-                        emit(Resource.Error(message = questionsResult.error.message!!))
-                        return@flow
-                    }
-                }
-
-                appDataStoreRepository.saveAppSettings(appSettings.copy(
-                    firstInstall = false
-                ))
-                emit(Resource.Success(LoadTriviaType.FIRST_INSTALL))
+                categories = data
             }?: kotlin.run {
                 emit(Resource.Error(message = categoriesResult.error.message!!))
-            }
-        } else { // User entering the app for next times, its supposed for them to have data
-            if(appSettings.shouldFetchNewCategories) { // Should go look if the service has new categories that don't exist in the app yet
-                val categoriesResult : ApiNetworkResponse<List<Category>> = triviaRepository.getCategories()
-
-                categoriesResult.data?.let { data ->
-                    val nonExistingCategories = data.filterNot { apiCategory ->
-                        return@filterNot triviaRepository.getDbCategories().any { it.id == apiCategory.id }
-                    }
-
-                    if(nonExistingCategories.isEmpty()) { //Does not have new categories in service
-                        emit(Resource.Success(LoadTriviaType.NO_CATEGORIES_UPDATED))
-                    } else {
-                        triviaRepository.insertCategoriesInDb(nonExistingCategories)
-                        nonExistingCategories.forEach { category ->
-                            val questionsResult : ApiNetworkResponse<List<Question>> = triviaRepository.getCategoryQuestions(category.id, profileSettings.numberOfQuestions)
-
-                            questionsResult.data?.let { questionsData ->
-                                val answersForQuestions : Map<String, List<Answer>> = questionsData.map {
-                                    return@map (it.description to it.allAnswers)
-                                }.toMap()
-                                val ids = triviaRepository.insertCategoryQuestionsInDb(questionsData)
-
-                                val questionsFromDb = triviaRepository.getQuestionsFromIdList(ids)
-
-                                answersForQuestions.forEach { (questionText, answers) ->
-
-                                    val questionId = questionsFromDb.firstOrNull { it.description == questionText }?.id
-
-                                    if(questionId != null) {
-                                        triviaRepository.insertAnswersInDb(answers, questionId)
-                                    }
-                                }
-                            }?: kotlin.run {
-                                emit(Resource.Error(message = questionsResult.error.message?:"error"))
-                            }
-                        }
-                        emit(Resource.Success(LoadTriviaType.CATEGORIES_UPDATED))
-                    }
-
-                    appDataStoreRepository.saveAppSettings(appSettings.copy(
-                        shouldFetchNewCategories = false
-                    ))
-
-                }?: kotlin.run {
-                    emit(Resource.Error(message = categoriesResult.error.message!!))
-                }
-            } else {
-                if(triviaRepository.getDbCategories().isEmpty()){ //Should not go look for new categories but the app somehow doesn't have any data in the database
-                    val categoriesResult : ApiNetworkResponse<List<Category>> = triviaRepository.getCategories()
-
-                    categoriesResult.data?.let { data ->
-                        triviaRepository.insertCategoriesInDb(data)
-
-                        data.forEach { category ->
-                            val questionsResult : ApiNetworkResponse<List<Question>> = triviaRepository.getCategoryQuestions(category.id, profileSettings.numberOfQuestions)
-
-                            questionsResult.data?.let { questionsData ->
-                                val answersForQuestions : Map<String, List<Answer>> = questionsData.map {
-                                    return@map (it.description to it.allAnswers)
-                                }.toMap() //TODO: REFACTOR
-
-                                val ids = triviaRepository.insertCategoryQuestionsInDb(questionsData)
-
-                                val questionsFromDb = triviaRepository.getQuestionsFromIdList(ids)
-
-                                answersForQuestions.forEach { (questionText, answers) ->
-
-                                    val questionId = questionsFromDb.firstOrNull { it.description == questionText }?.id
-
-                                    if(questionId != null) {
-                                        triviaRepository.insertAnswersInDb(answers, questionId)
-                                    }
-                                }
-                            }?: kotlin.run {
-                                emit(Resource.Error(message = questionsResult.error.message?:"error"))
-                            }
-                        }
-
-                        emit(Resource.Success(LoadTriviaType.CATEGORIES_UPDATED))
-                    }?: kotlin.run {
-                        emit(Resource.Error(message = categoriesResult.error.message!!))
-                    }
-                } else { // Normal flow, don't need to do anything different
-                    emit(Resource.Success(LoadTriviaType.NO_CATEGORIES_UPDATED))
-                }
+                return@flow
             }
         }
-}
+
+        if(appSettings.shouldFetchNewCategories) { //needs to filter categories
+            categories = getMissingCategories(categories = categories, missingIds = triviaRepository.getMissingCategories(categories.map { it.id }))
+
+            if(categories.isEmpty()) { //Does not have new categories in service
+                emit(Resource.Success(LoadTriviaType.NO_CATEGORIES_UPDATED))
+                return@flow
+            }
+        }
+
+        if(!appSettings.firstInstall && !appSettings.shouldFetchNewCategories && triviaRepository.getNumberOfCategories() != 0){ //no update needed
+            emit(Resource.Success(LoadTriviaType.NO_CATEGORIES_UPDATED))
+            return@flow
+        }
+
+
+        //Update categories and questions
+
+        val categoriesQuestions = HashMap<Int, List<Question>>()
+
+        categories.forEach { category ->
+
+            val questionsResult : ApiNetworkResponse<List<Question>> = triviaRepository.getCategoryQuestions(category.id, profileSettings.numberOfQuestions)
+
+            questionsResult.data?.let { questionsData ->
+                categoriesQuestions.putIfAbsent(category.id, questionsData)
+            }
+        }
+
+        if(categoriesQuestions.isEmpty()){
+            emit(Resource.Error(message = UNABLE_TO_LOAD_TRIVIA))
+            return@flow
+        }
+        else {
+
+            triviaRepository.insertCategoriesInDb(categories.filter { category -> categoriesQuestions.any { category.id == it.key } })
+
+            categoriesQuestions.values.forEach { questions ->
+                insertQuestionAndRespectiveAnswersInDb(questions)
+            }
+
+            appDataStoreRepository.saveAppSettings(
+                appSettings.copy(
+                    firstInstall = false
+                )
+            )
+            if(appSettings.firstInstall) {
+                emit(Resource.Success(LoadTriviaType.FIRST_INSTALL))
+            }
+            else{
+                emit(Resource.Success(LoadTriviaType.CATEGORIES_UPDATED))
+            }
+        }
+
+    }
+
+
+    private fun getMissingCategories(categories: List<Category>, missingIds: List<Int>): List<Category> {
+        return categories.filter { category -> missingIds.any { category.id == it } }
+    }
+
+    suspend fun insertQuestionAndRespectiveAnswersInDb(questions: List<Question>){
+        val questionIds = triviaRepository.insertCategoryQuestionsInDb(questions)
+
+        questions.forEachIndexed { index, question ->
+            triviaRepository.insertAnswersInDb(question.allAnswers, questionIds[index].toInt())
+        }
+    }
+
+    companion object{
+
+        const val UNABLE_TO_LOAD_TRIVIA = "Unable to load trivia"
+
+    }
 }

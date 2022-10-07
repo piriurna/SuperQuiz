@@ -46,7 +46,8 @@ android {
             applicationIdSuffix ".dev"
             manifestPlaceholders variant: 'SuperQuiz - Dev'
             buildConfigField("Boolean", "IS_REDIRECT_URL", "false")
-            buildConfigField("String", "BASE_URL", "\"https://opentdb.com/\"")
+            buildConfigField("String", "TRIVIA_BASE_URL", "\"https://opentdb.com/\"")
+            buildConfigField("String", "QUOTES_BASE_URL", "\"https://api.quotable.io/\"")
             buildConfigField("Long", "READ_TIMEOUT", "15L")
             buildConfigField("Long", "CONNECT_TIMEOUT", "15L")
         }
@@ -55,7 +56,8 @@ android {
             dimension "env"
             applicationIdSuffix ".free"
             manifestPlaceholders variant: 'SuperQuiz - Free'
-            buildConfigField("String", "BASE_URL", "\"https://opentdb.com/\"")
+            buildConfigField("String", "TRIVIA_BASE_URL", "\"https://opentdb.com/\"")
+            buildConfigField("String", "QUOTES_BASE_URL", "\"https://api.quotable.io/\"")
             buildConfigField("Long", "READ_TIMEOUT", "15L")
             buildConfigField("Long", "CONNECT_TIMEOUT", "15L")
         }
@@ -63,7 +65,8 @@ android {
         prod {
             dimension "env"
             manifestPlaceholders variant: 'SuperQuiz'
-            buildConfigField("String", "BASE_URL", "\"https://opentdb.com/\"")
+            buildConfigField("String", "TRIVIA_BASE_URL", "\"https://opentdb.com/\"")
+            buildConfigField("String", "QUOTES_BASE_URL", "\"https://api.quotable.io/\"")
             buildConfigField("Long", "READ_TIMEOUT", "15L")
             buildConfigField("Long", "CONNECT_TIMEOUT", "15L")
         }

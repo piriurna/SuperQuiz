@@ -8,6 +8,18 @@ fun Category.getImage() : Int {
     return CategoryImage.getCategoryById(this.id).imageRes;
 }
 
+fun Category.toSelectableItem() : SelectableItem {
+    return SelectableItem(
+        id = this.id.toString(),
+        name = this.id.toString()
+    )
+}
+
+fun List<Category>.toSelectableItems() : List<SelectableItem> {
+    return this.map {
+        it.toSelectableItem()
+    }
+}
 
 fun CategoryStatistics.toSelectableItem() : SelectableItem {
     return SelectableItem(

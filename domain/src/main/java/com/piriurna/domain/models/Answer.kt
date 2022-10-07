@@ -4,6 +4,7 @@ data class Answer(
     val id : Int,
     val description : String,
     val isCorrectAnswer : Boolean,
+    val isEnabled : Boolean = true
 ) {
 
     companion object {
@@ -11,7 +12,7 @@ data class Answer(
             Answer(
                 id = 0,
                 description = "-90",
-                isCorrectAnswer = true
+                isCorrectAnswer = true,
             ),
             Answer(
                 id = 1,

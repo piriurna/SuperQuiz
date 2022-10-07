@@ -15,7 +15,7 @@ import com.piriurna.data.database.entities.QuestionEntity
         QuestionEntity::class,
         AnswerEntity::class
    ],
-    version = 5,
+    version = 6,
     exportSchema = false
 )
 abstract class SuperQuizDatabase: RoomDatabase() {
