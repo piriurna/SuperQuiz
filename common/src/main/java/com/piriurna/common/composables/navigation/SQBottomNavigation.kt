@@ -1,7 +1,9 @@
 package com.piriurna.common.composables.navigation
 
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -60,6 +62,7 @@ fun SQBottomNavigation(
 
         val indicatorWidth by animateFloatAsState(
             targetValue = if(isMoving) 15f else fullIndicatorWidth,
+            animationSpec = spring(dampingRatio = Spring.DampingRatioLowBouncy),
             finishedListener = { isMoving = false }
         )
 
