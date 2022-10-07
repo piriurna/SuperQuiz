@@ -43,7 +43,7 @@ fun SQScaffold(
     navController: NavHostController? = null,
     content: @Composable (PaddingValues) -> Unit,
 ) {
-    val bottomBarHeight = 55.dp
+    val bottomBarHeight = 64.dp
     val bottomBarHeightPx = with(LocalDensity.current) {
         bottomBarHeight.roundToPx().toFloat()
     }
@@ -73,21 +73,17 @@ fun SQScaffold(
             modifier = scaffoldModifier.nestedScroll(nestedScrollConnection),
             content = content,
             bottomBar = {
-                if(bottomBarItems.isNotEmpty()) {
-                    SQBottomNavigation(
-                        modifier = Modifier
-                            .height(bottomBarHeight)
-                            .offset {
-                                IntOffset(x = 0, y = -bottomBarOffsetHeightPx.value.roundToInt())
-                            },
-                        selectedColor = purple,
-                        unselectedColor = Color.LightGray,
-                        items = bottomBarItems,
-                        selectedRoute = bottomBarItems[0].route,
-                        onItemSelected = onItemSelected,
-                        navController = navController
-                    )
-                }
+                SQBottomNavigation(
+                    modifier = Modifier
+                        .height(bottomBarHeight)
+                        .offset {
+                            IntOffset(x = 0, y = -bottomBarOffsetHeightPx.value.roundToInt())
+                        },
+                    unselectedColor = Color.LightGray,
+                    items = bottomBarItems,
+                    onItemSelected = onItemSelected,
+                    navController = navController
+                )
             }
         )
 

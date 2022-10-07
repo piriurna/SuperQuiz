@@ -1,7 +1,6 @@
 package com.piriurna.common.composables.navigation
 
-import androidx.compose.animation.core.SpringSpec
-import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -44,7 +43,7 @@ fun RowScope.SQNavigationItem(
 
     val top by animateDpAsState(
         targetValue = if (selected) 56.dp else 0.dp,
-        animationSpec = SpringSpec(dampingRatio = 0.5f, stiffness = 200f)
+        animationSpec = tween(durationMillis = 600),
     )
 
     Box(
