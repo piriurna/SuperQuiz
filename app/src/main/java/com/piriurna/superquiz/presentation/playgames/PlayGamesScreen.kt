@@ -1,12 +1,17 @@
 package com.piriurna.superquiz.presentation.playgames
 
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.BottomSheetValue
 import androidx.compose.material.Card
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.rememberBottomSheetState
+import androidx.compose.runtime.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -14,14 +19,20 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.piriurna.common.composables.scaffold.SQBottomSheetScaffold
 import com.piriurna.common.composables.scaffold.SQScaffold
 import com.piriurna.common.composables.text.SQText
+import com.piriurna.common.composables.text.SQUserGreeting
 import com.piriurna.common.theme.SQStyle.TextLato36
 import com.piriurna.domain.models.Category
 import com.piriurna.superquiz.presentation.navigation.HomeDestinationScreen
@@ -30,6 +41,7 @@ import com.piriurna.superquiz.presentation.playgames.composables.CategoryCard
 import com.piriurna.superquiz.ui.theme.gradientCentralColor
 import com.piriurna.superquiz.ui.theme.gradientInnerColor
 import com.piriurna.superquiz.ui.theme.gradientOuterColor
+import kotlin.math.log
 
 @Composable
 fun PlayGamesScreen(
@@ -43,59 +55,56 @@ fun PlayGamesScreen(
 }
 
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
 @Composable
 fun BuildPlayGamesScreen(
     state: PlayGamesState,
     events: ((PlayGamesEvents) -> Unit)? = null,
     navController: NavController,
 ) {
+
+    val sheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
+
+    val configuration = LocalConfiguration.current
+
+    val screenHeight = configuration.screenHeightDp
+
+    var titleHeight by remember {
+        mutableStateOf(0)
+    }
+
+    val titleTopPadding = 36.dp
+
+    val titleVerticalArrangementSpacing = 12.dp
+
+    val extraSpacing = 4.dp
+
+    val titleSizeDp = with(LocalDensity.current) {
+        titleHeight.toDp() + titleTopPadding + titleVerticalArrangementSpacing + extraSpacing
+    }
+
+    val cornerRadius = when(sheetState.progress.to){
+        BottomSheetValue.Collapsed -> {
+            (sheetState.progress.fraction * 10f).toInt()
+        }
+        BottomSheetValue.Expanded -> {
+            10 - (sheetState.progress.fraction * 10f).toInt()
+        }
+    }
+
     SQScaffold(isLoading = state.isLoading) {
-        Box(
-            modifier = Modifier
-                .background(
-                    brush = Brush.radialGradient(
-                        radius = 800f,
-                        center = Offset(x = 250f, y = 800f),
-                        colors = listOf(
-                            gradientInnerColor,
-                            gradientCentralColor,
-                            gradientOuterColor,
-                        )
-                    )
-                )
-                .fillMaxSize()
-        ) {
-
-            Column(
-                verticalArrangement= Arrangement.spacedBy(12.dp),
-                modifier = Modifier
-                    .align(Alignment.TopStart)
-                    .padding(top = 36.dp)
-                    .padding(horizontal = 24.dp)
-            ) {
-                SQText(
-                    text = "\uD83D\uDC4B Hello, Dear ${state.userName}",
-                    color = Color.White
-                )
-
-                SQText(
-                    text = "What Do You Want To Improve?",
-                    color = Color.White,
-                    lineHeight = 48.sp,
-                    style = TextLato36
-                )
-            }
-
+        SQBottomSheetScaffold(
+            sheetPeekHeight = screenHeight.dp - titleSizeDp,
+            sheetState = sheetState,
+            sheetContent = {
             Card(
                 shape = RoundedCornerShape(
-                    topStartPercent = 10,
-                    topEndPercent = 10
+                    topStartPercent = cornerRadius,
+                    topEndPercent = cornerRadius
                 ),
                 modifier = Modifier
-                    .fillMaxHeight(0.7f)
+                    .fillMaxHeight()
                     .fillMaxWidth()
-                    .align(Alignment.BottomCenter)
             ) {
                 LazyVerticalGrid(
                     modifier = Modifier.padding(12.dp),
@@ -114,6 +123,36 @@ fun BuildPlayGamesScreen(
                     }
                 )
             }
+        }) {
+            Box(
+                modifier = Modifier
+                    .background(
+                        brush = Brush.radialGradient(
+                            radius = 800f,
+                            center = Offset(x = 250f, y = 800f),
+                            colors = listOf(
+                                gradientInnerColor,
+                                gradientCentralColor,
+                                gradientOuterColor,
+                            )
+                        )
+                    )
+                    .fillMaxSize()
+            ) {
+
+                SQUserGreeting(
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .padding(top = titleTopPadding)
+                        .padding(horizontal = 24.dp)
+                        .onSizeChanged {
+                            titleHeight = it.height
+                            Log.i("Playgames", it.toString())
+                        },
+                    verticalArrangement = Arrangement.spacedBy(titleVerticalArrangementSpacing),
+                    userName = state.userName
+                )
+            }
         }
     }
 }
@@ -121,9 +160,11 @@ fun BuildPlayGamesScreen(
 @Preview(showBackground = true)
 @Composable
 private fun PlayGamesScreenPreview() {
+    val list = Category.mockCategoryList.toMutableList()
+    list.addAll(Category.mockCategoryList)
     BuildPlayGamesScreen(
         state = PlayGamesState(
-            categories = Category.mockCategoryList
+            categories = list
         ),
         navController = rememberNavController()
     )

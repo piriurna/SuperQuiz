@@ -22,10 +22,6 @@ fun SplashScreen(
 ) {
     val splashViewModel : SplashViewModel = hiltViewModel()
 
-
-
-
-
     BuildSplashScreen(splashViewModel.state.value, navController)
 
 }

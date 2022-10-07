@@ -23,11 +23,12 @@ fun SQBottomNavigation(
     items: List<BottomNavigationItem>,
     selectedRoute : String,
     onItemSelected: (BottomNavigationItem) -> Unit = {},
-    navController: NavController
+    navController: NavController?
 ) {
 
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
+    val navBackStackEntry = navController?.currentBackStackEntryAsState()
+
+    val currentDestination = navBackStackEntry?.value?.destination
 
     var selectedItem by remember {
         mutableStateOf(selectedRoute)

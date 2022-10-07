@@ -1,34 +1,58 @@
 package com.piriurna.common.composables.scaffold
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ColumnScope
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.BottomSheetScaffold
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.material.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.dp
+import com.piriurna.common.theme.primaryGreen
 
 @ExperimentalMaterialApi
 @Composable
 fun SQBottomSheetScaffold(
     modifier: Modifier = Modifier,
     sheetContent : @Composable ColumnScope.() -> Unit,
-    content: @Composable (PaddingValues) -> Unit
+    sheetPeekHeight : Dp = 50.dp,
+    sheetState : BottomSheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed),
+    content: @Composable (PaddingValues) -> Unit,
 ) {
 
-    BottomSheetScaffold(modifier=modifier, content = content, sheetContent = {
+    val scaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = sheetState
+    )
 
-        Box(Modifier.fillMaxSize()) {
-
-        }
-
-    })
+    BottomSheetScaffold(
+        modifier=modifier,
+        scaffoldState = scaffoldState,
+        content = content,
+        sheetContent = {
+            sheetContent.invoke(this)
+        },
+        sheetBackgroundColor = Color.Transparent,
+        sheetPeekHeight = sheetPeekHeight
+    )
 }
 
+@OptIn(ExperimentalMaterialApi::class)
 @Preview(showBackground = true)
 @Composable
 fun SQBottomSheetScaffoldPreview() {
+    SQBottomSheetScaffold(
+        sheetContent = {
 
+        },
+        content = { Column(
+            Modifier
+                .fillMaxSize()
+                .background(primaryGreen)) {
+
+        }}
+    )
 }
