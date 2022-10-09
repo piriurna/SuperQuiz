@@ -14,6 +14,12 @@ data class Category(
 
 
     fun isSuccess() = (correctAnswers * 100f)/totalNumberOfQuestions > 55
+
+    fun getPercentageOfCorrectAnswers() = try { correctAnswers * 100 / totalNumberOfQuestions } catch (e : ArithmeticException) { 0 }
+
+    fun getPercentageOfIncorrectAnswers() = try { incorrectAnswers * 100 / totalNumberOfQuestions } catch (e : ArithmeticException) { 0 }
+
+
     val subTitle: String?
         get() = if (description == "") null else description
 
@@ -32,7 +38,10 @@ data class Category(
                 name = "General Knowledge",
                 completionRate = 80,
                 title = "General Knowledge",
-                description = "Cooking"
+                description = "Cooking",
+                totalNumberOfQuestions = 10,
+                correctAnswers = 7,
+                incorrectAnswers = 2
             ),
             Category(
                 id = 19,

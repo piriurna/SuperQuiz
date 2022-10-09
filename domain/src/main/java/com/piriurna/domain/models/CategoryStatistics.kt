@@ -17,5 +17,7 @@ data class CategoryStatistics(
     fun isSuccess() = getPercentageOfCorrectAnswers() > 55
 
     fun getPercentageOfCorrectAnswers() = try { correctAnswers * 100 / totalNumberOfQuestions } catch (e : ArithmeticException) { 0 }
+
+    fun getPercentageOfIncorrectAnswers() = try { incorrectAnswers * 100 / totalNumberOfQuestions } catch (e : ArithmeticException) { 0 }
     fun getNotAnsweredQuestions() = totalNumberOfQuestions - correctAnswers - incorrectAnswers
 }
