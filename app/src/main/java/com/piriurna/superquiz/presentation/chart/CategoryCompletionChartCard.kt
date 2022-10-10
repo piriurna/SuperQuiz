@@ -54,10 +54,13 @@ fun CategoryCompletionChartCard(
 
                 }
 
-                val substitle = if((numberOfAnsweredQuestions.toFloat() / totalNumberOfQuestions.toFloat()) > 0.6f) {
-                    "Almost Finished, keep it up"
-                } else {
-                    "Work some more in this category"
+                val substitle = when {
+                    (numberOfAnsweredQuestions.toFloat() / totalNumberOfQuestions.toFloat()) == 1f -> "Well Done! You can get even more questions."
+                    (numberOfAnsweredQuestions.toFloat() / totalNumberOfQuestions.toFloat()) > 0.6f -> "Almost Finished! Keep it up!"
+                    (numberOfAnsweredQuestions.toFloat() / totalNumberOfQuestions.toFloat()) == 0f -> "You could try this category!"
+                    else -> {
+                        "Focus! You can do it"
+                    }
                 }
 
                 SQText(text = substitle, style = TextLatoBold)
