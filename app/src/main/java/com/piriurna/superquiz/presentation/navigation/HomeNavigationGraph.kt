@@ -27,7 +27,7 @@ fun HomeNavigationGraph(navController: NavHostController) {
         }
 
         composable(route = HomeDestinationScreen.Chart.route) {
-            ChartScreen()
+            ChartScreen(navController)
         }
 
 

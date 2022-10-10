@@ -11,7 +11,7 @@ fun Category.getImage() : Int {
 fun Category.toSelectableItem() : SelectableItem {
     return SelectableItem(
         id = this.id.toString(),
-        name = this.id.toString()
+        name = this.name
     )
 }
 
