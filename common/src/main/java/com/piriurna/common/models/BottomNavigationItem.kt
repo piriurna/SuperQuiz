@@ -6,13 +6,14 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import com.piriurna.common.R
 import com.piriurna.common.theme.orange
 import com.piriurna.common.theme.progressBlue
 import com.piriurna.common.theme.purple
 
 sealed class BottomNavigationItem(
     val route : String,
-    val icon : ImageVector,
+    val iconRes : Int,
     val title : String,
     val color : Color = purple
 ) {
@@ -20,22 +21,22 @@ sealed class BottomNavigationItem(
     object PlayGames : BottomNavigationItem(
         route = "PLAY_GAMES",
         title = "Play Games",
-        icon = Icons.Default.PlayArrow,
-        color = purple
+        iconRes = R.drawable.ic_play,
+        color = progressBlue
     )
 
     object Profile : BottomNavigationItem(
         route = "PROFILE",
         title = "Profile",
-        icon = Icons.Default.Face,
+        iconRes = R.drawable.ic_settings,
         color = orange
     )
 
     object Chart : BottomNavigationItem(
         route = "CHART",
         title = "Statistics",
-        icon = Icons.Default.Favorite,
-        color = progressBlue
+        iconRes = R.drawable.ic_pie_chart,
+        color = purple
     )
 
     companion object {
