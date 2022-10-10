@@ -1,10 +1,10 @@
 package com.piriurna.data.mappers
 
 import android.text.Html
-import androidx.core.text.parseAsHtml
 import com.piriurna.data.database.entities.AnswerEntity
 import com.piriurna.data.database.entities.CategoryEntity
 import com.piriurna.data.database.entities.QuestionEntity
+import com.piriurna.data.database.models.CategoryStats
 import com.piriurna.data.database.models.QuestionWithAnswers
 import com.piriurna.data.remote.dto.CategoryDto
 import com.piriurna.data.remote.dto.QuizDto
@@ -23,6 +23,21 @@ fun CategoryEntity.toCategory() : Category {
     return Category(
         id = this.categoryId,
         name = this.name
+    )
+}
+
+fun CategoryStats.toCategory() : Category {
+
+    return Category(
+        id = this.categoryEntity.categoryId,
+        name = this.categoryEntity.name,
+        title = this.title,
+        description = this.subTitle,
+        completionRate = this.completionRate,
+        totalNumberOfQuestions = this.numberOfQuestions,
+        correctAnswers = this.numberOfCorrectAnswers,
+        incorrectAnswers = this.numberOfWrongAnswers,
+        notAnsweredQuestions = this.numberOfNotAnsweredQuestions
     )
 }
 

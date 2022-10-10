@@ -1,16 +1,13 @@
 package com.piriurna.superquiz.presentation.playgames
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.piriurna.domain.Resource
 import com.piriurna.domain.usecases.GetCategoriesUseCase
 import com.piriurna.domain.usecases.GetProfileSettingsUseCase
 import com.piriurna.superquiz.SQBaseEventViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,8 +16,9 @@ class PlayGamesViewModel @Inject constructor(
     private val getProfileSettingsUseCase: GetProfileSettingsUseCase
 ) : SQBaseEventViewModel<PlayGamesEvents>(){
 
-    private val _state: MutableState<PlayGamesState> = mutableStateOf(PlayGamesState())
-    val state: State<PlayGamesState> = _state
+
+    private val _state = MutableStateFlow<PlayGamesState>(PlayGamesState())
+    val state: StateFlow<PlayGamesState> = _state
 
 
     init {
@@ -35,33 +33,16 @@ class PlayGamesViewModel @Inject constructor(
         }
     }
 
-
-    private fun getCategories(userName : String) {
-        getCategoriesUseCase().onEach { result ->
-            when(result) {
-                is Resource.Success -> {
-                    _state.value = _state.value.copy(
-                        categories = result.data ?: emptyList(),
-                        userName = userName,
-                        isLoading = false
-                    )
-                }
-
-                is Resource.Loading -> {
-                    _state.value = _state.value.copy(
-                        isLoading = true
-                    )
-
-                }
-            }
-        }.launchIn(viewModelScope)
-    }
-
     private fun getUserData() {
         getProfileSettingsUseCase().onEach { result ->
             when(result) {
                 is Resource.Success -> {
-                    getCategories(result.data?.userName?:"")
+
+                    _state.value = _state.value.copy(
+                        userName = result.data?.userName?:""
+                    )
+
+                    getCategories()
                 }
 
                 is Resource.Loading -> {
@@ -73,4 +54,18 @@ class PlayGamesViewModel @Inject constructor(
             }
         }.launchIn(viewModelScope)
     }
+
+    private fun getCategories(){
+
+        viewModelScope.launch {
+            getCategoriesUseCase().collectLatest{
+
+                _state.value = _state.value.copy(
+                    categories = it,
+                    isLoading = false
+                )
+            }
+        }
+    }
+
 }

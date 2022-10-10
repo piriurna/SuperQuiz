@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.sp
 import com.piriurna.common.composables.cards.SQCard
 import com.piriurna.common.composables.progress.SQProgressBar
 import com.piriurna.common.composables.text.SQText
+import com.piriurna.common.theme.SQStyle.TextLato12
 import com.piriurna.common.theme.SQStyle.TextLatoBold20
 import com.piriurna.domain.models.Category
 import com.piriurna.superquiz.mappers.getImage
@@ -46,10 +47,19 @@ fun CategoryCard(
                 )
 
                 SQText(
-                    text = category.name,
+                    text = category.title,
                     style = TextLatoBold20,
                     lineHeight = 28.sp
                 )
+
+                category.subTitle?.let { subtitle->
+                    SQText(
+                        text = subtitle,
+                        style = TextLato12,
+                        lineHeight = 28.sp
+                    )
+                }
+
             }
 
             val progressIndicatorText = "You completed ${category.completionRate}%"
@@ -65,9 +75,14 @@ fun CategoryCard(
 @Preview(showBackground = true)
 @Composable
 private fun CategoryCardPreview() {
-    Box(modifier = Modifier.fillMaxSize()) {
+    Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
         CategoryCard(
             category = Category.mockCategoryList[1],
+            onClick = {}
+        )
+
+        CategoryCard(
+            category = Category.mockCategoryList[2],
             onClick = {}
         )
     }

@@ -10,6 +10,8 @@ import com.piriurna.domain.models.Answer
 import com.piriurna.domain.models.Category
 import com.piriurna.domain.models.Question
 import com.piriurna.domain.repositories.TriviaRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import java.lang.Exception
 import javax.inject.Inject
 
@@ -67,13 +69,15 @@ class TriviaRepositoryImpl @Inject constructor(
         return questionDao.getQuestions(ids)!!.toQuestion()
     }
 
-    override suspend fun getDbCategories(): List<Category> {
-        return categoryDao.getCategories()?.map { categoryEntity ->
-            return@map categoryEntity.toCategory()
-        } ?: kotlin.run {
-            return emptyList()
-        }
 
+    override fun getDbCategories(): Flow<List<Category>> {
+        return categoryDao.getCategories().map {  list->
+            list.map { categorystats-> categorystats.toCategory() }
+        }
+    }
+
+    override suspend fun getDbCategory(categoryId: Int): Category {
+        return categoryDao.getCategory(categoryId = categoryId).toCategory()
     }
 
     override suspend fun disableAnswer(answerId: Int) {
@@ -96,4 +100,12 @@ class TriviaRepositoryImpl @Inject constructor(
         return 0
     }
 
+    override suspend fun getNumberOfCategories(): Int {
+        return categoryDao.getNumberOfCategories()
+    }
+
+    override suspend fun getMissingCategories(values: List<Int>): List<Int> {
+        val ll = categoryDao.getMissingCategories(values)
+        return ll
+    }
 }
