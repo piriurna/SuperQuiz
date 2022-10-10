@@ -3,6 +3,7 @@ package com.piriurna.common.composables.navigation
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
@@ -103,7 +104,8 @@ fun BuildSQBottomNavigation(
 
         if (isVisible) {
             Row(
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.clickable(enabled = false, onClick = {})
             ){
                 items.forEachIndexed { index, item ->
                     SQNavigationItem(
