@@ -2,8 +2,6 @@ package com.piriurna.superquiz.presentation.chart
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.Composable
@@ -27,8 +25,8 @@ fun CategoryCompletionChartCard(
     sections : List<PieChartSection>,
     onPrimaryAction : () -> Unit,
     categoryName : String,
-    numberOfCorrectAnswers : Int,
-    totalNumberOfAnswers : Int
+    numberOfAnsweredQuestions : Int,
+    totalNumberOfQuestions : Int
 ) {
     SQCard{
         Row(
@@ -52,11 +50,11 @@ fun CategoryCompletionChartCard(
                         colorFilter = ColorFilter.tint(purple)
                     )
 
-                    SQText(text = "$numberOfCorrectAnswers/$totalNumberOfAnswers", style = TextLato35Bold, color = purple)
+                    SQText(text = "$numberOfAnsweredQuestions/$totalNumberOfQuestions", style = TextLato35Bold, color = purple)
 
                 }
 
-                val substitle = if((numberOfCorrectAnswers.toFloat() / totalNumberOfAnswers.toFloat()) > 0.6f) {
+                val substitle = if((numberOfAnsweredQuestions.toFloat() / totalNumberOfQuestions.toFloat()) > 0.6f) {
                     "Almost Finished, keep it up"
                 } else {
                     "Work some more in this category"
@@ -77,7 +75,13 @@ fun CategoryCompletionChartCard(
                 horizontalAlignment = Alignment.End
             ) {
 
-                SQPieChart(sections = sections, pieChartSize = 120.dp, graphThickness = 26f)
+                SQPieChart(
+                    sections = sections,
+                    pieChartSize = 120.dp,
+                    graphThickness = 26f,
+                    centerTextTitle = "${numberOfAnsweredQuestions * 100 / totalNumberOfQuestions}%",
+                    centerTextSubTitle = "Done"
+                )
             }
         }
     }
@@ -92,7 +96,7 @@ fun CategoryCompletionChartCardPreview() {
         sections = PieChartSection.getMockPieChartSections(),
         onPrimaryAction = {},
         "Expenses",
-        numberOfCorrectAnswers = 4,
-        totalNumberOfAnswers = 6
+        numberOfAnsweredQuestions = 4,
+        totalNumberOfQuestions = 6
     )
 }

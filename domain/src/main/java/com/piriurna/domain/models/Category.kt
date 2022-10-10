@@ -17,7 +17,11 @@ data class Category(
 
     fun getPercentageOfCorrectAnswers() = try { correctAnswers * 100 / totalNumberOfQuestions } catch (e : ArithmeticException) { 0 }
 
+    fun getPercentageOfCorrectAnsweredAnswers() = try { correctAnswers * 100 / getAnsweredQuestions() } catch (e : ArithmeticException) { 0 }
+
     fun getPercentageOfIncorrectAnswers() = try { incorrectAnswers * 100 / totalNumberOfQuestions } catch (e : ArithmeticException) { 0 }
+
+    fun getAnsweredQuestions() = totalNumberOfQuestions - notAnsweredQuestions
 
 
     val subTitle: String?
