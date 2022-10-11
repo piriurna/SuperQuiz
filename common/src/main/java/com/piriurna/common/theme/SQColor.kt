@@ -13,7 +13,7 @@ val Colors.primaryText: Color
     get() = if (isLight) Color(0xff616161) else Color(0xfff3f5fb)
 
 
-val purple = Color(red = 149, green = 67, blue = 255)
+val purple = Color(74, 21, 173)
 val lightPurple = Color(red = 149, green = 67, blue = 255, alpha = 26)
 
 val orange = Color(red = 254, green = 177, blue = 87)
@@ -30,9 +30,5 @@ val progressBlue = Color(red = 0, green = 101, blue = 253)
 
 
 val incompleteGray = Color(red = 237, green = 234, blue = 255)
-
-val gradientInnerColor = Color(146, 68, 248)
-val gradientCentralColor = Color(138, 64, 249)
-val gradientOuterColor = Color(77, 40, 218)
 
 val errorColor = Color(192, 57, 43)

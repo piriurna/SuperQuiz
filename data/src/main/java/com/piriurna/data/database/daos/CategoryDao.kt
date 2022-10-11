@@ -32,9 +32,9 @@ interface CategoryDao {
               LEFT JOIN (      
                     SELECT  tbl_question.ownerCategoryId,  
                             (COUNT(chosenAnswerId)  * 100  / COUNT(questionId)) as completionRate,
-                            COUNT(questionId) numberOfQuestions, 
-                            COUNT(tbl_answers_correct.isCorrectAnswer) numberOfCorrectAnswers, 
-                            COUNT(tbl_answers_wrong.isCorrectAnswer) numberOWrongAnswers
+                            COUNT(questionId) as numberOfQuestions, 
+                            COUNT(tbl_answers_correct.isCorrectAnswer) as numberOfCorrectAnswers, 
+                            COUNT(tbl_answers_wrong.isCorrectAnswer) as numberOWrongAnswers
                     FROM question as tbl_question
                     LEFT JOIN (
                         
