@@ -25,7 +25,9 @@ import com.piriurna.common.composables.chip.SQChip
 import com.piriurna.common.composables.progress.SQProgressBar
 import com.piriurna.common.composables.scaffold.SQScaffold
 import com.piriurna.common.theme.lightOrange
+import com.piriurna.common.theme.lightPurple
 import com.piriurna.common.theme.orange
+import com.piriurna.common.theme.purple
 import com.piriurna.domain.models.Answer
 import com.piriurna.domain.models.Question
 import com.piriurna.superquiz.R
@@ -35,8 +37,6 @@ import com.piriurna.superquiz.presentation.navigation.NavigationArguments
 import com.piriurna.superquiz.presentation.navigation.PlayGamesDestinations
 import com.piriurna.superquiz.presentation.navigation.utils.getArgument
 import com.piriurna.superquiz.presentation.questions.composables.SQQuestionCard
-import com.piriurna.superquiz.ui.theme.lightPurple
-import com.piriurna.superquiz.ui.theme.purple
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.min

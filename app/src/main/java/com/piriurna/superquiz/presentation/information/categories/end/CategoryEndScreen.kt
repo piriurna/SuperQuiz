@@ -22,15 +22,14 @@ import com.piriurna.common.composables.text.SQText
 import com.piriurna.common.theme.SQStyle.TextLato27Bold
 import com.piriurna.common.theme.SQStyle.TextLatoThin18
 import com.piriurna.common.theme.errorColor
+import com.piriurna.common.theme.primaryGreen
 import com.piriurna.domain.models.Category
-import com.piriurna.domain.models.CategoryStatistics
 import com.piriurna.domain.models.Question
 import com.piriurna.superquiz.R
 import com.piriurna.superquiz.presentation.information.categories.end.models.CategoryEndEvents
 import com.piriurna.superquiz.presentation.information.categories.end.models.CategoryEndState
 import com.piriurna.superquiz.presentation.navigation.NavigationArguments
 import com.piriurna.superquiz.presentation.navigation.utils.getArgument
-import com.piriurna.superquiz.ui.theme.primaryGreen
 import kotlinx.coroutines.delay
 
 @Composable
