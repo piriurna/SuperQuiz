@@ -17,8 +17,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.piriurna.common.composables.text.SQText
@@ -40,21 +43,29 @@ fun SQSwipeToConfirmButton(
     backgroundDefaultColor : Color = purple,
     backgroundCompleteColor : Color = errorColor,
     onComplete : () -> Unit,
-    sliderEnabled : Boolean = true
+    sliderEnabled : Boolean = true,
 ) {
 
-    val width = 350.dp
+    var sliderWidth by remember {
+      mutableStateOf(350)
+    }
+
+    val sliderWidthDp =
+        with(LocalDensity.current) {
+            sliderWidth.toDp()
+        }
+
     val dragSize = 50.dp
 
     val swipeableState = rememberSwipeableState(ConfirmationState.DEFAULT)
-    val sizePx = with(LocalDensity.current) { (width - dragSize).toPx() }
+    val sizePx = with(LocalDensity.current) { (sliderWidthDp - dragSize).toPx() }
     val anchors = mapOf(0f to ConfirmationState.DEFAULT, sizePx to ConfirmationState.CONFIRMED)
     val progress by derivedStateOf {
         if (swipeableState.offset.value == 0f) 0f else swipeableState.offset.value / sizePx
     }
 
     LaunchedEffect(progress) {
-        if(progress == 1f) {
+        if(progress == 1f ) {
             onComplete()
         }
     }
@@ -67,7 +78,7 @@ fun SQSwipeToConfirmButton(
 
     Box(
         modifier = modifier
-            .width(width)
+            .fillMaxWidth()
             .swipeable(
                 state = swipeableState,
                 anchors = anchors,
@@ -76,6 +87,9 @@ fun SQSwipeToConfirmButton(
                 enabled = sliderEnabled
             )
             .background(backgroundColor, RoundedCornerShape(dragSize))
+            .onSizeChanged {
+                sliderWidth = it.width
+            }
     ) {
         Column(
             Modifier
@@ -134,6 +148,7 @@ private fun DraggableControl(
 @Preview
 @Composable
 fun SQSwipeButtonPreview() {
+
     var enabled by remember {
        mutableStateOf(true)
     }
