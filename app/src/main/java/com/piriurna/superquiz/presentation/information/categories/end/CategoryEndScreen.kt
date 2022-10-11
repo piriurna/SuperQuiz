@@ -188,7 +188,8 @@ fun CategoryEndScreenPreview() {
                 id = Category.mockCategoryList[0].id,
                 name = Category.mockCategoryList[0].name,
                 totalNumberOfQuestions = 100,
-                correctAnswers = 30,
+                title =Category.mockCategoryList[0].title,
+                correctAnswers = 80,
                 incorrectAnswers = Question.mockQuestions.count { !it.isQuestionAnsweredCorrectly() }
             )
         )
