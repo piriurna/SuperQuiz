@@ -95,7 +95,7 @@ fun BuildSQBottomNavigation(
 
 
             val color by animateColorAsState(
-                targetValue = items.getOrElse(currentIndex) {BottomNavigationItem.PlayGames}.color,
+                targetValue = items.getOrNull(currentIndex)?.color?: purple,
                 animationSpec = tween(moveAnimationDuration)
             )
 
@@ -152,7 +152,7 @@ private fun SQBottomNavigationPreview() {
         BuildSQBottomNavigation(
             isVisible = true,
             unselectedColor = Color.LightGray,
-            items = listOf(BottomNavigationItem.PlayGames, BottomNavigationItem.Profile, BottomNavigationItem.Chart, BottomNavigationItem.Profile),
+            items = BottomNavigationItem.getMockNavigationItems,
             indicatorSizeAnimationDuration = 350,
             onItemSelected = {},
         )
@@ -160,7 +160,7 @@ private fun SQBottomNavigationPreview() {
         BuildSQBottomNavigation(
             isVisible = true,
             unselectedColor = Color.LightGray,
-            items = listOf(BottomNavigationItem.PlayGames, BottomNavigationItem.Profile, BottomNavigationItem.Chart),
+            items = BottomNavigationItem.getMockNavigationItems,
             indicatorSizeAnimationDuration = 400,
             onItemSelected = {}
         )
@@ -168,7 +168,7 @@ private fun SQBottomNavigationPreview() {
         BuildSQBottomNavigation(
             isVisible = true,
             unselectedColor = Color.LightGray,
-            items = listOf(BottomNavigationItem.PlayGames, BottomNavigationItem.Profile, BottomNavigationItem.Chart),
+            items = BottomNavigationItem.getMockNavigationItems,
             indicatorSizeAnimationDuration = 500,
             onItemSelected = {},
         )
