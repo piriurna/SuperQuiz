@@ -109,7 +109,9 @@ dependencies {
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
     debugImplementation "androidx.compose.ui:ui-tooling:$compose_version"
     debugImplementation "androidx.compose.ui:ui-test-manifest:$compose_version"
+
     implementation rootProject.libraries.accompanist
+    implementation rootProject.libraries.accompanistSwipe
 
     implementation rootProject.libraries.hiltAndroid
     kapt rootProject.libraries.hiltAndroidCompiler
