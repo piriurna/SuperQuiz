@@ -3,6 +3,7 @@ package com.piriurna.common.composables.toolbar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.dp
 import com.piriurna.common.composables.button.SQAppBarIcon
 
 sealed class AppBarOptions {
@@ -16,8 +17,9 @@ sealed class AppBarOptions {
     }
 
     class AppBarWithBack(
+        onBackPressed : () -> Unit,
         private val appBarBackButton : @Composable () -> Unit = {
-            SQAppBarIcon(onClick = { }, icon = Icons.Default.ArrowBack)
+            SQAppBarIcon(onClick = onBackPressed, icon = Icons.Default.ArrowBack)
         }
     ) : AppBarOptions(), BackAppbar {
 
@@ -25,8 +27,9 @@ sealed class AppBarOptions {
     }
 
     class AppBarWithBackAndOptions(
+        onBackPressed : () -> Unit,
         val appBarBackButton : @Composable () -> Unit = {
-            SQAppBarIcon(onClick = { }, icon = Icons.Default.ArrowBack)
+            SQAppBarIcon(onClick = onBackPressed, icon = Icons.Default.ArrowBack)
         },
         private val appBarOptionsButton : @Composable () -> Unit,
     ) : AppBarOptions(), BackAppbar, OptionsAppbar {
@@ -38,8 +41,9 @@ sealed class AppBarOptions {
 
     class AppBarWithTitleAndBack(
         val appBarTitle: String,
+        onBackPressed : () -> Unit,
         val appBarBackButton : @Composable () -> Unit = {
-            SQAppBarIcon(onClick = { }, icon = Icons.Default.ArrowBack)
+            SQAppBarIcon(onClick = onBackPressed, icon = Icons.Default.ArrowBack)
         }
     ) : AppBarOptions(), BackAppbar, TitleAppbar {
 
@@ -50,8 +54,9 @@ sealed class AppBarOptions {
 
     class AppBarWithTitleBackAndOptions(
         private val appBarTitle: String,
+        onBackPressed : () -> Unit,
         private val appBarBackButton : @Composable () -> Unit = {
-            SQAppBarIcon(onClick = { }, icon = Icons.Default.ArrowBack)
+            SQAppBarIcon(onClick = onBackPressed, icon = Icons.Default.ArrowBack)
         },
         private val appBarOptionsButton : @Composable () -> Unit,
     ): AppBarOptions(), BackAppbar, TitleAppbar, OptionsAppbar {
@@ -63,4 +68,7 @@ sealed class AppBarOptions {
 
     }
 
+    companion object {
+        val APP_BAR_HEIGHT = 88.dp
+    }
 }

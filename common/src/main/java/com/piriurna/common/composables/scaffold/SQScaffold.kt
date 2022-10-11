@@ -75,19 +75,6 @@ fun SQScaffold(
         Scaffold(
             modifier = scaffoldModifier.nestedScroll(nestedScrollConnection),
             content = content,
-            bottomBar = {
-                SQBottomNavigation(
-                    modifier = Modifier
-                        .height(bottomBarHeight)
-                        .offset {
-                            IntOffset(x = 0, y = -bottomBarOffsetHeightPx.value.roundToInt())
-                        },
-                    unselectedColor = Color.LightGray,
-                    items = bottomBarItems,
-                    onItemSelected = onItemSelected,
-                    navController = navController
-                )
-            }
         )
 
         if(appBarOptions != null)
@@ -97,6 +84,19 @@ fun SQScaffold(
             )
 
         SQLoading(isLoading = isLoading)
+
+        SQBottomNavigation(
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .height(bottomBarHeight)
+                .offset {
+                    IntOffset(x = 0, y = -bottomBarOffsetHeightPx.value.roundToInt())
+                },
+            unselectedColor = Color.LightGray,
+            items = bottomBarItems,
+            onItemSelected = onItemSelected,
+            navController = navController
+        )
     }
 }
 
@@ -106,12 +106,13 @@ fun SQScaffold(
 fun SQScaffoldPreview() {
     SQScaffold(
         isLoading = true,
-        bottomBarItems = listOf(BottomNavigationItem.PlayGames, BottomNavigationItem.Profile),
+        bottomBarItems = BottomNavigationItem.getMockNavigationItems,
         appBarOptions = AppBarOptions.AppBarWithTitleAndBack(
             appBarTitle = "This is the Appbar Title",
             appBarBackButton = {
                 SQAppBarIcon(onClick = { }, icon = Icons.Default.ArrowBack)
             },
+            onBackPressed = {}
         )
     ) {
         Text(text = "Scaffold test")

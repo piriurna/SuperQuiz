@@ -36,7 +36,7 @@ fun SQAppBar(
 
     Box(modifier = modifier
         .background(color = backgroundColor)
-        .height(88.dp)
+        .height(AppBarOptions.APP_BAR_HEIGHT)
         .padding(10.dp)
         .fillMaxWidth()
     ) {
@@ -79,7 +79,8 @@ fun SQAppBarPreview() {
                },
                 appBarOptionsButton = {
                     SQAppBarIcon(onClick = { }, icon = Icons.Default.Menu)
-                }
+                },
+                onBackPressed = {}
             )
         )
 
@@ -88,7 +89,8 @@ fun SQAppBarPreview() {
                 appBarTitle = "This is the Appbar Title",
                 appBarBackButton = {
                     SQAppBarIcon(onClick = { }, icon = Icons.Default.ArrowBack)
-                }
+                },
+                onBackPressed = {}
             )
         )
 
@@ -99,7 +101,8 @@ fun SQAppBarPreview() {
                 },
                 appBarOptionsButton = {
                     SQAppBarIcon(onClick = { }, icon = Icons.Default.Menu)
-                }
+                },
+                onBackPressed = {}
             )
         )
     }
