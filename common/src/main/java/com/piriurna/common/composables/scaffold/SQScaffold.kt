@@ -92,7 +92,7 @@ fun SQScaffold(
 
         if(appBarOptions != null)
             SQAppBar(
-                modifier = Modifier.padding(top = 20.dp).align(Alignment.TopCenter),
+                modifier = Modifier.align(Alignment.TopCenter),
                 appBarOptions = appBarOptions
             )
 
@@ -107,14 +107,11 @@ fun SQScaffoldPreview() {
     SQScaffold(
         isLoading = true,
         bottomBarItems = listOf(BottomNavigationItem.PlayGames, BottomNavigationItem.Profile),
-        appBarOptions = AppBarOptions.AppBarWithTitleBackAndOptions(
+        appBarOptions = AppBarOptions.AppBarWithTitleAndBack(
             appBarTitle = "This is the Appbar Title",
             appBarBackButton = {
                 SQAppBarIcon(onClick = { }, icon = Icons.Default.ArrowBack)
             },
-            appBarOptionsButton = {
-                SQAppBarIcon(onClick = { }, icon = Icons.Default.Menu)
-            }
         )
     ) {
         Text(text = "Scaffold test")

@@ -53,6 +53,12 @@ class ProfileSettingsViewModel @Inject constructor(
             is ProfileSettingsEvents.SaveSettings -> {
                 saveSettings(event.profileSettings)
             }
+
+            is ProfileSettingsEvents.SaveUserName -> {
+                saveSettings(_state.value.profileSettings.copy(
+                    userName = event.username
+                ))
+            }
         }
     }
 
