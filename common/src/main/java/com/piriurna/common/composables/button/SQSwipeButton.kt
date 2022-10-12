@@ -82,7 +82,7 @@ fun SQSwipeToConfirmButton(
             .swipeable(
                 state = swipeableState,
                 anchors = anchors,
-                thresholds = { _, _ -> FractionalThreshold(0.5f) },
+                thresholds = { _, _ -> FractionalThreshold(0.9f) },
                 orientation = Orientation.Horizontal,
                 enabled = sliderEnabled
             )
