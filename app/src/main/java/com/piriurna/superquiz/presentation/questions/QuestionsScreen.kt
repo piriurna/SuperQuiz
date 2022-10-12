@@ -57,7 +57,6 @@ fun QuestionsScreen(
 
     if(categoryId != null) {
         BuildQuestionsScreen(
-            categoryId = categoryId,
             state = state.value,
             events = viewModel::onTriggerEvent,
             navController
@@ -71,7 +70,6 @@ fun QuestionsScreen(
 @OptIn(ExperimentalPagerApi::class, ExperimentalAnimationApi::class)
 @Composable
 fun BuildQuestionsScreen(
-    categoryId : Int,
     state: QuestionsState,
     events : ((QuestionsEvents) -> Unit)? = null,
     navController: NavController = rememberNavController()
@@ -80,10 +78,6 @@ fun BuildQuestionsScreen(
     val pagerState = rememberPagerState()
 
     val scope = rememberCoroutineScope()
-
-    LaunchedEffect(Unit) {
-        events?.invoke(QuestionsEvents.GetQuestions(categoryId))
-    }
 
     val questions = state.categoryQuestions
 
@@ -224,9 +218,9 @@ fun BuildQuestionsScreen(
                         if(answerAlreadySent) {
                             answerAlreadySent = false
                             if(state.isLastQuestion(pagerState.currentPage)) {
-                                navController.navigate(PlayGamesDestinations.CategoryCompleted.withArgs(categoryId))
-                            } else {
-                                events?.invoke(QuestionsEvents.GetQuestions(categoryId))
+                                currentQuestion?.let {
+                                    navController.navigate(PlayGamesDestinations.CategoryCompleted.withArgs(it.categoryId))
+                                }
                             }
                         } else {
                             selectedAnswer?.let { answer ->
@@ -256,7 +250,9 @@ fun BuildQuestionsScreen(
                     description = "Would you like to get more questions for this category?",
                     okLabel = "Get Questions",
                     okClick = {
-                        events?.invoke(QuestionsEvents.FetchQuestionsForCategory(categoryId))
+                        currentQuestion?.let {
+                            events?.invoke(QuestionsEvents.FetchQuestionsForCategory(it.categoryId))
+                        }
                     },
                     themeColor = Color.Green.copy(alpha = 0.5f))
             }
@@ -268,9 +264,11 @@ fun BuildQuestionsScreen(
 @Composable
 private fun QuestionScreenPreview() {
     Column(Modifier.fillMaxSize()) {
-        BuildQuestionsScreen(categoryId = 9, state = QuestionsState(
-            categoryQuestions = Question.mockQuestions
-        ))
+        BuildQuestionsScreen(
+            state = QuestionsState(
+                categoryQuestions = Question.mockQuestions
+            )
+        )
 
     }
 }

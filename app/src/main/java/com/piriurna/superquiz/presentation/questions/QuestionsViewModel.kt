@@ -3,6 +3,7 @@ package com.piriurna.superquiz.presentation.questions
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.piriurna.domain.Resource
 import com.piriurna.domain.models.Answer
@@ -13,6 +14,7 @@ import com.piriurna.domain.usecases.questions.DisableSelectedAnswersUseCase
 import com.piriurna.domain.usecases.questions.FetchQuestionsForCategoryUseCase
 import com.piriurna.domain.usecases.quotes.GetRandomQuoteListUseCase
 import com.piriurna.superquiz.SQBaseEventViewModel
+import com.piriurna.superquiz.presentation.navigation.NavigationArguments
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -24,13 +26,15 @@ class QuestionsViewModel @Inject constructor(
     private val saveAnswerUseCase: SaveAnswerUseCase,
     private val disableSelectedAnswersUseCase: DisableSelectedAnswersUseCase,
     private val fetchQuestionsForCategoryUseCase: FetchQuestionsForCategoryUseCase,
-    private val getRandomQuoteListUseCase: GetRandomQuoteListUseCase
+    private val getRandomQuoteListUseCase: GetRandomQuoteListUseCase,
+    savedStateHandle: SavedStateHandle
 ) : SQBaseEventViewModel<QuestionsEvents>(){
 
 
-//    private val _state: MutableState<QuestionsState> = mutableStateOf(QuestionsState())
-//    val state: State<QuestionsState> = _state
-//
+    init {
+        val categoryId = savedStateHandle.get<String>(NavigationArguments.CATEGORY_ID).orEmpty()
+        onTriggerEvent(QuestionsEvents.GetQuestions(categoryId.toInt()))
+    }
 
     private val _state = MutableStateFlow(QuestionsState())
     val state: StateFlow<QuestionsState> = _state
