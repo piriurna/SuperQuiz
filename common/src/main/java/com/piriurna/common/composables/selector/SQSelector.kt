@@ -20,46 +20,33 @@ import kotlin.math.min
 @Composable
 fun SQSelector(
     modifier: Modifier = Modifier,
-    items: List<SelectableItem>,
-    initialItemIndex: Int = 0,
-    onItemChanged : (SelectableItem) -> Unit = {},
-    onNextPressed : (Int) -> Unit = {},
-    onPreviousPressed : (Int) -> Unit = {}
+    item : SelectableItem,
+    onNextPressed : () -> Unit = {},
+    onPreviousPressed : () -> Unit = {}
 ) {
-    var selectedIndex by remember {
-        mutableStateOf(initialItemIndex)
-    }
-
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {
-        if(items.isNotEmpty()){
-            val selectedItem = items[selectedIndex]
 
-            Icon(
-                modifier = Modifier.clickable {
-                    selectedIndex = max(0, selectedIndex - 1)
-                    onItemChanged(items[selectedIndex])
-                    onPreviousPressed(selectedIndex)
-                },
-                imageVector = Icons.Default.ArrowBack,
-                contentDescription = "Previous Button"
-            )
+        Icon(
+            modifier = Modifier.clickable {
+                onPreviousPressed()
+            },
+            imageVector = Icons.Default.ArrowBack,
+            contentDescription = "Previous Button"
+        )
 
-            SQText(text = selectedItem.name, style = SQStyle.TextLatoBold)
+        SQText(text = item.name, style = SQStyle.TextLatoBold)
 
-            Icon(
-                modifier = Modifier.clickable {
-                    selectedIndex = min(items.size - 1, selectedIndex + 1)
-                    onItemChanged(items[selectedIndex])
-                    onNextPressed(selectedIndex)
-                },
-                imageVector = Icons.Default.ArrowForward,
-                contentDescription = "Next Button"
-            )
-        }
+        Icon(
+            modifier = Modifier.clickable {
+                onNextPressed()
+            },
+            imageVector = Icons.Default.ArrowForward,
+            contentDescription = "Next Button"
+        )
     }
 }
 
@@ -67,9 +54,8 @@ fun SQSelector(
 @Composable
 fun SQSelectorPreview() {
     Box(modifier = Modifier.fillMaxSize()){
-        SQSelector(items = listOf(
-            SelectableItem("0", "Categoria 1"),
-            SelectableItem("1", "Categoria 2"),
-        ))
+        SQSelector(
+            item = SelectableItem("9", "Category 1"),
+        )
     }
 }

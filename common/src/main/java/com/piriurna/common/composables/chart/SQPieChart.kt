@@ -2,112 +2,69 @@ package com.piriurna.common.composables.chart
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.piriurna.common.composables.text.SQText
 import com.piriurna.common.models.PieChartSection
-import com.piriurna.common.models.PieChartSectionArea
+import com.piriurna.common.theme.SQStyle.TextLato22
+import com.piriurna.common.theme.SQStyle.TextLato27Bold
+import com.piriurna.common.theme.lightPurple
 
 @Composable
 fun SQPieChart(
     modifier: Modifier = Modifier,
     sections: List<PieChartSection>,
-    pieSize : Float = 735F
+    pieChartSize : Dp,
+    graphThickness : Float,
+    centerTextTitle : String? = null,
+    centerTextSubTitle : String? = null
 ) {
 
-    val DEFAULT_SECTION_WIDTH by derivedStateOf { pieSize / 3F }
-
-    val SELECTED_SECTION_WIDTH by derivedStateOf { pieSize / 2.5F }
-
-    val totalPie by remember {
-        mutableStateOf(sections.map {it.value}.sum())
-    }
-
-    val proportions by derivedStateOf {
-        sections.map { it.value / totalPie }
-    }
-
-    val sweepAnglePercentage by derivedStateOf {
-        proportions.map { 360 * it }
-    }
-
-    val progressSize = mutableListOf<Float>()
-    progressSize.add(sweepAnglePercentage.first())
-
-    for (x in 1 until sweepAnglePercentage.size)
-        progressSize.add(sweepAnglePercentage[x] + progressSize[x - 1])
-
-    val barAreas = sections.mapIndexed { index, pieChartSection ->
-        PieChartSectionArea(
-            index = index,
-            data = pieChartSection,
-            angle = progressSize[index]
-        )
-    }
-
-    var selectedPosition by remember { mutableStateOf(0.0) }
-    val selectedSection by remember(selectedPosition, barAreas) {
-        derivedStateOf {
-            barAreas.forEachIndexed { index, pieChartSectionArea ->
-                val sweepSize = sweepAnglePercentage[index]
-                val sweepStart = pieChartSectionArea.angle - sweepSize
-                if(selectedPosition <= pieChartSectionArea.angle &&
-                        selectedPosition >= sweepStart) {
-                    return@derivedStateOf pieChartSectionArea
-                }
-            }
-
-            return@derivedStateOf null
-        }
-    }
-
-    val canvasSize = with(LocalDensity.current) {
-        (pieSize * 1.5f).toDp()
-    }
-
-    Canvas(
-        modifier = modifier
-            .size(canvasSize)
-            .startGesture(
-                pieWidth = pieSize,
-                onCompleted = {
-                    selectedPosition = it
-                }
-            )
+    Box(
+        modifier = modifier.size(pieChartSize),
+        contentAlignment = Alignment.Center
     ) {
 
-        var startAngle = 0f
-
-        sections.forEachIndexed { index, section ->
-
-            val sectionWidth = if(selectedSection?.index == index) SELECTED_SECTION_WIDTH else DEFAULT_SECTION_WIDTH
-
-            val padding = DEFAULT_SECTION_WIDTH * 1.5f
-
-            val offset = padding/2F
-
-            drawArc(
-                color= section.color,
-                size = Size(pieSize, pieSize),
-                startAngle = startAngle,
-                sweepAngle = sweepAnglePercentage[index],
-                topLeft = Offset(offset, offset),
-                useCenter = false,
-                style = Stroke(
-                    width = sectionWidth
-                )
+        Canvas(modifier = Modifier.size(pieChartSize * 0.9f)) {
+            drawCircle(
+                lightPurple,
+                size.width / 2,
+                style = Stroke(graphThickness)
             )
 
-            startAngle += sweepAnglePercentage[index]
+            var currentStartingAngle = -90f
+
+            sections.forEach {
+                val sectionAngle = ((it.percentage / 100f) * 360).toFloat()
+
+                drawArc(
+                    color = it.color,
+                    startAngle = currentStartingAngle,
+                    sweepAngle = sectionAngle,
+                    useCenter = false,
+                    style = Stroke(graphThickness, cap = StrokeCap.Round),
+                )
+                currentStartingAngle += sectionAngle
+            }
+
+
+        }
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            centerTextTitle?.let {
+                SQText(text = it, style = TextLato27Bold)
+            }
+            centerTextSubTitle?.let {
+                SQText(text = it, style = TextLato22)
+            }
         }
     }
 }
@@ -122,7 +79,10 @@ fun SQPieChartPreview() {
     ) {
         SQPieChart(
             sections = PieChartSection.getMockPieChartSections(),
-            pieSize = 650f
+            pieChartSize = 350.dp,
+            graphThickness = 35f,
+            centerTextTitle = "67%",
+            centerTextSubTitle = "Complete"
         )
     }
 }

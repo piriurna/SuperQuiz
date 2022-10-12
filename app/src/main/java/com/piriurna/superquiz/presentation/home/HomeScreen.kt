@@ -13,7 +13,7 @@ fun HomeScreen(
     navController: NavHostController = rememberNavController()
 ) {
     SQScaffold(
-        bottomBarItems = listOf(BottomNavigationItem.PlayGames, BottomNavigationItem.Profile, BottomNavigationItem.Chart),
+        bottomBarItems = listOf(BottomNavigationItem.PlayGames, BottomNavigationItem.Chart, BottomNavigationItem.Profile),
         onItemSelected = { item ->
             navController.navigate(item.route)
         },
