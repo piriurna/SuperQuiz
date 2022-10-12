@@ -12,7 +12,7 @@ ext.versions = [
         dagger                      : '2.26',
         okHttp                      : '5.0.0-alpha.2',
         retrofit                    : '2.9.0',
-        navigationCompose           : '2.5.1'
+        navigationCompose           : '2.5.1',
 ]
 
 ext.libraries = [
@@ -38,7 +38,8 @@ ext.libraries = [
         loggingInterceptor        : "com.squareup.okhttp3:logging-interceptor:$versions.okHttp",
         retrofit                  : "com.squareup.retrofit2:retrofit:$versions.retrofit",
         coverterGson              : "com.squareup.retrofit2:converter-gson:$versions.retrofit",
-        navigationCompose         : "androidx.navigation:navigation-compose:$versions.navigationCompose"
+        navigationCompose         : "androidx.navigation:navigation-compose:$versions.navigationCompose",
+        accompanistSwipe          : "com.google.accompanist:accompanist-swiperefresh:$versions.accompanist"
 ]
 
 ext.tests = [

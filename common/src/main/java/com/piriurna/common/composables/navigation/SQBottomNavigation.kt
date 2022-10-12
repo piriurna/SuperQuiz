@@ -63,48 +63,48 @@ fun BuildSQBottomNavigation(
     indicatorSizeAnimationDuration : Int = 350,
     onItemSelected: (BottomNavigationItem) -> Unit = {},
 ) {
-    Column(
-        modifier = modifier
-            .shadow(8.dp)
-            .fillMaxWidth()
-            .background(Color.White)
-    ) {
+    if (isVisible) {
+        Column(
+            modifier = modifier
+                .shadow(8.dp)
+                .fillMaxWidth()
+                .background(Color.White)
+        ) {
 
-        val configuration = LocalConfiguration.current
+            val configuration = LocalConfiguration.current
 
-        val screenWidth = configuration.screenWidthDp
+            val screenWidth = configuration.screenWidthDp
 
-        var isMoving by remember {
-            mutableStateOf(false)
-        }
-
-
-        val fullIndicatorWidth = 56f
-
-        val indicatorWidth by animateFloatAsState(
-            targetValue = if(isMoving) fullIndicatorWidth * 1.6f else fullIndicatorWidth,
-            animationSpec = tween(durationMillis = indicatorSizeAnimationDuration, easing = FastOutLinearInEasing),
-            finishedListener = { isMoving = false }
-        )
+            var isMoving by remember {
+                mutableStateOf(false)
+            }
 
 
-        val itemWidth = screenWidth / items.size.toFloat()
+            val fullIndicatorWidth = 56f
 
-        var currentIndex by remember { mutableStateOf(0) }
-
-
-        val color by animateColorAsState(
-            targetValue = items.getOrElse(currentIndex) {BottomNavigationItem.PlayGames}.color,
-            animationSpec = tween(moveAnimationDuration)
-        )
-
-        val offsetAnim by animateFloatAsState(
-            targetValue = with(LocalDensity.current){ ((itemWidth * currentIndex) + (itemWidth - fullIndicatorWidth)/2f).dp.toPx() },
-            animationSpec = tween(moveAnimationDuration)
-        )
+            val indicatorWidth by animateFloatAsState(
+                targetValue = if(isMoving) fullIndicatorWidth * 1.6f else fullIndicatorWidth,
+                animationSpec = tween(durationMillis = indicatorSizeAnimationDuration, easing = FastOutLinearInEasing),
+                finishedListener = { isMoving = false }
+            )
 
 
-        if (isVisible) {
+            val itemWidth = screenWidth / items.size.toFloat()
+
+            var currentIndex by remember { mutableStateOf(0) }
+
+
+            val color by animateColorAsState(
+                targetValue = items.getOrElse(currentIndex) {BottomNavigationItem.PlayGames}.color,
+                animationSpec = tween(moveAnimationDuration)
+            )
+
+            val offsetAnim by animateFloatAsState(
+                targetValue = with(LocalDensity.current){ ((itemWidth * currentIndex) + (itemWidth - fullIndicatorWidth)/2f).dp.toPx() },
+                animationSpec = tween(moveAnimationDuration)
+            )
+
+
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.clickable(enabled = false, onClick = {})
