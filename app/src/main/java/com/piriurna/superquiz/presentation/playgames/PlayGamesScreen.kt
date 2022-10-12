@@ -18,30 +18,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.piriurna.common.composables.scaffold.SQBottomSheetScaffold
 import com.piriurna.common.composables.scaffold.SQScaffold
-import com.piriurna.common.composables.text.SQText
 import com.piriurna.common.composables.text.SQUserGreeting
-import com.piriurna.common.theme.SQStyle.TextLato36
 import com.piriurna.domain.models.Category
-import com.piriurna.superquiz.presentation.navigation.HomeDestinationScreen
 import com.piriurna.superquiz.presentation.navigation.PlayGamesDestinations
 import com.piriurna.superquiz.presentation.playgames.composables.CategoryCard
 import com.piriurna.superquiz.ui.theme.gradientCentralColor
 import com.piriurna.superquiz.ui.theme.gradientInnerColor
 import com.piriurna.superquiz.ui.theme.gradientOuterColor
-import kotlin.math.log
 
 @Composable
 fun PlayGamesScreen(
@@ -55,7 +50,7 @@ fun PlayGamesScreen(
 }
 
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun BuildPlayGamesScreen(
     state: PlayGamesState,
@@ -64,6 +59,8 @@ fun BuildPlayGamesScreen(
 ) {
 
     val sheetState = rememberBottomSheetState(initialValue = BottomSheetValue.Collapsed)
+
+    val swipeState = rememberSwipeRefreshState(isRefreshing = state.isRefreshing)
 
     val configuration = LocalConfiguration.current
 
@@ -106,22 +103,28 @@ fun BuildPlayGamesScreen(
                     .fillMaxHeight()
                     .fillMaxWidth()
             ) {
-                LazyVerticalGrid(
-                    modifier = Modifier.padding(12.dp),
-                    cells = GridCells.Fixed(2),
-                    content = {
-                        items(state.categories.size) { index ->
-                            val category = state.categories[index]
-                            CategoryCard(
-                                modifier = Modifier,
-                                onClick = {
-                                    navController.navigate(route = PlayGamesDestinations.Questions.withArgs(category.id))
-                                },
-                                category = category
-                            )
+                SwipeRefresh(
+                    state = swipeState,
+                    onRefresh = { events?.invoke(PlayGamesEvents.RefreshCategories) },
+                    swipeEnabled = sheetState.isCollapsed
+                ) {
+                    LazyVerticalGrid(
+                        modifier = Modifier.padding(12.dp),
+                        cells = GridCells.Fixed(2),
+                        content = {
+                            items(state.categories.size) { index ->
+                                val category = state.categories[index]
+                                CategoryCard(
+                                    modifier = Modifier,
+                                    onClick = {
+                                        navController.navigate(route = PlayGamesDestinations.Questions.withArgs(category.id))
+                                    },
+                                    category = category
+                                )
+                            }
                         }
-                    }
-                )
+                    )
+                }
             }
         }) {
             Box(
