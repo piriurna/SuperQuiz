@@ -2,6 +2,7 @@ package com.piriurna.superquiz.presentation.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import com.piriurna.common.composables.navigation.BaseDestinations
@@ -40,6 +41,6 @@ sealed class PlayGamesDestinations(
     val route: String,
     customArguments: List<CustomArguments> = emptyList()
 ) : BaseDestinations(route = route, customArguments = customArguments) {
-    object Questions : PlayGamesDestinations(route = "QUESTIONS", listOf(CustomArguments(NavigationArguments.CATEGORY_ID)))
+    object Questions : PlayGamesDestinations(route = "QUESTIONS", listOf(CustomArguments(NavigationArguments.CATEGORY_ID, NavType.IntType, nullable = false)))
     object CategoryCompleted : PlayGamesDestinations(route = "CATEGORY_COMPLETED", listOf(CustomArguments(NavigationArguments.CATEGORY_ID)))
 }
