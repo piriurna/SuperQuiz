@@ -76,8 +76,8 @@ class TriviaRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getDbCategory(categoryId: Int): Category {
-        return categoryDao.getCategory(categoryId = categoryId).toCategory()
+    override fun getDbCategory(categoryId: Int): Flow<Category> {
+        return categoryDao.getCategory(categoryId = categoryId).map { it.toCategory() }
     }
 
     override suspend fun disableAnswer(answerId: Int) {

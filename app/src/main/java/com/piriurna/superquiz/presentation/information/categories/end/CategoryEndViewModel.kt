@@ -13,6 +13,7 @@ import com.piriurna.superquiz.presentation.information.categories.end.models.Cat
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,27 +36,15 @@ class CategoryEndViewModel @Inject constructor(
 
 
     private fun getCategoryStatistics(categoryId : Int) {
-        getCategoryStatisticsUseCase(categoryId).onEach { result ->
-            when(result) {
-                is Resource.Loading -> {
-                    _state.value = _state.value.copy(
-                        isLoading = true
-                    )
-                }
-                is Resource.Success -> {
+        viewModelScope.launch {
+            getCategoryStatisticsUseCase(categoryId).onEach { result ->
+
                     _state.value = _state.value.copy(
                         isLoading = false,
-                        category = result.data
+                        category = result
                     )
-                }
-                is Resource.Error -> {
-                    _state.value = _state.value.copy(
-                        isLoading = false
-                    )
-                }
             }
 
-        }.launchIn(viewModelScope)
-
+        }
     }
 }
