@@ -26,26 +26,18 @@ import com.piriurna.common.composables.progress.SQProgressBar
 import com.piriurna.common.composables.scaffold.SQScaffold
 import com.piriurna.common.theme.lightOrange
 import com.piriurna.common.theme.orange
-import com.piriurna.domain.models.Answer
 import com.piriurna.domain.models.Question
 import com.piriurna.superquiz.R
 import com.piriurna.superquiz.presentation.composables.AnswerAlertPanel
 import com.piriurna.superquiz.presentation.composables.models.disabledHorizontalPointerInputScroll
-import com.piriurna.superquiz.presentation.navigation.NavigationArguments
 import com.piriurna.superquiz.presentation.navigation.PlayGamesDestinations
-import com.piriurna.superquiz.presentation.navigation.utils.getArgument
 import com.piriurna.superquiz.presentation.questions.composables.SQQuestionCard
 import com.piriurna.superquiz.ui.theme.lightPurple
 import com.piriurna.superquiz.ui.theme.purple
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.math.min
-
-const val NUMBER_OF_QUESTIONS_DISABLED_ON_HINT = 2
 
 @Composable
 fun QuestionsScreen(
-    navBackStackEntry: NavBackStackEntry,
     navController: NavController
 ) {
 
@@ -53,17 +45,12 @@ fun QuestionsScreen(
 
     val state = viewModel.state.collectAsState()
 
-    val categoryId = navBackStackEntry.getArgument(NavigationArguments.CATEGORY_ID)?.toInt()
 
-    if(categoryId != null) {
-        BuildQuestionsScreen(
-            state = state.value,
-            events = viewModel::onTriggerEvent,
-            navController
-        )
-    } else {
-        //todo: show a 404 screen or similar
-    }
+    BuildQuestionsScreen(
+        state = state.value,
+        events = viewModel::onTriggerEvent,
+        navController
+    )
 
 }
 
@@ -79,97 +66,92 @@ fun BuildQuestionsScreen(
 
     val scope = rememberCoroutineScope()
 
-    val questions = state.categoryQuestions
+    LaunchedEffect(key1 = state.destination, key2 = state.currentQuestion) {
 
-    val numOfQuestions = state.categoryQuestions.size
+        when(state.destination) {
+            QuestionDestination.SHOW_QUESTION -> {
+                if(pagerState.currentPage != state.getCurrentQuestionIndex() && pagerState.pageCount != 0){
+                    pagerState.animateScrollToPage(state.getCurrentQuestionIndex())
+                }
+            }
+            QuestionDestination.GO_TO_RESULTS -> {
+                navController.popBackStack()
+                navController.navigate(
+                    PlayGamesDestinations.CategoryCompleted.withArgs(
+                        state.category.id
+                    )
+                )
+            }
+            else -> {
 
-
-    val currentQuestion by derivedStateOf {
-        questions.find { it.id == state.lastAnsweredQuestionId }
-    }
-
-    val questionIndex = questions.indexOf(currentQuestion)
-
-    val percentage by animateFloatAsState(((questionIndex + 1).toFloat() / numOfQuestions.toFloat()) * 100)
-
-    var selectedAnswer by remember {
-        mutableStateOf<Answer?>(null)
-    }
-
-    var answerAlreadySent by remember {
-        mutableStateOf(false)
-    }
-
-    val isCategoryEmpty by derivedStateOf {
-        !state.isLoading && questionIndex == -1
-    }
-
-    var currentMinute by remember {
-        mutableStateOf(0)
-    }
-
-    var currentSec by remember {
-        mutableStateOf(0L)
-    }
-
-
-    LaunchedEffect(key1 = currentSec) {
-        if(currentSec < 60000) {
-            delay(100L)
-            currentSec += 100L
-        } else {
-            currentMinute++
-            currentSec = 0L
-        }
-    }
-
-    LaunchedEffect(key1 = questionIndex, key2 = pagerState.pageCount) {
-        scope.launch {
-            if(pagerState.pageCount != 0 && questionIndex != -1 && pagerState.pageCount > questionIndex){
-                pagerState.scrollToPage(questionIndex)
-                selectedAnswer = null
             }
         }
     }
 
     SQScaffold(isLoading = state.isLoading) {
-        Column(
-            modifier = Modifier
-                .padding(16.dp)
-                .padding(bottom = 32.dp)
-                .fillMaxSize(),
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column(verticalArrangement = Arrangement.spacedBy(36.dp)) {
-                currentQuestion?.let { question ->
 
-                    val isHintVisible by derivedStateOf {
-                        question.isHintAvailable() && !answerAlreadySent
-                    }
+        AnimatedVisibility(
+            visible = state.destination == QuestionDestination.NO_QUESTIONS_AVAILABLE,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            SQAlertDialog(
+                title = "You ran out of questions",
+                description = "Would you like to get more questions for this category?",
+                laterLabel = "Later",
+                laterClick = {
+                    events?.invoke(QuestionsEvents.DismissNoQuestionsPopup)
+                    navController.popBackStack()
+                },
+                okLabel = "Get Questions",
+                okClick = {
+                    events?.invoke(QuestionsEvents.FetchQuestionsForCategory(state.category.id))
+                },
+                themeColor = Color.Green.copy(alpha = 0.5f)
+            )
+        }
+
+        state.currentQuestion?.let { question ->
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .padding(bottom = 32.dp)
+                    .fillMaxSize(),
+                verticalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column(verticalArrangement = Arrangement.spacedBy(36.dp)) {
+
+                    val isHintVisible = question.isHintAvailable()
+
+                    val progress by animateFloatAsState(targetValue = state.category.completionRate.toFloat())
+
                     SQProgressBar(
-                        progress = percentage.toInt(),
-                        percentageText = "${questionIndex + 1}/${numOfQuestions}",
+                        progress = progress.toInt(),
+                        percentageText = "${state.getCurrentQuestionIndex()}/${state.questionsList.size}",
                         textIncompleteColor = Color.Black,
                         chipIcon = ImageVector.vectorResource(R.drawable.ic_timer),
                         chipForegroundColor = orange,
                         chipBackgroundColor = lightOrange,
-                        chipText = "${currentMinute}min ${currentSec / 1000L}s",
+                        chipText = "${0}min ${0 / 1000L}s",
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
 
+
+
                     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
                         HorizontalPager(
-                            count = questions.size,
+                            count = state.questionsList.size,
                             state = pagerState,
                             modifier = Modifier.disabledHorizontalPointerInputScroll()
                         ) { index ->
+
                             SQQuestionCard(
-                                question = questions[index],
-                                questionIndex = index + 1,
+                                question = question,
+                                questionIndex = state.getCurrentQuestionIndex(),
                                 onAnswerSelected = { answer ->
-                                    selectedAnswer = answer
+                                    events?.invoke(QuestionsEvents.SelectAnswer(answer))
                                 },
-                                contentEnabled = !answerAlreadySent,
+                                contentEnabled = !state.showingAnswerResult,
                                 enabled = false
                             )
                         }
@@ -196,65 +178,36 @@ fun BuildQuestionsScreen(
                             }
                         }
                     }
+
+
+                }
+                AnimatedVisibility(
+                    visible = state.showingAnswerResult && !state.isLoading,
+                    enter = scaleIn(animationSpec = spring(Spring.DampingRatioLowBouncy))
+                ) {
+                    if (state.showingAnswerResult)
+                        AnswerAlertPanel(
+                            isCorrect = question.isQuestionAnsweredCorrectly(),
+                            quote = state.quotes[pagerState.currentPage]
+                        )
                 }
 
 
-            }
-            AnimatedVisibility(
-                visible = answerAlreadySent,
-                enter = scaleIn(animationSpec = spring(Spring.DampingRatioLowBouncy)),
-                exit = scaleOut()
-            ) {
-                AnswerAlertPanel(
-                    isCorrect = selectedAnswer == currentQuestion?.getCorrectAnswer(),
-                    quote = state.quotes[pagerState.currentPage]
-                )
-            }
-
-
-            SQButton(
-                onClick = {
-                    scope.launch {
-                        if(answerAlreadySent) {
-                            answerAlreadySent = false
-                            if(state.isLastQuestion(pagerState.currentPage)) {
-                                currentQuestion?.let {
-                                    navController.navigate(PlayGamesDestinations.CategoryCompleted.withArgs(it.categoryId))
-                                }
+                SQButton(
+                    buttonText = if (state.showingAnswerResult) "NEXT" else "SEND",
+                    enabled = question.chosenAnswer != null,
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    onClick = {
+                        scope.launch {
+                            if (state.showingAnswerResult) {
+                                events?.invoke(QuestionsEvents.GoToNextPage)
+                            } else {
+                                events?.invoke(QuestionsEvents.ShowResult)
                             }
-                        } else {
-                            selectedAnswer?.let { answer ->
-
-                                currentQuestion?.let { question ->
-
-                                    events?.invoke(QuestionsEvents.SaveAnswer(question, answer))
-                                    answerAlreadySent = true
-                                }
-
-                            }
-                        }
-                    }
-                },
-                buttonText = if(answerAlreadySent) "NEXT" else "SEND",
-                enabled = selectedAnswer != null,
-                modifier= Modifier
-                    .fillMaxWidth(),
-            )
-            AnimatedVisibility(
-                visible = isCategoryEmpty,
-                enter = fadeIn(),
-                exit = fadeOut()
-            ) {
-                SQAlertDialog(
-                    title = "You ran out of questions",
-                    description = "Would you like to get more questions for this category?",
-                    okLabel = "Get Questions",
-                    okClick = {
-                        currentQuestion?.let {
-                            events?.invoke(QuestionsEvents.FetchQuestionsForCategory(it.categoryId))
                         }
                     },
-                    themeColor = Color.Green.copy(alpha = 0.5f))
+                )
             }
         }
     }
@@ -266,7 +219,7 @@ private fun QuestionScreenPreview() {
     Column(Modifier.fillMaxSize()) {
         BuildQuestionsScreen(
             state = QuestionsState(
-                categoryQuestions = Question.mockQuestions
+                questionsList = Question.mockQuestions
             )
         )
 

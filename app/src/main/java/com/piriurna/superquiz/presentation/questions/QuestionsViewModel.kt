@@ -1,13 +1,10 @@
 package com.piriurna.superquiz.presentation.questions
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.piriurna.domain.Resource
-import com.piriurna.domain.models.Answer
 import com.piriurna.domain.models.Question
+import com.piriurna.domain.usecases.GetCategoryUseCase
 import com.piriurna.domain.usecases.GetDbCategoryQuestionsUseCase
 import com.piriurna.domain.usecases.SaveAnswerUseCase
 import com.piriurna.domain.usecases.questions.DisableSelectedAnswersUseCase
@@ -27,30 +24,29 @@ class QuestionsViewModel @Inject constructor(
     private val disableSelectedAnswersUseCase: DisableSelectedAnswersUseCase,
     private val fetchQuestionsForCategoryUseCase: FetchQuestionsForCategoryUseCase,
     private val getRandomQuoteListUseCase: GetRandomQuoteListUseCase,
+    private val getCategoryUseCase: GetCategoryUseCase,
     savedStateHandle: SavedStateHandle
 ) : SQBaseEventViewModel<QuestionsEvents>(){
 
 
-    init {
-        val categoryId = savedStateHandle.get<String>(NavigationArguments.CATEGORY_ID).orEmpty()
-        onTriggerEvent(QuestionsEvents.GetQuestions(categoryId.toInt()))
-    }
-
-    private val _state = MutableStateFlow(QuestionsState())
+    private val _state: MutableStateFlow<QuestionsState> = MutableStateFlow(QuestionsState())
     val state: StateFlow<QuestionsState> = _state
 
-    private var fetchQuotes = true
-    private var currentUnaswerdQuestionIndex = 0
-    private var isFirstTime = true
+    init {
+        val categoryId = savedStateHandle.get<Int>(NavigationArguments.CATEGORY_ID)?:0
+
+        onTriggerEvent(QuestionsEvents.GetQuestions(categoryId))
+    }
 
     override fun onTriggerEvent(event: QuestionsEvents) {
         when(event) {
-            is QuestionsEvents.GetQuestions -> {
-                getQuestions(event.categoryId)
+
+            is QuestionsEvents.GetCategory -> {
+                getCategory(event.categoryId)
             }
 
-            is QuestionsEvents.SaveAnswer -> {
-                saveAnswer(event.question, event.answer)
+            is QuestionsEvents.GetQuestions -> {
+                getQuestions(event.categoryId)
             }
 
             is QuestionsEvents.PerformHintAction -> {
@@ -61,59 +57,80 @@ class QuestionsViewModel @Inject constructor(
                 fetchCategoryQuestions(event.categoryId)
             }
 
-            is QuestionsEvents.GetNextQuestion -> {
-                getUnaswerdQuestion()
-            }
-        }
-    }
-
-
-    private fun getQuestions(categoryId: Int){
-
-        viewModelScope.launch {
-            getDbCategoryQuestionsUseCase(categoryId).collectLatest{ questions->
-
-                val id = questions.firstOrNull { !it.isQuestionAnswered() }?.id?:0
-                currentUnaswerdQuestionIndex = questions.indexOfFirst { it.id == id }
-
-
+            is QuestionsEvents.ShowResult -> {
                 _state.value = _state.value.copy(
-                    categoryQuestions = questions,
-                    lastAnsweredQuestionId = questions.firstOrNull { !it.isQuestionAnswered() }?.id?:0,
-                    categoryId = categoryId,
-                    isLoading = false
+                    showingAnswerResult = true
                 )
+            }
 
-                if(isFirstTime){
-                    getUnaswerdQuestion()
+            is QuestionsEvents.GoToNextPage -> {
+
+                saveAnswer(_state.value.currentQuestion!!)
+
+
+                if(_state.value.isLastQuestion()){
+                    _state.value = _state.value.copy(
+                        destination = QuestionDestination.GO_TO_RESULTS
+                    )
+                } else {
+                    val nextQuestion = _state.value.questionsList[_state.value.getCurrentQuestionIndex() + 1]
+                    _state.value = _state.value.copy(
+                        destination = QuestionDestination.SHOW_QUESTION,
+                        currentQuestion = nextQuestion,
+                        showingAnswerResult = false
+                    )
                 }
 
-                getQuotes(_state.value.categoryQuestions.size)
+
+            }
+
+            is QuestionsEvents.SelectAnswer -> {
+                val currentQuestion = _state.value.currentQuestion?.copy(
+                    chosenAnswer = event.answer
+                )
+                _state.value = _state.value.copy(
+                    currentQuestion = currentQuestion
+                )
+            }
+
+            is QuestionsEvents.DismissNoQuestionsPopup -> {
+                _state.value = _state.value.copy(
+                    destination = QuestionDestination.QUIT
+                )
             }
         }
-
-
-
     }
 
 
-    private fun getUnaswerdQuestion(){
-        isFirstTime = false
+    private fun getQuestions(categoryId: Int) {
         viewModelScope.launch {
-            _state.value = _state.value.copy(
-                //lastAnsweredQuestionId = questions.firstOrNull { !it.isQuestionAnswered() }?.id?:0,
-                currentUnaswerdQuestion =  _state.value.categoryQuestions.get(currentUnaswerdQuestionIndex)
-            )
-        }
+            val questionsList = getDbCategoryQuestionsUseCase(categoryId).first()
 
+
+            val shouldFetchQuotes = _state.value.questionsList.isEmpty()
+
+
+            val currentQuestion = questionsList.firstOrNull { !it.isQuestionAnswered() }
+
+            _state.value = _state.value.copy(
+                questionsList = questionsList,
+                currentQuestion = currentQuestion,
+                destination = if(currentQuestion == null) QuestionDestination.NO_QUESTIONS_AVAILABLE else QuestionDestination.SHOW_QUESTION,
+                showingAnswerResult = false
+            )
+
+            if(shouldFetchQuotes) {
+                getQuotes(questionsList.size) {
+                    getCategory(categoryId)
+                }
+            }
+
+
+
+        }
     }
 
-
-
-    private fun getQuotes(numOfQuotes : Int) {
-
-        if(!fetchQuotes) return
-
+    private fun getQuotes(numOfQuotes : Int, afterSuccess : () -> Unit) {
         getRandomQuoteListUseCase(numOfQuotes).onEach { result ->
             when(result) {
                 is Resource.Loading -> {
@@ -133,14 +150,15 @@ class QuestionsViewModel @Inject constructor(
                         isLoading = false,
                         quotes = result.data?: emptyList(),
                     )
-                    fetchQuotes = false
+
+                    afterSuccess()
                 }
             }
         }.launchIn(viewModelScope)
     }
 
-    private fun saveAnswer(question: Question, answer: Answer) {
-        saveAnswerUseCase.invoke(question, answer).onEach { result ->
+    private fun saveAnswer(question : Question) {
+        saveAnswerUseCase.invoke(question, question.chosenAnswer!!).onEach { result ->
             when(result) {
                 is Resource.Loading -> {
                     _state.value = _state.value.copy(
@@ -166,7 +184,9 @@ class QuestionsViewModel @Inject constructor(
         disableSelectedAnswersUseCase(question).onEach { result ->
             when(result) {
                 is Resource.Success -> {
-                    getQuestions(question.categoryId)
+                    _state.value = _state.value.copy(
+                        currentQuestion = result.data
+                    )
                 }
                 else -> {}
             }
@@ -196,5 +216,15 @@ class QuestionsViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+    private fun getCategory(categoryId: Int) {
+        viewModelScope.launch {
+            getCategoryUseCase(categoryId).collectLatest {
+                _state.value = _state.value.copy(
+                    category = it
+                )
+            }
+        }
     }
 }

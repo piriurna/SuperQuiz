@@ -22,14 +22,14 @@ fun NavGraphBuilder.playGamesNavigationGraph(navController: NavHostController) {
             route = PlayGamesDestinations.Questions.fullRoute,
             arguments = PlayGamesDestinations.Questions.arguments
         ) {
-            QuestionsScreen(it, navController)
+            QuestionsScreen(navController)
         }
 
         composable(
             route = PlayGamesDestinations.CategoryCompleted.fullRoute,
             arguments = PlayGamesDestinations.CategoryCompleted.arguments
         ) {
-            CategoryEndScreen(it)
+            CategoryEndScreen(it, navController)
         }
 
 
