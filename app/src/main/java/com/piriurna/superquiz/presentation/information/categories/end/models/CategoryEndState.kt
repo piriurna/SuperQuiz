@@ -6,6 +6,7 @@ import com.piriurna.domain.models.Question
 
 data class CategoryEndState(
     val isLoading : Boolean = false,
-    val category: Category? = null
+    val category: Category? = null,
+    val destination : CategoryEndDestination = CategoryEndDestination.NO_STATE
 ) {
 }

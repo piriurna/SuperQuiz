@@ -7,7 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.piriurna.domain.Resource
 import com.piriurna.domain.models.CategoryStatistics
 import com.piriurna.domain.usecases.GetCategoryUseCase
+import com.piriurna.domain.usecases.questions.FetchQuestionsForCategoryUseCase
 import com.piriurna.superquiz.SQBaseEventViewModel
+import com.piriurna.superquiz.presentation.information.categories.end.models.CategoryEndDestination
 import com.piriurna.superquiz.presentation.information.categories.end.models.CategoryEndEvents
 import com.piriurna.superquiz.presentation.information.categories.end.models.CategoryEndState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +20,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CategoryEndViewModel @Inject constructor(
-    private val getCategoryStatisticsUseCase: GetCategoryUseCase
+    private val getCategoryStatisticsUseCase: GetCategoryUseCase,
+    private val fetchQuestionsForCategoryUseCase: FetchQuestionsForCategoryUseCase
 ) : SQBaseEventViewModel<CategoryEndEvents>(){
 
     private val _state: MutableState<CategoryEndState> = mutableStateOf(CategoryEndState())
@@ -30,6 +33,10 @@ class CategoryEndViewModel @Inject constructor(
         when(event) {
             is CategoryEndEvents.GetCategoryStatistics -> {
                 getCategoryStatistics(categoryId = event.categoryId)
+            }
+
+            is CategoryEndEvents.FetchMoreQuestions -> {
+
             }
         }
     }
@@ -45,6 +52,23 @@ class CategoryEndViewModel @Inject constructor(
                     )
             }
 
+        }
+    }
+
+    private fun fetchMoreQuestions(categoryId: Int) {
+        viewModelScope.launch {
+            fetchQuestionsForCategoryUseCase(categoryId = categoryId).onEach {
+                when(it) {
+                    is Resource.Success -> {
+                        _state.value = _state.value.copy(
+                            isLoading = false,
+                            destination = CategoryEndDestination.GO_TO_QUESTIONS
+                        )
+                    }
+
+                    else -> {}
+                }
+            }
         }
     }
 }
