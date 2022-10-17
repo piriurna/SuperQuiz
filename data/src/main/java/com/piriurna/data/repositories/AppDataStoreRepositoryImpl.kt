@@ -13,8 +13,8 @@ class AppDataStoreRepositoryImpl(
         context.appSettingsStore.updateData {
             it.copy(
                 firstInstall = appSettings.firstInstall,
-                shouldFetchNewCategories = appSettings.shouldFetchNewCategories,
-                onboardingComplete = appSettings.onboardingComplete
+                onboardingComplete = appSettings.onboardingComplete,
+                lastUpdatedCategoriesTimestamp = appSettings.lastUpdatedCategoriesTimestamp
             )
         }
     }
@@ -22,6 +22,15 @@ class AppDataStoreRepositoryImpl(
 
     override suspend fun getAppSettings(): Flow<AppSettings> {
         return context.appSettingsStore.data
+    }
+
+
+    override suspend fun setShouldFetchNewCategories(time : Long) {
+        context.appSettingsStore.updateData {
+            it.copy(
+                lastUpdatedCategoriesTimestamp = time
+            )
+        }
     }
 
 
