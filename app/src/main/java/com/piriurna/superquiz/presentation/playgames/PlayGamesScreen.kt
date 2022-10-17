@@ -31,12 +31,12 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.piriurna.common.composables.scaffold.SQBottomSheetScaffold
 import com.piriurna.common.composables.scaffold.SQScaffold
 import com.piriurna.common.composables.text.SQUserGreeting
+import com.piriurna.common.theme.gradientCentralColor
+import com.piriurna.common.theme.gradientInnerColor
+import com.piriurna.common.theme.gradientOuterColor
 import com.piriurna.domain.models.Category
 import com.piriurna.superquiz.presentation.navigation.PlayGamesDestinations
 import com.piriurna.superquiz.presentation.playgames.composables.CategoryCard
-import com.piriurna.superquiz.ui.theme.gradientCentralColor
-import com.piriurna.superquiz.ui.theme.gradientInnerColor
-import com.piriurna.superquiz.ui.theme.gradientOuterColor
 
 @Composable
 fun PlayGamesScreen(

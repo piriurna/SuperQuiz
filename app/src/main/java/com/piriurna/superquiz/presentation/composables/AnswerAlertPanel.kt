@@ -17,8 +17,8 @@ import androidx.compose.ui.unit.dp
 import com.piriurna.common.composables.text.SQBadgeText
 import com.piriurna.common.composables.text.SQText
 import com.piriurna.common.theme.SQStyle
+import com.piriurna.common.theme.primaryGreen
 import com.piriurna.domain.models.quotes.Quote
-import com.piriurna.superquiz.ui.theme.primaryGreen
 
 @Composable
 fun AnswerAlertPanel(

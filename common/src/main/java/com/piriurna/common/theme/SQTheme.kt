@@ -1,4 +1,4 @@
-package com.piriurna.superquiz.ui.theme
+package com.piriurna.common.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
@@ -37,8 +37,8 @@ fun SuperQuizTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composa
 
     MaterialTheme(
         colors = colors,
-        typography = Typography,
-        shapes = Shapes,
+        typography = SQType.Typography,
+        shapes = SQShape.Shapes,
         content = content
     )
 }

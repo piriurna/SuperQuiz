@@ -13,7 +13,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -25,15 +24,15 @@ import com.piriurna.common.composables.chip.SQChip
 import com.piriurna.common.composables.progress.SQProgressBar
 import com.piriurna.common.composables.scaffold.SQScaffold
 import com.piriurna.common.theme.lightOrange
+import com.piriurna.common.theme.lightPurple
 import com.piriurna.common.theme.orange
+import com.piriurna.common.theme.purple
 import com.piriurna.domain.models.Question
 import com.piriurna.superquiz.R
 import com.piriurna.superquiz.presentation.composables.AnswerAlertPanel
 import com.piriurna.superquiz.presentation.composables.models.disabledHorizontalPointerInputScroll
 import com.piriurna.superquiz.presentation.navigation.PlayGamesDestinations
 import com.piriurna.superquiz.presentation.questions.composables.SQQuestionCard
-import com.piriurna.superquiz.ui.theme.lightPurple
-import com.piriurna.superquiz.ui.theme.purple
 import kotlinx.coroutines.launch
 
 @Composable

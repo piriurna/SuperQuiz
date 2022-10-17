@@ -22,7 +22,7 @@ fun NavGraphBuilder.settingsNavigationGraph(navController: NavHostController) {
         }
 
         composable(route = SettingsDestinations.UserSettings.route) {
-            UserSettingsScreen()
+            UserSettingsScreen(navController)
         }
 
 
