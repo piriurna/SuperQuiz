@@ -96,7 +96,7 @@ interface CategoryDao {
               WHERE tbl_categories.categoryId =:categoryId
     """
     )
-    suspend fun getCategory(categoryId: Int): CategoryStats
+    fun getCategory(categoryId: Int): Flow<CategoryStats>
 
 
 

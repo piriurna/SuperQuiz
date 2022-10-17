@@ -17,6 +17,10 @@ data class Question(
         return allAnswers.firstOrNull { it.isCorrectAnswer }
     }
 
+    fun isCorrectAnswer(answer: Answer) : Boolean {
+        return answer == allAnswers.firstOrNull { it.isCorrectAnswer }
+    }
+
     fun getIncorrectAnswers() = allAnswers.filter { !it.isCorrectAnswer }
 
     fun isQuestionAnswered() = chosenAnswer != null

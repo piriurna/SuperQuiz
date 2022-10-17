@@ -14,13 +14,11 @@ class SaveAnswerUseCase @Inject constructor(
     private val triviaRepository: TriviaRepository
 ) {
 
-    operator fun invoke(questionId: Int, chosenAnswer: Answer) : Flow<Resource<Boolean>> = flow {
+    operator fun invoke(question: Question, chosenAnswer: Answer) : Flow<Resource<Boolean>> = flow {
         emit(Resource.Loading())
 
-        val question : Question? = triviaRepository.getQuestionFromDb(questionId)
-
-        question?.let {
-            val newQuestion = it.copy(
+        with(question){
+            val newQuestion = copy(
                 chosenAnswer = chosenAnswer
             )
 
@@ -29,12 +27,13 @@ class SaveAnswerUseCase @Inject constructor(
             if(success != 0) {
                 emit(Resource.Success(true))
             } else {
-                emit(Resource.Error("Error getting question"))
+                emit(Resource.Error(ERROR_GETTING_QUESTION))
             }
-
-
-        }?: kotlin.run {
-            emit(Resource.Error("Error getting question"))
         }
     }
+
+    companion object{
+        const val ERROR_GETTING_QUESTION = "Error getting question"
+    }
+
 }
