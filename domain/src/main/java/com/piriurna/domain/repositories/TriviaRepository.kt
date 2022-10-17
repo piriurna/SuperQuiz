@@ -14,14 +14,14 @@ interface TriviaRepository {
 
     suspend fun insertCategoryQuestionsInDb(questions: List<Question>) : List<Long>
 
-    suspend fun getCategoryQuestionsFromDb(categoryId: Int) : List<Question>
+    fun getCategoryQuestionsFromDb(categoryId: Int): Flow<List<Question>>
 
     suspend fun getQuestionFromDb(questionId: Int) : Question?
 
     suspend fun getQuestionsFromIdList(ids: List<Long>) : List<Question>
 
     fun getDbCategories(): Flow<List<Category>>
-    suspend fun getDbCategory(categoryId: Int): Category
+    fun getDbCategory(categoryId: Int): Flow<Category>
 
     suspend fun disableAnswer(answerId: Int)
 

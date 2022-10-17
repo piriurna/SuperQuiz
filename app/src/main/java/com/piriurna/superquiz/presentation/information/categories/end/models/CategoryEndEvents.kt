@@ -5,4 +5,6 @@ import com.piriurna.superquiz.SQBaseEvent
 sealed class CategoryEndEvents : SQBaseEvent() {
 
     class GetCategoryStatistics(val categoryId : Int) : CategoryEndEvents()
+
+    class FetchMoreQuestions(val categoryId: Int) : CategoryEndEvents()
 }

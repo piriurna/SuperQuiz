@@ -35,7 +35,8 @@ class DisableSelectedAnswersUseCase @Inject constructor(
 
         val updatedQuestion = triviaRepository.getQuestionFromDb(question.id)
 
-
-        emit(Resource.Success(updatedQuestion!!))
+        emit(Resource.Success(question.copy(
+            allAnswers = updatedQuestion?.allAnswers?:question.allAnswers
+        )))
     }
 }

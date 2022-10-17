@@ -4,19 +4,24 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Alignment.Companion.Center
+import androidx.compose.ui.Alignment.Companion.Top
 import androidx.compose.ui.Alignment.Companion.TopCenter
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavBackStackEntry
+import androidx.navigation.NavHostController
 import com.piriurna.common.composables.button.SQButton
 import com.piriurna.common.composables.text.SQText
 import com.piriurna.common.theme.SQStyle.TextLato27Bold
@@ -26,20 +31,36 @@ import com.piriurna.domain.models.Category
 import com.piriurna.domain.models.CategoryStatistics
 import com.piriurna.domain.models.Question
 import com.piriurna.superquiz.R
+import com.piriurna.superquiz.presentation.information.categories.end.models.CategoryEndDestination
 import com.piriurna.superquiz.presentation.information.categories.end.models.CategoryEndEvents
 import com.piriurna.superquiz.presentation.information.categories.end.models.CategoryEndState
 import com.piriurna.superquiz.presentation.navigation.NavigationArguments
+import com.piriurna.superquiz.presentation.navigation.PlayGamesDestinations
 import com.piriurna.superquiz.presentation.navigation.utils.getArgument
 import com.piriurna.superquiz.ui.theme.primaryGreen
 import kotlinx.coroutines.delay
 
 @Composable
 fun CategoryEndScreen(
-    navBackStackEntry: NavBackStackEntry
+    navBackStackEntry: NavBackStackEntry,
+    navController: NavHostController
 ) {
     val viewModel : CategoryEndViewModel = hiltViewModel()
 
     val categoryId = navBackStackEntry.getArgument(NavigationArguments.CATEGORY_ID)?.toInt()
+
+
+    LaunchedEffect(key1 = viewModel.state.value) {
+        when(viewModel.state.value.destination) {
+            CategoryEndDestination.GO_TO_QUESTIONS -> {
+                navController.popBackStack()
+                navController.navigate(PlayGamesDestinations.Questions.withArgs(
+                    categoryId
+                ))
+            }
+            else -> {}
+        }
+    }
 
     if(categoryId != null) {
         BuildCategoryEndScreen(categoryId,viewModel.state.value, viewModel::onTriggerEvent)
@@ -54,23 +75,16 @@ fun CategoryEndScreen(
 fun BuildCategoryEndScreen(
     categoryId : Int,
     state : CategoryEndState,
-    events: ((CategoryEndEvents) -> Unit)? = null
+    events: ((CategoryEndEvents) -> Unit)? = null,
+    initialAnimationState : Boolean = false
 ) {
     
     var imageVisible by remember {
-        mutableStateOf(false)
+        mutableStateOf(initialAnimationState)
     }
 
     var titleVisible by remember {
-        mutableStateOf(false)
-    }
-
-    var subtitleVisible by remember {
-        mutableStateOf(false)
-    }
-
-    var buttonVisible by remember {
-        mutableStateOf(false)
+        mutableStateOf(initialAnimationState)
     }
 
     val correctAnswers = state.category?.correctAnswers?.toFloat() ?: 0F
@@ -80,7 +94,6 @@ fun BuildCategoryEndScreen(
         targetValue = ((correctAnswers/totalNumberOfQuestions) * 100).toInt()
     )
 
-    //TODO REFACTOR, PUT IT ALL IN THE STATISTICS MODEL OR THE NEW CATEGORY MODEL
     val statusImage = if(state.category?.isSuccess() == true) R.drawable.ic_checked_correct else R.drawable.ic_unchecked_incorrect
 
     val statusTitle = if(state.category?.isSuccess() == true) "You got $percentage% Correct!" else "You only got ${percentage}% Correct..."
@@ -91,34 +104,29 @@ fun BuildCategoryEndScreen(
 
     LaunchedEffect(Unit) {
         events?.invoke(CategoryEndEvents.GetCategoryStatistics(categoryId))
-        titleVisible = true
 
-        delay(200)
-        subtitleVisible = true
-
-        delay(200)
-        buttonVisible = true
-
-        delay(400)
         imageVisible = true
+
+        delay(200)
+        titleVisible = true
     }
 
 
-    Box(
+    Column(
         Modifier
             .fillMaxSize()
-            .padding(32.dp)) {
+            .padding(32.dp)
+            .padding(top = 32.dp),
+        verticalArrangement = Arrangement.SpaceBetween,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         AnimatedVisibility(
-            modifier = Modifier
-                .align(TopCenter)
-                .padding(top = 90.dp),
             visible = imageVisible,
             enter = scaleIn(),
             exit = scaleOut()
         ) {
             Image(
                 modifier = Modifier
-                    .align(Center)
                     .size(250.dp),
                 painter = painterResource(id = statusImage),
                 contentDescription = "Congratulations image"
@@ -128,53 +136,40 @@ fun BuildCategoryEndScreen(
 
 
         Column(
-            modifier = Modifier
-                .align(Center)
-                .size(350.dp)
-                .padding(top = 240.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             AnimatedVisibility(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
                 visible = titleVisible,
                 enter = slideInVertically(initialOffsetY = { 100 }),
                 exit = slideOutVertically()
             ) {
-                SQText(text = statusTitle, style = TextLato27Bold)
-            }
+                Column {
+                    SQText(text = statusTitle, style = TextLato27Bold, textAlign = TextAlign.Center)
 
-            AnimatedVisibility(
-                visible = subtitleVisible,
-                enter = slideInVertically(initialOffsetY = { 100 }),
-                exit = slideOutVertically()
-
-            ) {
-                SQText(
-                    modifier = Modifier.padding(top = 12.dp),
-                    text = statusSubTitle,
-                    style = TextLatoThin18,
-                    textAlign = TextAlign.Center
-                )
+                    SQText(
+                        modifier = Modifier.padding(top = 12.dp),
+                        text = statusSubTitle,
+                        style = TextLatoThin18,
+                        textAlign = TextAlign.Center
+                    )
+                }
             }
 
         }
 
-        AnimatedVisibility(
-            modifier = Modifier
-                .align(BottomCenter)
-                .padding(bottom = 32.dp),
-            visible = buttonVisible,
-            enter = slideInVertically(initialOffsetY = { 100 }),
-            exit = slideOutVertically()
 
-        ) {
-            SQButton(onClick = { /*TODO*/ }, buttonText = "Get more quizes", backgroundColor = buttonColor)
-        }
-
+        SQButton(
+            modifier = Modifier.fillMaxWidth().padding(bottom = 32.dp),
+            onClick = { events?.invoke(CategoryEndEvents.FetchMoreQuestions(categoryId)) },
+            buttonText = "Get more quizes",
+            backgroundColor = buttonColor
+        )
 
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, device = Devices.NEXUS_5)
 @Composable
 fun CategoryEndScreenPreview() {
     var state by remember {
@@ -194,5 +189,5 @@ fun CategoryEndScreenPreview() {
             )
         )
     }
-    BuildCategoryEndScreen(Category.mockCategoryList[0].id, state)
+    BuildCategoryEndScreen(Category.mockCategoryList[0].id, state, initialAnimationState = true)
 }
