@@ -1,10 +1,13 @@
 package com.piriurna.data.mappers
 
+import com.piriurna.data.remote.SQException
 import com.piriurna.domain.ApiNetworkError
-import java.lang.Exception
 
-fun Exception.toApiNetworkError() : ApiNetworkError {
-    return ApiNetworkError(
-        message = this.message
-    )
+fun SQException.toApiNetworkError() : ApiNetworkError {
+  return return ApiNetworkError(
+      code = this.code,
+      message = this.message,
+      errors = listOf(this.toString())
+  )
+
 }

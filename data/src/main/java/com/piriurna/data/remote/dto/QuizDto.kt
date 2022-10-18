@@ -8,4 +8,13 @@ data class QuizDto(
     val responseCode: Int,
     @SerializedName("results")
     val questions: List<QuestionDto>
-)
+) {
+
+    companion object {
+        const val SUCCESS = 0
+
+        const val INVALID_CATEGORY_ID = 1
+
+        const val INVALID_PARAMETER = 2
+    }
+}

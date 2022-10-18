@@ -3,6 +3,7 @@ package com.piriurna.data.remote
 import retrofit2.HttpException
 import java.io.IOException
 import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 object HandleApi {
 
@@ -15,25 +16,20 @@ object HandleApi {
         catch (ex: Exception){
             when(ex){
                 is HttpException -> {
-
-                    throw ex
-
-//                    convertErrorBody(ex)?.let { error ->
-//                        throw HecateKennelApiNetworkException(
-//                            code = error.code,
-//                            message = error.message,
-//                            errors = listOf(error.level)
-//                        )
-//                    } ?: run {
-//                        throw ex
-//                    }
-
+                    throw SQException.NetworkException(code = ex.code(), message = ex.message())
                 }
-                is SocketTimeoutException -> throw ex//emitter.onError(ErrorType.TIMEOUT)
-                is IOException -> throw ex//emitter.onError(ErrorType.NETWORK)
-                else -> throw ex//
+                is UnknownHostException -> throw SQException.NoInternetException
+
+                is IOException -> throw SQException.NetworkException(code = ErrorType.IO.code, message = ex.message)
+
+                is SocketTimeoutException -> throw SQException.TimeoutException(ex.message)
+
+                else -> throw ex
 
             }
         }
     }
+
+
+
 }

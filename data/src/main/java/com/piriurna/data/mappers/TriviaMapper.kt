@@ -6,8 +6,12 @@ import com.piriurna.data.database.entities.CategoryEntity
 import com.piriurna.data.database.entities.QuestionEntity
 import com.piriurna.data.database.models.CategoryStats
 import com.piriurna.data.database.models.QuestionWithAnswers
+import com.piriurna.data.remote.SQException
 import com.piriurna.data.remote.dto.CategoryDto
 import com.piriurna.data.remote.dto.QuizDto
+import com.piriurna.data.remote.dto.QuizDto.Companion.INVALID_CATEGORY_ID
+import com.piriurna.data.remote.dto.QuizDto.Companion.INVALID_PARAMETER
+import com.piriurna.data.remote.dto.QuizDto.Companion.SUCCESS
 import com.piriurna.domain.models.*
 
 fun CategoryDto.toCategory() : List<Category> {
@@ -56,25 +60,39 @@ fun List<Category>.toCategoryEntity() : List<CategoryEntity> {
 }
 
 
-
-//TODO: REFACTOR
 fun QuizDto.toQuestions(categoryId: Int) : List<Question> {
-    return this.questions.mapIndexed { index, questionDto ->
-        val allAnswers = questionDto.incorrectAnswers.map { Answer(id = 0, description = it, isCorrectAnswer = false) }.toMutableList()
-        allAnswers.add(Answer(id = 0, description = questionDto.correctAnswer, isCorrectAnswer = true))
-        allAnswers.shuffle()
 
-        return@mapIndexed Question(
-            id = 0,
-            index = index,
+    when(responseCode) {
+         SUCCESS -> return this.questions.mapIndexed { index, questionDto ->
+            val allAnswers = questionDto.incorrectAnswers.map { Answer(id = 0, description = it, isCorrectAnswer = false) }.toMutableList()
+            allAnswers.add(Answer(id = 0, description = questionDto.correctAnswer, isCorrectAnswer = true))
+            allAnswers.shuffle()
+
+            return@mapIndexed Question(
+                id = 0,
+                index = index,
+                categoryId = categoryId,
+                difficulty = DifficultyType.convertFromString(questionDto.difficulty),
+                allAnswers = allAnswers,
+                description = Html.fromHtml(questionDto.question, Html.FROM_HTML_MODE_COMPACT).toString(),
+                type = QuestionType.convertFromString(questionDto.type)
+            )
+        }
+
+        INVALID_CATEGORY_ID -> throw SQException.CategoryNotFoundException(
             categoryId = categoryId,
-            difficulty = DifficultyType.convertFromString(questionDto.difficulty),
-            allAnswers = allAnswers,
-            description = Html.fromHtml(questionDto.question, Html.FROM_HTML_MODE_COMPACT).toString(),
-            type = QuestionType.convertFromString(questionDto.type)
+            message = "Category $categoryId not Found"
         )
+
+        INVALID_PARAMETER -> throw SQException.InvalidParameterException(message = "Invalid parameters passed for the api call")
+
+        else -> { return emptyList() }
     }
+
+
 }
+
+
 
 
 fun Question.toQuestionEntity() : QuestionEntity {
