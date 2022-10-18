@@ -4,6 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
+import com.piriurna.data.remote.ErrorType
 import com.piriurna.domain.Resource
 import com.piriurna.domain.models.LoadTriviaType
 import com.piriurna.domain.models.splash.SplashDestination
@@ -46,6 +47,12 @@ class SplashViewModel @Inject constructor(
                 is Resource.Loading -> {
                     _state.value = _state.value.copy(
                         isLoading = true
+                    )
+                }
+                is Resource.Error -> {
+                    _state.value = _state.value.copy(
+                        isLoading = false,
+                        error = result.message
                     )
                 }
             }

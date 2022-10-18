@@ -2,16 +2,15 @@ package com.piriurna.superquiz.presentation.splash
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.piriurna.domain.models.LoadTriviaType
 import com.piriurna.domain.models.splash.SplashDestination
 import com.piriurna.superquiz.presentation.AppLogo
 import com.piriurna.superquiz.presentation.navigation.RootDestinationScreen
@@ -50,15 +49,27 @@ fun BuildSplashScreen(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        AppLogo()
+        AppLogo(
+            shouldAnimate = state.error == null
+        )
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, device = Devices.NEXUS_5)
 @Composable
 private fun SplashScreenPreview() {
-    BuildSplashScreen(
-        state = SplashState(),
-        navController = rememberNavController()
-    )
+
+    val state by remember {
+        mutableStateOf(SplashState(error = "Error connecting to the network"))
+    }
+
+    Box() {
+        BuildSplashScreen(
+            state = state,
+            navController = rememberNavController()
+        )
+    }
+
+
+
 }
