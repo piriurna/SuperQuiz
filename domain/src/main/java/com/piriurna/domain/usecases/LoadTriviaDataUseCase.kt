@@ -32,7 +32,7 @@ class LoadTriviaDataUseCase @Inject constructor(
             categoriesResult.data?.let { data ->
                 categories = data
             }?: kotlin.run {
-                emit(Resource.Error(message = categoriesResult.error.message!!))
+                emit(Resource.Error(message = categoriesResult.error.message!!, code = categoriesResult.error.code))
                 return@flow
             }
         }
