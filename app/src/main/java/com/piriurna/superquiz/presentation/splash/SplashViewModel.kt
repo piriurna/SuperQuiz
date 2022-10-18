@@ -11,6 +11,7 @@ import com.piriurna.domain.models.splash.SplashDestination
 import com.piriurna.domain.usecases.LoadTriviaDataUseCase
 import com.piriurna.domain.usecases.splash.GetSplashNextDestinationUseCase
 import com.piriurna.superquiz.SQBaseEventViewModel
+import com.piriurna.superquiz.presentation.splash.models.SplashError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -34,6 +35,10 @@ class SplashViewModel @Inject constructor(
             is SplashEvents.LoadTriviaData -> {
                 loadTriviaData()
             }
+
+            is SplashEvents.Retry -> {
+                retry()
+            }
         }
     }
 
@@ -52,7 +57,7 @@ class SplashViewModel @Inject constructor(
                 is Resource.Error -> {
                     _state.value = _state.value.copy(
                         isLoading = false,
-                        error = result.message
+                        error = SplashError.getFromCode(result.code)
                     )
                 }
             }
@@ -75,5 +80,14 @@ class SplashViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+
+    private fun retry() {
+        _state.value = _state.value.copy(
+            error = null
+        )
+
+        loadTriviaData()
     }
 }
