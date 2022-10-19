@@ -79,16 +79,22 @@ class LoadTriviaDataUseCase @Inject constructor(
                 insertQuestionAndRespectiveAnswersInDb(questions)
             }
 
-            appDataStoreRepository.saveAppSettings(
-                appSettings.copy(
-                    firstInstall = false,
-                    lastUpdatedCategoriesTimestamp = Calendar.getInstance().timeInMillis
-                )
-            )
+
             if(appSettings.firstInstall) {
+                appDataStoreRepository.saveAppSettings(
+                    appSettings.copy(
+                        firstInstall = false,
+                        lastUpdatedCategoriesTimestamp = Calendar.getInstance().timeInMillis
+                    )
+                )
                 emit(Resource.Success(LoadTriviaType.FIRST_INSTALL))
             }
             else{
+                appDataStoreRepository.saveAppSettings(
+                    appSettings.copy(
+                        lastUpdatedCategoriesTimestamp = Calendar.getInstance().timeInMillis
+                    )
+                )
                 emit(Resource.Success(LoadTriviaType.CATEGORIES_UPDATED))
             }
         }
