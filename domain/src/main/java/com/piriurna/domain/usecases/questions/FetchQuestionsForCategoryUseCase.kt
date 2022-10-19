@@ -24,6 +24,8 @@ class FetchQuestionsForCategoryUseCase @Inject constructor(
         val newQuestions : ApiNetworkResponse<List<Question>> = triviaRepository.getCategoryQuestions(categoryId, profileSettings.numberOfQuestions)
 
         newQuestions.data?.let { questionsList ->
+            triviaRepository.deleteCategoryQuestions(categoryId)
+
             val databaseQuestionsIds = triviaRepository.insertCategoryQuestionsInDb(questionsList)
             
             questionsList.forEachIndexed { index, question ->

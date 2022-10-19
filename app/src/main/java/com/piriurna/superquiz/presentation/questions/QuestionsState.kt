@@ -10,12 +10,15 @@ data class QuestionsState(
     val questionsList: List<Question> = emptyList(),
     val currentQuestion : Question? = null,
     val quotes : List<Quote> = emptyList(),
-    val showingAnswerResult : Boolean = false,
     val destination : QuestionDestination = QuestionDestination.SHOW_QUESTION
 ) {
 
     fun isLastQuestion() = questionsList.size - 1 == getCurrentQuestionIndex()
 
     fun getCurrentQuestionIndex() = questionsList.indexOfFirst { it.id == currentQuestion?.id }
+
+    fun getNextQuestion() = questionsList[getCurrentQuestionIndex() + 1]
+
+    fun isShowingAnswerResult() = destination == QuestionDestination.SHOW_ANSWER_RESULT
 
 }
