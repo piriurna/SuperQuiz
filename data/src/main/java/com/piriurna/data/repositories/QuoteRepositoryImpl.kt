@@ -2,6 +2,7 @@ package com.piriurna.data.repositories
 
 import com.piriurna.data.mappers.toApiNetworkError
 import com.piriurna.data.mappers.toQuote
+import com.piriurna.data.remote.SQException
 import com.piriurna.data.remote.sources.QuoteApiSource
 import com.piriurna.domain.ApiNetworkResponse
 import com.piriurna.domain.models.quotes.Quote
@@ -19,7 +20,7 @@ class QuoteRepositoryImpl @Inject constructor(
             ApiNetworkResponse(
                 data = result
             )
-        } catch (e : Exception) {
+        } catch (e : SQException) {
             ApiNetworkResponse(
                 error = e.toApiNetworkError()
             )
@@ -33,7 +34,7 @@ class QuoteRepositoryImpl @Inject constructor(
             ApiNetworkResponse(
                 data = result
             )
-        } catch (e : Exception) {
+        } catch (e : SQException) {
             ApiNetworkResponse(
                 error = e.toApiNetworkError()
             )

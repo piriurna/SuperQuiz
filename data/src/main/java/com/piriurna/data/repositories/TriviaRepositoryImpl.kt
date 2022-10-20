@@ -4,6 +4,7 @@ import com.piriurna.data.database.daos.AnswerDao
 import com.piriurna.data.database.daos.CategoryDao
 import com.piriurna.data.database.daos.QuestionDao
 import com.piriurna.data.mappers.*
+import com.piriurna.data.remote.SQException
 import com.piriurna.data.remote.sources.TriviaApiSource
 import com.piriurna.domain.ApiNetworkResponse
 import com.piriurna.domain.models.Answer
@@ -29,7 +30,7 @@ class TriviaRepositoryImpl @Inject constructor(
             ApiNetworkResponse(
                 data = result
             )
-        } catch (e : Exception) {
+        } catch (e : SQException) {
             ApiNetworkResponse(
                 error = e.toApiNetworkError()
             )
@@ -43,7 +44,7 @@ class TriviaRepositoryImpl @Inject constructor(
             ApiNetworkResponse(
                 data = result
             )
-        } catch (e : Exception) {
+        } catch (e : SQException) {
             ApiNetworkResponse(
                 error = e.toApiNetworkError()
             )
