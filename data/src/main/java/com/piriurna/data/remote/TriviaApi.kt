@@ -13,7 +13,7 @@ interface TriviaApi {
 
     @GET("api.php")
     suspend fun getQuiz(
-        @Query("amounts") amount: String,
+        @Query("amount") amount: String,
         @Query("category") categoryId : String
     ) : QuizDto
 
