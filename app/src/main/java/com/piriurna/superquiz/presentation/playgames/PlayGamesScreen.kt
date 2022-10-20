@@ -89,7 +89,7 @@ fun BuildPlayGamesScreen(
         }
     }
 
-    SQScaffold(isLoading = state.isLoading) {
+    SQScaffold(isLoading = state.isLoading, error = state.error) {
         SQBottomSheetScaffold(
             sheetPeekHeight = screenHeight.dp - titleSizeDp,
             sheetState = sheetState,

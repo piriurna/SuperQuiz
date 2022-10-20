@@ -5,25 +5,20 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.piriurna.common.composables.button.SQButton
 import com.piriurna.common.composables.error.SQErrorContainer
-import com.piriurna.common.theme.errorColor
+import com.piriurna.common.models.SQError
 import com.piriurna.domain.models.splash.SplashDestination
 import com.piriurna.superquiz.presentation.AppLogo
 import com.piriurna.superquiz.presentation.navigation.RootDestinationScreen
-import com.piriurna.superquiz.presentation.splash.models.SplashError
 import kotlinx.coroutines.delay
 
 @Composable
@@ -82,10 +77,9 @@ fun BuildSplashScreen(
                     imageResource = error.imageResource,
                     title = error.title,
                     subtitle = error.subtitle,
-                    button = {
-                        if(error.canRetry)
-                            SQButton(modifier = Modifier.fillMaxWidth(0.5f), onClick = { events(SplashEvents.Retry) }, buttonText = "RETRY", backgroundColor = errorColor)
-                    }
+                    buttonOnClick = { events(SplashEvents.Retry) },
+                    buttonText = "RETRY",
+                    hasButton = error.canRetry
                 )
             }
         }
@@ -112,7 +106,7 @@ private fun SplashScreenPreview() {
 
         state = state.copy(
             isLoading = false,
-            error = SplashError.GENERIC_ERROR
+            error = SQError.GenericError({})
         )
     }
 
