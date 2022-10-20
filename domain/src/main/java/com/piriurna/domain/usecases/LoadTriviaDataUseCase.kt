@@ -9,7 +9,9 @@ import com.piriurna.domain.repositories.TriviaRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.HashMap
 
 class LoadTriviaDataUseCase @Inject constructor(
     private val triviaRepository: TriviaRepository,
@@ -25,7 +27,7 @@ class LoadTriviaDataUseCase @Inject constructor(
 
         var categories = emptyList<Category>()
 
-        if(appSettings.firstInstall || appSettings.shouldFetchNewCategories || triviaRepository.getNumberOfCategories() == 0){ //Case where you need to load categories from the api
+        if(appSettings.firstInstall || appSettings.shouldFetchNewCategories() || triviaRepository.getNumberOfCategories() == 0){ //Case where you need to load categories from the api
 
             val categoriesResult : ApiNetworkResponse<List<Category>> = triviaRepository.getCategories()
 
@@ -37,7 +39,7 @@ class LoadTriviaDataUseCase @Inject constructor(
             }
         }
 
-        if(appSettings.shouldFetchNewCategories) { //needs to filter categories
+        if(appSettings.shouldFetchNewCategories()) { //needs to filter categories
             categories = getMissingCategories(categories = categories, missingIds = triviaRepository.getMissingCategories(categories.map { it.id }))
 
             if(categories.isEmpty()) { //Does not have new categories in service
@@ -46,7 +48,7 @@ class LoadTriviaDataUseCase @Inject constructor(
             }
         }
 
-        if(!appSettings.firstInstall && !appSettings.shouldFetchNewCategories && triviaRepository.getNumberOfCategories() != 0){ //no update needed
+        if(!appSettings.firstInstall && !appSettings.shouldFetchNewCategories() && triviaRepository.getNumberOfCategories() != 0){ //no update needed
             emit(Resource.Success(LoadTriviaType.NO_CATEGORIES_UPDATED))
             return@flow
         }
@@ -79,7 +81,8 @@ class LoadTriviaDataUseCase @Inject constructor(
 
             appDataStoreRepository.saveAppSettings(
                 appSettings.copy(
-                    firstInstall = false
+                    firstInstall = false,
+                    lastUpdatedCategoriesTimestamp = Calendar.getInstance().timeInMillis
                 )
             )
             if(appSettings.firstInstall) {
