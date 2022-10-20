@@ -1,5 +1,6 @@
 package com.piriurna.data.remote
 
+import com.piriurna.data.remote.dto.QuizDto
 import retrofit2.HttpException
 import java.io.IOException
 import java.net.SocketTimeoutException
@@ -10,8 +11,21 @@ object HandleApi {
     suspend fun <T> safeApiCall(callFunction: suspend () -> T): T {
         return try{
 
-            callFunction.invoke()
+            val apiResponse: T = callFunction.invoke()
 
+
+            if(apiResponse is QuizDto) {
+
+                when(apiResponse.responseCode) {
+                    ErrorType.INVALID_CATEGORY.code -> throw SQException.CategoryNotFoundException(
+                        message = "Category not Found"
+                    )
+
+                    ErrorType.INVALID_PARAMETER.code -> throw SQException.InvalidParameterException(message = "Invalid parameters passed for the api call")
+                }
+            }
+
+            apiResponse
         }
         catch (ex: Exception){
             when(ex){

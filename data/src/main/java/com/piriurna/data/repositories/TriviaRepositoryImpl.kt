@@ -40,7 +40,7 @@ class TriviaRepositoryImpl @Inject constructor(
 
     override suspend fun getCategoryQuestions(categoryId: Int, numberOfQuestions: Int): ApiNetworkResponse<List<Question>> {
         return try {
-            val result = triviaApiSource.getQuiz(categoryId, numberOfQuestions)
+            val result = triviaApiSource.getQuiz(categoryId, numberOfQuestions).toQuestions(categoryId)
             ApiNetworkResponse(
                 data = result
             )
