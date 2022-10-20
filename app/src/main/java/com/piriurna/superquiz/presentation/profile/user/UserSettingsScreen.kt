@@ -23,6 +23,7 @@ import com.piriurna.common.composables.text.SQText
 import com.piriurna.common.composables.toolbar.AppBarOptions
 import com.piriurna.common.theme.SQStyle.TextLato22
 import com.piriurna.common.theme.lightPurple
+import com.piriurna.superquiz.presentation.navigation.HomeDestinationScreen
 import com.piriurna.superquiz.presentation.profile.ProfileSettingsEvents
 import com.piriurna.superquiz.presentation.profile.ProfileSettingsState
 import com.piriurna.superquiz.presentation.profile.ProfileSettingsViewModel
@@ -35,6 +36,16 @@ fun UserSettingsScreen(
 
     val state = viewModel.state.value
 
+    LaunchedEffect(key1 = state.userSettingsActions) {
+        when(state.userSettingsActions) {
+            UserSettingsActions.BACK_TO_CATEGORY_LIST -> {
+                navController.popBackStack()
+                navController.navigate(HomeDestinationScreen.PlayGames.route)
+            }
+
+            else -> {}
+        }
+    }
 
     BuildUserSettingsScreen(state = state, events = viewModel::onTriggerEvent, navController = navController)
 }
@@ -130,8 +141,9 @@ fun BuildUserSettingsScreen(
                     ) {
                         SQSwipeToConfirmButton(
                             modifier = Modifier.fillMaxWidth(),
-                            onComplete = { },
-                            buttonText = "REMOVE ALL DATA"
+                            onComplete = { events.invoke(ProfileSettingsEvents.DeleteUserData) },
+                            buttonText = "REMOVE ALL DATA",
+                            shouldSwipeBack = state.shouldResetSwipe()
                         )
                     }
                 }
