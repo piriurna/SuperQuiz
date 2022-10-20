@@ -71,6 +71,7 @@ fun BuildQuestionsScreen(
             QuestionDestination.SHOW_QUESTION -> {
                 if(pagerState.currentPage != state.getCurrentQuestionIndex() && pagerState.pageCount != 0){
                     pagerState.animateScrollToPage(state.getCurrentQuestionIndex())
+
                 }
             }
             QuestionDestination.GO_TO_RESULTS -> {
@@ -90,7 +91,7 @@ fun BuildQuestionsScreen(
     SQScaffold(isLoading = state.isLoading) {
 
         AnimatedVisibility(
-            visible = state.destination == QuestionDestination.NO_QUESTIONS_AVAILABLE,
+            visible = state.destination == QuestionDestination.NO_QUESTIONS_AVAILABLE && !state.isLoading,
             enter = fadeIn(),
             exit = fadeOut()
         ) {
@@ -106,7 +107,7 @@ fun BuildQuestionsScreen(
                 okClick = {
                     events?.invoke(QuestionsEvents.FetchQuestionsForCategory(state.category.id))
                 },
-                themeColor = Color.Green.copy(alpha = 0.5f)
+                themeColor = purple.copy(alpha = 0.5f)
             )
         }
 
@@ -150,7 +151,7 @@ fun BuildQuestionsScreen(
                                 onAnswerSelected = { answer ->
                                     events?.invoke(QuestionsEvents.SelectAnswer(answer))
                                 },
-                                contentEnabled = !state.showingAnswerResult,
+                                contentEnabled = !state.isShowingAnswerResult(),
                                 enabled = false
                             )
                         }
@@ -181,10 +182,10 @@ fun BuildQuestionsScreen(
 
                 }
                 AnimatedVisibility(
-                    visible = state.showingAnswerResult && !state.isLoading,
+                    visible = state.isShowingAnswerResult() && !state.isLoading,
                     enter = scaleIn(animationSpec = spring(Spring.DampingRatioLowBouncy))
                 ) {
-                    if (state.showingAnswerResult)
+                    if (state.isShowingAnswerResult())
                         AnswerAlertPanel(
                             isCorrect = question.isQuestionAnsweredCorrectly(),
                             quote = state.quotes[pagerState.currentPage]
@@ -193,13 +194,13 @@ fun BuildQuestionsScreen(
 
 
                 SQButton(
-                    buttonText = if (state.showingAnswerResult) "NEXT" else "SEND",
+                    buttonText = if (state.isShowingAnswerResult()) "NEXT" else "SEND",
                     enabled = question.chosenAnswer != null,
                     modifier = Modifier
                         .fillMaxWidth(),
                     onClick = {
                         scope.launch {
-                            if (state.showingAnswerResult) {
+                            if (state.isShowingAnswerResult()) {
                                 events?.invoke(QuestionsEvents.GoToNextPage)
                             } else {
                                 events?.invoke(QuestionsEvents.ShowResult)

@@ -36,6 +36,7 @@ class QuestionsViewModel @Inject constructor(
         val categoryId = savedStateHandle.get<Int>(NavigationArguments.CATEGORY_ID)?:0
 
         onTriggerEvent(QuestionsEvents.GetQuestions(categoryId))
+        onTriggerEvent(QuestionsEvents.GetCategory(categoryId))
     }
 
     override fun onTriggerEvent(event: QuestionsEvents) {
@@ -59,27 +60,27 @@ class QuestionsViewModel @Inject constructor(
 
             is QuestionsEvents.ShowResult -> {
                 _state.value = _state.value.copy(
-                    showingAnswerResult = true
+                    destination = QuestionDestination.SHOW_ANSWER_RESULT
                 )
             }
 
             is QuestionsEvents.GoToNextPage -> {
 
-                saveAnswer(_state.value.currentQuestion!!)
+                _state.value.currentQuestion?.let { currentQuestion ->
+                    saveAnswer(currentQuestion)
 
-
-                if(_state.value.isLastQuestion()){
-                    _state.value = _state.value.copy(
-                        destination = QuestionDestination.GO_TO_RESULTS
-                    )
-                } else {
-                    val nextQuestion = _state.value.questionsList[_state.value.getCurrentQuestionIndex() + 1]
-                    _state.value = _state.value.copy(
-                        destination = QuestionDestination.SHOW_QUESTION,
-                        currentQuestion = nextQuestion,
-                        showingAnswerResult = false
-                    )
+                    if(_state.value.isLastQuestion()){
+                        _state.value = _state.value.copy(
+                            destination = QuestionDestination.GO_TO_RESULTS
+                        )
+                    } else {
+                        _state.value = _state.value.copy(
+                            destination = QuestionDestination.SHOW_QUESTION,
+                            currentQuestion = _state.value.getNextQuestion(),
+                        )
+                    }
                 }
+
 
 
             }
@@ -107,30 +108,22 @@ class QuestionsViewModel @Inject constructor(
             val questionsList = getDbCategoryQuestionsUseCase(categoryId).first()
 
 
-            val shouldFetchQuotes = _state.value.questionsList.isEmpty()
-
-
             val currentQuestion = questionsList.firstOrNull { !it.isQuestionAnswered() }
 
             _state.value = _state.value.copy(
                 questionsList = questionsList,
                 currentQuestion = currentQuestion,
-                destination = if(currentQuestion == null) QuestionDestination.NO_QUESTIONS_AVAILABLE else QuestionDestination.SHOW_QUESTION,
-                showingAnswerResult = false
+                destination = if(currentQuestion == null) QuestionDestination.NO_QUESTIONS_AVAILABLE else QuestionDestination.SHOW_QUESTION
             )
 
-            if(shouldFetchQuotes) {
-                getQuotes(questionsList.size) {
-                    getCategory(categoryId)
-                }
-            }
+            getQuotes(questionsList.size)
 
 
 
         }
     }
 
-    private fun getQuotes(numOfQuotes : Int, afterSuccess : () -> Unit) {
+    private fun getQuotes(numOfQuotes : Int) {
         getRandomQuoteListUseCase(numOfQuotes).onEach { result ->
             when(result) {
                 is Resource.Loading -> {
@@ -150,8 +143,6 @@ class QuestionsViewModel @Inject constructor(
                         isLoading = false,
                         quotes = result.data?: emptyList(),
                     )
-
-                    afterSuccess()
                 }
             }
         }.launchIn(viewModelScope)

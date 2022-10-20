@@ -25,4 +25,7 @@ interface QuestionDao {
 
     @Query("UPDATE question SET chosenAnswerId =:chosenAnswerId WHERE questionId =:questionId")
     suspend fun updateQuestion(questionId: Long, chosenAnswerId : Int) : Int
+
+    @Query("DELETE FROM question WHERE ownerCategoryId =:categoryId")
+    suspend fun deleteCategoryQuestions(categoryId: Int)
 }

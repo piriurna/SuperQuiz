@@ -46,33 +46,27 @@ fun CategoryEndScreen(
 ) {
     val viewModel : CategoryEndViewModel = hiltViewModel()
 
-    val categoryId = navBackStackEntry.getArgument(NavigationArguments.CATEGORY_ID)?.toInt()
-
+    val state = viewModel.state.value
 
     LaunchedEffect(key1 = viewModel.state.value) {
         when(viewModel.state.value.destination) {
             CategoryEndDestination.GO_TO_QUESTIONS -> {
                 navController.popBackStack()
                 navController.navigate(PlayGamesDestinations.Questions.withArgs(
-                    categoryId
+                    state.category?.id
                 ))
             }
             else -> {}
         }
     }
 
-    if(categoryId != null) {
-        BuildCategoryEndScreen(categoryId,viewModel.state.value, viewModel::onTriggerEvent)
-    } else {
-        //Todo: 404 screen or similar
-    }
+    BuildCategoryEndScreen(state, viewModel::onTriggerEvent)
 
 }
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun BuildCategoryEndScreen(
-    categoryId : Int,
     state : CategoryEndState,
     events: ((CategoryEndEvents) -> Unit)? = null,
     initialAnimationState : Boolean = false
@@ -86,11 +80,9 @@ fun BuildCategoryEndScreen(
         mutableStateOf(initialAnimationState)
     }
 
-    val correctAnswers = state.category?.correctAnswers?.toFloat() ?: 0F
-    val totalNumberOfQuestions = state.category?.totalNumberOfQuestions?.toFloat() ?: 0F
     val percentage by animateIntAsState(
         animationSpec = tween(1000),
-        targetValue = ((correctAnswers/totalNumberOfQuestions) * 100).toInt()
+        targetValue = state.category?.getPercentageOfCorrectAnswers()?:0
     )
 
     val statusImage = if(state.category?.isSuccess() == true) R.drawable.ic_checked_correct else R.drawable.ic_unchecked_incorrect
@@ -102,8 +94,6 @@ fun BuildCategoryEndScreen(
     val buttonColor = if(state.category?.isSuccess() == true) primaryGreen else errorColor
 
     LaunchedEffect(Unit) {
-        events?.invoke(CategoryEndEvents.GetCategoryStatistics(categoryId))
-
         imageVisible = true
 
         delay(200)
@@ -134,33 +124,31 @@ fun BuildCategoryEndScreen(
 
 
 
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
+
+        AnimatedVisibility(
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            visible = titleVisible,
+            enter = slideInVertically(initialOffsetY = { 100 }),
+            exit = slideOutVertically()
         ) {
-            AnimatedVisibility(
-                modifier = Modifier.align(Alignment.CenterHorizontally),
-                visible = titleVisible,
-                enter = slideInVertically(initialOffsetY = { 100 }),
-                exit = slideOutVertically()
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Column {
-                    SQText(text = statusTitle, style = TextLato27Bold, textAlign = TextAlign.Center)
+                SQText(text = statusTitle, style = TextLato27Bold, textAlign = TextAlign.Center)
 
-                    SQText(
-                        modifier = Modifier.padding(top = 12.dp),
-                        text = statusSubTitle,
-                        style = TextLatoThin18,
-                        textAlign = TextAlign.Center
-                    )
-                }
+                SQText(
+                    modifier = Modifier.padding(top = 12.dp),
+                    text = statusSubTitle,
+                    style = TextLatoThin18,
+                    textAlign = TextAlign.Center
+                )
             }
-
         }
 
 
         SQButton(
             modifier = Modifier.fillMaxWidth().padding(bottom = 32.dp),
-            onClick = { events?.invoke(CategoryEndEvents.FetchMoreQuestions(categoryId)) },
+            onClick = { events?.invoke(CategoryEndEvents.FetchMoreQuestions) },
             buttonText = "Get more quizes",
             backgroundColor = buttonColor
         )
@@ -171,22 +159,18 @@ fun BuildCategoryEndScreen(
 @Preview(showBackground = true, device = Devices.NEXUS_5)
 @Composable
 fun CategoryEndScreenPreview() {
-    var state by remember {
-        mutableStateOf(CategoryEndState(isLoading = true))
-    }
-
-    LaunchedEffect(Unit) {
-        state = state.copy(
-            isLoading = false,
-            category = Category(
-                id = Category.mockCategoryList[0].id,
-                name = Category.mockCategoryList[0].name,
-                totalNumberOfQuestions = 100,
-                title =Category.mockCategoryList[0].title,
-                correctAnswers = 80,
-                incorrectAnswers = Question.mockQuestions.count { !it.isQuestionAnsweredCorrectly() }
-            )
+    val state = CategoryEndState(
+        isLoading = false,
+        category = Category(
+            id = Category.mockCategoryList[0].id,
+            completionRate = 80,
+            name = Category.mockCategoryList[0].name,
+            totalNumberOfQuestions = 100,
+            title =Category.mockCategoryList[0].title,
+            correctAnswers = 80,
+            incorrectAnswers = Question.mockQuestions.count { !it.isQuestionAnsweredCorrectly() }
         )
-    }
-    BuildCategoryEndScreen(Category.mockCategoryList[0].id, state, initialAnimationState = true)
+    )
+
+    BuildCategoryEndScreen(state, initialAnimationState = true)
 }

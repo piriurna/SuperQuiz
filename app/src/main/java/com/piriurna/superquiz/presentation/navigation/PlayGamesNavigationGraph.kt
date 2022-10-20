@@ -42,5 +42,5 @@ sealed class PlayGamesDestinations(
     customArguments: List<CustomArguments> = emptyList()
 ) : BaseDestinations(route = route, customArguments = customArguments) {
     object Questions : PlayGamesDestinations(route = "QUESTIONS", listOf(CustomArguments(NavigationArguments.CATEGORY_ID, NavType.IntType, nullable = false)))
-    object CategoryCompleted : PlayGamesDestinations(route = "CATEGORY_COMPLETED", listOf(CustomArguments(NavigationArguments.CATEGORY_ID)))
+    object CategoryCompleted : PlayGamesDestinations(route = "CATEGORY_COMPLETED", listOf(CustomArguments(NavigationArguments.CATEGORY_ID, NavType.IntType, nullable = false)))
 }

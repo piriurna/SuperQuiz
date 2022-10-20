@@ -14,6 +14,8 @@ interface TriviaRepository {
 
     suspend fun insertCategoryQuestionsInDb(questions: List<Question>) : List<Long>
 
+    suspend fun deleteCategoryQuestions(categoryId: Int)
+
     fun getCategoryQuestionsFromDb(categoryId: Int): Flow<List<Question>>
 
     suspend fun getQuestionFromDb(questionId: Int) : Question?

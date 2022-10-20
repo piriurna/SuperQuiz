@@ -64,6 +64,10 @@ class TriviaRepositoryImpl @Inject constructor(
         return questionDao.getQuestions(categoryId).map { it.toQuestion() }
     }
 
+    override suspend fun deleteCategoryQuestions(categoryId: Int) {
+        questionDao.deleteCategoryQuestions(categoryId)
+    }
+
 
     override suspend fun getQuestionsFromIdList(ids: List<Long>): List<Question> {
         return questionDao.getQuestions(ids)!!.toQuestion()
