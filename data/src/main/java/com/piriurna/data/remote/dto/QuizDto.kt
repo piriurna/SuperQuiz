@@ -8,4 +8,5 @@ data class QuizDto(
     val responseCode: Int,
     @SerializedName("results")
     val questions: List<QuestionDto>
-)
+) {
+}

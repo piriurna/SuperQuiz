@@ -5,4 +5,6 @@ import com.piriurna.superquiz.SQBaseEvent
 
 sealed class SplashEvents : SQBaseEvent(){
     object LoadTriviaData: SplashEvents()
+
+    object Retry : SplashEvents()
 }

@@ -56,8 +56,6 @@ fun List<Category>.toCategoryEntity() : List<CategoryEntity> {
 }
 
 
-
-//TODO: REFACTOR
 fun QuizDto.toQuestions(categoryId: Int) : List<Question> {
     return this.questions.mapIndexed { index, questionDto ->
         val allAnswers = questionDto.incorrectAnswers.map { Answer(id = 0, description = it, isCorrectAnswer = false) }.toMutableList()
@@ -75,6 +73,8 @@ fun QuizDto.toQuestions(categoryId: Int) : List<Question> {
         )
     }
 }
+
+
 
 
 fun Question.toQuestionEntity() : QuestionEntity {

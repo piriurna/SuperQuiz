@@ -34,7 +34,7 @@ fun AppLogo(
     var rotationDirection by remember { mutableStateOf(360f) }
 
     val angle by animateFloatAsState(
-        targetValue = if(animate) currentAngle + rotationDirection else 0f,
+        targetValue = if(animate && shouldAnimate) currentAngle + rotationDirection else 0f,
         animationSpec = tween(1500, easing = LinearOutSlowInEasing),
         finishedListener = {
             when {
@@ -125,7 +125,7 @@ fun AppLogo(
 
     if(isFirstTime) {
         isFirstTime = false
-        animate = true
+        animate = shouldAnimate
     }
 
 }
@@ -137,6 +137,6 @@ fun AppLogoPreview() {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        AppLogo()
+        AppLogo(shouldAnimate = false)
     }
 }
