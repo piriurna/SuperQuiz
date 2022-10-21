@@ -29,4 +29,4 @@ An app that lets you answer trivia questions for mind excercise
 
 Image #1            |  Image #2             |  Image #3           
 :-------------------------:|:----------------------------:|:----------------------------:
-<img src="images/SuperQuiz_1.jpg">    |  <img src="images/SuperQuiz_2.jpg">     |  <img src="images/SuperQuiz_3.jpg">
+<img src="images/SuperQuiz_2.jpg">    |  <img src="images/SuperQuiz_1.jpg">     |  <img src="images/SuperQuiz_3.jpg">
