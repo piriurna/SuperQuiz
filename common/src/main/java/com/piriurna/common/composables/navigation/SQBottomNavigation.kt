@@ -27,6 +27,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.piriurna.common.mappers.getSelected
 import com.piriurna.common.theme.purple
 import com.piriurna.common.models.BottomNavigationItem
 
@@ -46,6 +47,7 @@ fun SQBottomNavigation(
     BuildSQBottomNavigation(
         modifier = modifier,
         isVisible = showBottomBar(currentDestination, items = items),
+        selectedRoute = currentDestination?.route,
         unselectedColor = unselectedColor,
         items = items,
         onItemSelected = onItemSelected
@@ -59,6 +61,7 @@ fun BuildSQBottomNavigation(
     modifier: Modifier = Modifier,
     unselectedColor: Color,
     items: List<BottomNavigationItem>,
+    selectedRoute: String?,
     moveAnimationDuration : Int = 1000,
     indicatorSizeAnimationDuration : Int = 350,
     onItemSelected: (BottomNavigationItem) -> Unit = {},
@@ -91,16 +94,14 @@ fun BuildSQBottomNavigation(
 
             val itemWidth = screenWidth / items.size.toFloat()
 
-            var currentIndex by remember { mutableStateOf(0) }
-
 
             val color by animateColorAsState(
-                targetValue = items.getOrNull(currentIndex)?.color?: purple,
+                targetValue = items.getSelected(selectedRoute)?.color?: purple,
                 animationSpec = tween(moveAnimationDuration)
             )
 
             val offsetAnim by animateFloatAsState(
-                targetValue = with(LocalDensity.current){ ((itemWidth * currentIndex) + (itemWidth - fullIndicatorWidth)/2f).dp.toPx() },
+                targetValue = with(LocalDensity.current){ ((itemWidth * items.indexOf(items.getSelected(selectedRoute))) + (itemWidth - fullIndicatorWidth)/2f).dp.toPx() },
                 animationSpec = tween(moveAnimationDuration)
             )
 
@@ -115,13 +116,12 @@ fun BuildSQBottomNavigation(
                             .width(itemWidth.dp),
                         icon = ImageVector.vectorResource(id = item.iconRes),
                         text = item.title,
-                        selected = currentIndex == index,
+                        selected = selectedRoute == item.route,
                         selectedColor = color,
                         unselectedColor = unselectedColor,
                         onClick = {
                             onItemSelected(item)
                             isMoving = true
-                            currentIndex = index
                         }
                     )
                 }
@@ -155,6 +155,7 @@ private fun SQBottomNavigationPreview() {
             items = BottomNavigationItem.getMockNavigationItems,
             indicatorSizeAnimationDuration = 350,
             onItemSelected = {},
+            selectedRoute = "PROFILE"
         )
 
         BuildSQBottomNavigation(
@@ -162,7 +163,8 @@ private fun SQBottomNavigationPreview() {
             unselectedColor = Color.LightGray,
             items = BottomNavigationItem.getMockNavigationItems,
             indicatorSizeAnimationDuration = 400,
-            onItemSelected = {}
+            onItemSelected = {},
+            selectedRoute = "PLAY_GAMES"
         )
 
         BuildSQBottomNavigation(
@@ -171,6 +173,7 @@ private fun SQBottomNavigationPreview() {
             items = BottomNavigationItem.getMockNavigationItems,
             indicatorSizeAnimationDuration = 500,
             onItemSelected = {},
+            selectedRoute = "CHART"
         )
     }
 }
