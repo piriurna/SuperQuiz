@@ -8,8 +8,9 @@ import com.piriurna.domain.models.ProfileSettings
 fun AppSettingsStore.toAppSettings() : AppSettings {
     return AppSettings(
         firstInstall = this.firstInstall,
-        shouldFetchNewCategories = this.shouldFetchNewCategories,
-        onboardingComplete = this.onboardingComplete
+        onboardingComplete = this.onboardingComplete,
+        timeToRefreshCategories = timeToRefreshCategories,
+        lastUpdatedCategoriesTimestamp = lastUpdatedCategoriesTimestamp
     )
 }
 
@@ -17,8 +18,9 @@ fun AppSettingsStore.toAppSettings() : AppSettings {
 fun AppSettings.toAppSettingsStore() : AppSettingsStore {
     return AppSettingsStore(
         firstInstall = this.firstInstall,
-        shouldFetchNewCategories = this.shouldFetchNewCategories,
-        onboardingComplete = this.onboardingComplete
+        onboardingComplete = this.onboardingComplete,
+        timeToRefreshCategories = timeToRefreshCategories,
+        lastUpdatedCategoriesTimestamp = lastUpdatedCategoriesTimestamp
     )
 }
 
