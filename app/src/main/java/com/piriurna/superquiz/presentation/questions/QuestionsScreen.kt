@@ -9,7 +9,10 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -96,14 +99,14 @@ fun BuildQuestionsScreen(
             exit = fadeOut()
         ) {
             SQAlertDialog(
-                title = "You ran out of questions",
-                description = "Would you like to get more questions for this category?",
-                laterLabel = "Later",
+                title = stringResource(R.string.you_ran_out_of_questions),
+                description = stringResource(R.string.would_you_like_to_get_more_questions_for_this_category),
+                laterLabel = stringResource(R.string.later),
                 laterClick = {
                     events?.invoke(QuestionsEvents.DismissNoQuestionsPopup)
                     navController.popBackStack()
                 },
-                okLabel = "Get Questions",
+                okLabel = stringResource(R.string.get_questions),
                 okClick = {
                     events?.invoke(QuestionsEvents.FetchQuestionsForCategory(state.category.id))
                 },
@@ -129,10 +132,6 @@ fun BuildQuestionsScreen(
                         progress = progress.toInt(),
                         percentageText = "${state.getCurrentQuestionIndex()}/${state.questionsList.size}",
                         textIncompleteColor = Color.Black,
-                        chipIcon = ImageVector.vectorResource(R.drawable.ic_timer),
-                        chipForegroundColor = orange,
-                        chipBackgroundColor = lightOrange,
-                        chipText = "${0}min ${0 / 1000L}s",
                         modifier = Modifier.padding(bottom = 16.dp)
                     )
 
@@ -167,7 +166,7 @@ fun BuildQuestionsScreen(
                                 exit = scaleOut()
                             ) {
                                 SQChip(
-                                    text = "Hints",
+                                    text = stringResource(R.string.hints),
                                     icon = ImageVector.vectorResource(id = R.drawable.ic_light_bulb_hint),
                                     onClick = {
                                         events?.invoke(QuestionsEvents.PerformHintAction(question))
@@ -194,7 +193,7 @@ fun BuildQuestionsScreen(
 
 
                 SQButton(
-                    buttonText = if (state.isShowingAnswerResult()) "NEXT" else "SEND",
+                    buttonText = stringResource(state.getButtonStringResource()).toUpperCase(Locale.current),
                     enabled = question.chosenAnswer != null,
                     modifier = Modifier
                         .fillMaxWidth(),
