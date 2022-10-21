@@ -2,6 +2,7 @@ package com.piriurna.superquiz.presentation.questions
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.piriurna.data.remote.ErrorType
 import com.piriurna.domain.Resource
 import com.piriurna.domain.models.Question
 import com.piriurna.domain.usecases.GetCategoryUseCase
@@ -11,6 +12,7 @@ import com.piriurna.domain.usecases.questions.DisableSelectedAnswersUseCase
 import com.piriurna.domain.usecases.questions.FetchQuestionsForCategoryUseCase
 import com.piriurna.domain.usecases.quotes.GetRandomQuoteListUseCase
 import com.piriurna.superquiz.SQBaseEventViewModel
+import com.piriurna.superquiz.mappers.toSQError
 import com.piriurna.superquiz.presentation.navigation.NavigationArguments
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -134,7 +136,8 @@ class QuestionsViewModel @Inject constructor(
 
                 is Resource.Error -> {
                     _state.value = _state.value.copy(
-                        isLoading = false
+                        isLoading = false,
+                        error = ErrorType.valueFromCode(result.code).toSQError { getQuotes(numOfQuotes) }
                     )
                 }
 
@@ -158,7 +161,8 @@ class QuestionsViewModel @Inject constructor(
                 }
                 is Resource.Error -> {
                     _state.value = _state.value.copy(
-                        isLoading = false
+                        isLoading = false,
+                        error = ErrorType.valueFromCode(result.code).toSQError { saveAnswer(question) }
                     )
                 }
                 is Resource.Success -> {
@@ -176,7 +180,7 @@ class QuestionsViewModel @Inject constructor(
             when(result) {
                 is Resource.Success -> {
                     _state.value = _state.value.copy(
-                        currentQuestion = result.data
+                        currentQuestion = result.data,
                     )
                 }
                 else -> {}
@@ -198,7 +202,8 @@ class QuestionsViewModel @Inject constructor(
 
                 is Resource.Error -> {
                     _state.value = _state.value.copy(
-                        isLoading = false
+                        isLoading = false,
+                        error = ErrorType.valueFromCode(result.code).toSQError { QuestionsEvents.FetchQuestionsForCategory(categoryId) }
                     )
                 }
 

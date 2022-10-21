@@ -5,11 +5,13 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import com.piriurna.data.remote.ErrorType
 import com.piriurna.domain.Resource
 import com.piriurna.domain.models.CategoryStatistics
 import com.piriurna.domain.usecases.GetCategoryUseCase
 import com.piriurna.domain.usecases.questions.FetchQuestionsForCategoryUseCase
 import com.piriurna.superquiz.SQBaseEventViewModel
+import com.piriurna.superquiz.mappers.toSQError
 import com.piriurna.superquiz.presentation.information.categories.end.models.CategoryEndDestination
 import com.piriurna.superquiz.presentation.information.categories.end.models.CategoryEndEvents
 import com.piriurna.superquiz.presentation.information.categories.end.models.CategoryEndState
@@ -67,8 +69,8 @@ class CategoryEndViewModel @Inject constructor(
     }
 
     private fun fetchMoreQuestions(categoryId: Int) {
-        fetchQuestionsForCategoryUseCase(categoryId = categoryId).onEach {
-            when(it) {
+        fetchQuestionsForCategoryUseCase(categoryId = categoryId).onEach { result ->
+            when(result) {
                 is Resource.Success -> {
                     _state.value = _state.value.copy(
                         isLoading = false,
@@ -76,7 +78,19 @@ class CategoryEndViewModel @Inject constructor(
                     )
                 }
 
-                else -> {}
+                is Resource.Loading -> {
+                    _state.value = _state.value.copy(
+                        isLoading = true,
+                        error = null
+                    )
+                }
+
+                is Resource.Error -> {
+                    _state.value = _state.value.copy(
+                        isLoading = true,
+                        error = ErrorType.valueFromCode(result.code).toSQError { CategoryEndEvents.FetchMoreQuestions }
+                    )
+                }
             }
         }.launchIn(viewModelScope)
     }

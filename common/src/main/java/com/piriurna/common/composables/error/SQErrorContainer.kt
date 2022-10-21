@@ -5,17 +5,19 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.piriurna.common.R
 import com.piriurna.common.composables.button.SQButton
 import com.piriurna.common.composables.text.SQText
+import com.piriurna.common.theme.SQStyle
 import com.piriurna.common.theme.SQStyle.TextLato18
 import com.piriurna.common.theme.SQStyle.TextLato27Bold
 import com.piriurna.common.theme.errorColor
+import com.piriurna.common.theme.purple
 
 @Composable
 fun SQErrorContainer(
@@ -23,7 +25,12 @@ fun SQErrorContainer(
     imageResource : Int,
     title: String,
     subtitle : String,
-    button : @Composable (() -> Unit)? = null
+    hasButton : Boolean,
+    buttonText : String = "",
+    buttonBackgroundColor : Color = purple,
+    buttonTextColor : Color = Color.White,
+    buttonModifier: Modifier = Modifier.fillMaxWidth(0.5f),
+    buttonOnClick : () -> Unit = {}
 ) {
     Column(
         modifier = modifier,
@@ -40,7 +47,8 @@ fun SQErrorContainer(
 
         SQText(text = subtitle, style = TextLato18)
 
-        button?.invoke()
+        if(hasButton)
+            SQButton(modifier = buttonModifier, onClick = buttonOnClick, buttonText = buttonText, textColor = buttonTextColor, backgroundColor = buttonBackgroundColor, foregroundColor = buttonTextColor)
     }
 }
 
@@ -51,8 +59,9 @@ fun SQErrorContainerPreview() {
         imageResource = R.drawable.ic_disconnected,
         title = "Error!",
         subtitle = "No Internet Connection",
-        button = {
-            SQButton(modifier = Modifier.width(150.dp), onClick = { /*TODO*/ }, buttonText = "RETRY", backgroundColor = errorColor)
-        }
+        buttonText = "RETRY",
+        buttonBackgroundColor = purple,
+        hasButton = true,
+        buttonOnClick = {}
     )
 }

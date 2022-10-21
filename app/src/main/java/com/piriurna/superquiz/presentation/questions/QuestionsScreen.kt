@@ -88,7 +88,7 @@ fun BuildQuestionsScreen(
         }
     }
 
-    SQScaffold(isLoading = state.isLoading) {
+    SQScaffold(isLoading = state.isLoading, error = state.error) {
 
         AnimatedVisibility(
             visible = state.destination == QuestionDestination.NO_QUESTIONS_AVAILABLE && !state.isLoading,

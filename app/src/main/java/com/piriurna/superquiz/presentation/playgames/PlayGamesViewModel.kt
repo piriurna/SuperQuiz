@@ -1,11 +1,13 @@
 package com.piriurna.superquiz.presentation.playgames
 
 import androidx.lifecycle.viewModelScope
+import com.piriurna.data.remote.ErrorType
 import com.piriurna.domain.Resource
 import com.piriurna.domain.usecases.GetCategoriesUseCase
 import com.piriurna.domain.usecases.GetProfileSettingsUseCase
 import com.piriurna.domain.usecases.RefreshCategoriesUseCase
 import com.piriurna.superquiz.SQBaseEventViewModel
+import com.piriurna.superquiz.mappers.toSQError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -56,6 +58,13 @@ class PlayGamesViewModel @Inject constructor(
                         isLoading = true
                     )
 
+                }
+
+                is Resource.Error -> {
+                    _state.value = _state.value.copy(
+                        isLoading = false,
+                        error = ErrorType.valueFromCode(result.code).toSQError { PlayGamesEvents.GetData }
+                    )
                 }
             }
         }.launchIn(viewModelScope)
