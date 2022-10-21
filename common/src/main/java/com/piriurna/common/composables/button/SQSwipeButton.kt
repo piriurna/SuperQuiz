@@ -44,6 +44,7 @@ fun SQSwipeToConfirmButton(
     backgroundCompleteColor : Color = errorColor,
     onComplete : () -> Unit,
     sliderEnabled : Boolean = true,
+    shouldSwipeBack : Boolean = false
 ) {
 
     var sliderWidth by remember {
@@ -65,8 +66,14 @@ fun SQSwipeToConfirmButton(
     }
 
     LaunchedEffect(progress) {
-        if(progress == 1f ) {
+        if(progress == 1f) {
             onComplete()
+        }
+    }
+
+    LaunchedEffect(key1 = shouldSwipeBack) {
+        if(shouldSwipeBack) {
+            swipeableState.animateTo(ConfirmationState.DEFAULT)
         }
     }
 

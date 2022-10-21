@@ -10,4 +10,6 @@ sealed class ProfileSettingsEvents : SQBaseEvent() {
     class SaveSettings(val profileSettings: ProfileSettings) : ProfileSettingsEvents()
 
     class SaveUserName(val username : String) : ProfileSettingsEvents()
+
+    object DeleteUserData : ProfileSettingsEvents()
 }
