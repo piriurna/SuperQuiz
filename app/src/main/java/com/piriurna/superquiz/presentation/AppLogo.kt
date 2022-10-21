@@ -22,10 +22,12 @@ fun AppLogo(
     modifier: Modifier = Modifier,
     shouldAnimate : Boolean = true
 ) {
-    var showingHorse by remember { mutableStateOf(true) }
-    var showingRook by remember { mutableStateOf(false) }
+    var showingHorse by remember { mutableStateOf(false) }
+    var showingRook by remember { mutableStateOf(true) }
     var showingQueen by remember { mutableStateOf(false) }
 
+
+    val drawableSize = 80.dp
 
     var isFirstTime by remember { mutableStateOf(true) }
     var animate by remember { mutableStateOf(false) }
@@ -81,7 +83,7 @@ fun AppLogo(
                 painter = painterResource(id = R.drawable.ic_chess_knight),
                 contentDescription = stringResource(R.string.icon),
                 modifier = Modifier
-                    .size(156.dp)
+                    .size(drawableSize)
                     .graphicsLayer {
                         rotationZ = angle
 
@@ -98,7 +100,7 @@ fun AppLogo(
                 painter = painterResource(id = R.drawable.ic_chess_rook),
                 contentDescription = stringResource(R.string.icon),
                 modifier = Modifier
-                    .size(156.dp)
+                    .size(drawableSize)
                     .graphicsLayer {
                         rotationZ = angle
 
@@ -115,7 +117,7 @@ fun AppLogo(
                 painter = painterResource(id = R.drawable.ic_chess_queen),
                 contentDescription = stringResource(R.string.icon),
                 modifier = Modifier
-                    .size(156.dp)
+                    .size(drawableSize)
                     .graphicsLayer {
                         rotationZ = angle
 
