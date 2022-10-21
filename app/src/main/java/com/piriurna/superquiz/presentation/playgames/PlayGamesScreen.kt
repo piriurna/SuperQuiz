@@ -150,7 +150,6 @@ fun BuildPlayGamesScreen(
                         .padding(horizontal = 24.dp)
                         .onSizeChanged {
                             titleHeight = it.height
-                            Log.i("Playgames", it.toString())
                         },
                     verticalArrangement = Arrangement.spacedBy(titleVerticalArrangementSpacing),
                     userName = state.userName

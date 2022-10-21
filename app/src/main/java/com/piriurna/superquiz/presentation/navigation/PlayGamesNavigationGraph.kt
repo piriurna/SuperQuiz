@@ -29,7 +29,7 @@ fun NavGraphBuilder.playGamesNavigationGraph(navController: NavHostController) {
             route = PlayGamesDestinations.CategoryCompleted.fullRoute,
             arguments = PlayGamesDestinations.CategoryCompleted.arguments
         ) {
-            CategoryEndScreen(it, navController)
+            CategoryEndScreen(navController)
         }
 
 

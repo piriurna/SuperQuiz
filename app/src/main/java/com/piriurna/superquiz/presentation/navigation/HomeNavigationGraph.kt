@@ -8,8 +8,6 @@ import com.piriurna.superquiz.presentation.chart.ChartScreen
 import com.piriurna.superquiz.presentation.navigation.models.Graph
 import com.piriurna.superquiz.presentation.playgames.PlayGamesScreen
 import com.piriurna.superquiz.presentation.profile.ProfileScreen
-import com.piriurna.superquiz.presentation.profile.questions.QuestionsSettingsScreen
-import com.piriurna.superquiz.presentation.profile.user.UserSettingsScreen
 
 @Composable
 fun HomeNavigationGraph(navController: NavHostController) {
@@ -32,6 +30,7 @@ fun HomeNavigationGraph(navController: NavHostController) {
 
 
         settingsNavigationGraph(navController = navController)
+
         composable(route = HomeDestinationScreen.Profile.route) {
             ProfileScreen(navController = navController)
         }
@@ -43,6 +42,5 @@ sealed class HomeDestinationScreen(val route: String, val arguments : String = "
     object PlayGames : HomeDestinationScreen(route = "PLAY_GAMES")
     object Chart : HomeDestinationScreen(route = "CHART")
     object Profile : HomeDestinationScreen(route = "PROFILE")
-    object QuestionSettings : HomeDestinationScreen(route = "QUESTION_SETTINGS")
     object UserSettings : HomeDestinationScreen(route = "USER_SETTINGS")
 }

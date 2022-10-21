@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -23,6 +24,7 @@ import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.piriurna.common.composables.scaffold.SQScaffold
+import com.piriurna.superquiz.R
 import com.piriurna.superquiz.presentation.navigation.RootDestinationScreen
 import com.piriurna.superquiz.presentation.onboarding.composables.OnboardingCard
 import com.piriurna.superquiz.presentation.onboarding.models.OnboardingUI
@@ -78,12 +80,12 @@ fun BuildOnboardingScreen(
                                 .decoderFactory(SvgDecoder.Factory())
                                 .crossfade(true)
                                 .build(),
-                            contentDescription = "Page Image"
+                            contentDescription = stringResource(R.string.page_image)
                         )
                     } else {
                         Image(
                             painter = painterResource(id = pages[page].mainImage),
-                            contentDescription = "Page Image",
+                            contentDescription = stringResource(R.string.page_image),
                             modifier = Modifier
                                 .align(Alignment.TopCenter)
                                 .padding(horizontal = 36.dp)

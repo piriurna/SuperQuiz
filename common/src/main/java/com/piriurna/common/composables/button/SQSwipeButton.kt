@@ -20,10 +20,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import com.piriurna.common.R
 import com.piriurna.common.composables.text.SQText
 import com.piriurna.common.models.ConfirmationState
 import com.piriurna.common.theme.SQStyle.TextLato12
@@ -39,7 +41,7 @@ import kotlin.math.roundToInt
 fun SQSwipeToConfirmButton(
     modifier: Modifier = Modifier,
     buttonText : String,
-    confirmText : String = "Swipe to confirm",
+    confirmText : String = stringResource(R.string.swipe_to_confirm),
     backgroundDefaultColor : Color = purple,
     backgroundCompleteColor : Color = errorColor,
     onComplete : () -> Unit,

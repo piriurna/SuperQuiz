@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="icon">Icon</string>
+    <string name="chip_icon">chip icon</string>
+    <string name="what_do_you_want_to_improve">What Do You Want To Improve?</string>
+    <string name="hello_dear_username">"\uD83D\uDC4B Hello, Dear %s</string>
+    <string name="refresh">Refresh</string>
+    <string name="swipe_to_confirm">Swipe to confirm</string>
+</resources>

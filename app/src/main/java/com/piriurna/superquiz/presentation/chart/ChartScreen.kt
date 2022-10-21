@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -24,6 +25,7 @@ import com.piriurna.common.theme.SQStyle.TextLato16
 import com.piriurna.common.theme.SQStyle.TextLato22
 import com.piriurna.common.theme.SQStyle.TextLato22Bold
 import com.piriurna.domain.models.Category
+import com.piriurna.superquiz.R
 import com.piriurna.superquiz.mappers.getProgressChart
 import com.piriurna.superquiz.mappers.toPieChartSections
 import com.piriurna.superquiz.mappers.toSelectableItem
@@ -98,13 +100,13 @@ fun BuildChartScreen(
 
                 SQText(
                     modifier = Modifier.padding(horizontal = 20.dp),
-                    text = "These are your numbers",
+                    text = stringResource(R.string.these_are_your_numbers),
                     style = TextLato22Bold, color = Color.Black,
                 )
 
                 SQText(
                     modifier = Modifier.padding(horizontal = 20.dp),
-                    text = "Here you can check your progress in each category",
+                    text = stringResource(R.string.here_you_can_check_your_progress_in_each_category),
                     style = TextLato16, color = Color.Black
                 )
 
@@ -130,7 +132,7 @@ fun BuildChartScreen(
                             )
 
                             SQText(
-                                text = "Statistics",
+                                text = stringResource(R.string.statistics),
                                 style = TextLato22
                             )
 

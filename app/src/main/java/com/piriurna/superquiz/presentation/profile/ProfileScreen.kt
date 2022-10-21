@@ -15,6 +15,7 @@ import com.piriurna.common.composables.selector.SQMenuRow
 import com.piriurna.common.composables.text.SQText
 import com.piriurna.common.theme.SQStyle.TextLato35
 import com.piriurna.superquiz.presentation.navigation.HomeDestinationScreen
+import com.piriurna.superquiz.presentation.navigation.SettingsDestinations
 
 @Composable
 fun ProfileScreen(
@@ -41,15 +42,7 @@ fun ProfileScreen(
             modifier = Modifier.padding(top = 32.dp),
             label = "Settings",
             onClick = {
-                navController.navigate(HomeDestinationScreen.UserSettings.route)
-            }
-        )
-
-        SQMenuRow(
-            modifier = Modifier.padding(top = 32.dp),
-            label = "Questions",
-            onClick = {
-                navController.navigate(HomeDestinationScreen.QuestionSettings.route)
+                navController.navigate(SettingsDestinations.UserSettings.route)
             }
         )
 

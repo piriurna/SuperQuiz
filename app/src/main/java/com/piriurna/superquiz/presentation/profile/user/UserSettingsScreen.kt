@@ -11,6 +11,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.intl.Locale
+import androidx.compose.ui.text.toUpperCase
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -23,6 +26,7 @@ import com.piriurna.common.composables.text.SQText
 import com.piriurna.common.composables.toolbar.AppBarOptions
 import com.piriurna.common.theme.SQStyle.TextLato22
 import com.piriurna.common.theme.lightPurple
+import com.piriurna.superquiz.R
 import com.piriurna.superquiz.presentation.navigation.HomeDestinationScreen
 import com.piriurna.superquiz.presentation.profile.ProfileSettingsEvents
 import com.piriurna.superquiz.presentation.profile.ProfileSettingsState
@@ -62,7 +66,7 @@ fun BuildUserSettingsScreen(
     }
     SQScaffold(
         isLoading = state.isLoading,
-        appBarOptions = AppBarOptions.AppBarWithTitleAndBack(appBarTitle = "App Settings", {
+        appBarOptions = AppBarOptions.AppBarWithTitleAndBack(appBarTitle = stringResource(R.string.app_settings), {
             events.invoke(ProfileSettingsEvents.SaveUserName(username))
             navController.popBackStack()
         }),
@@ -81,7 +85,7 @@ fun BuildUserSettingsScreen(
 
                 SQText(
                     modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp),
-                    text = "User",
+                    text = stringResource(R.string.user),
                     style = TextLato22
                 )
 
@@ -103,15 +107,15 @@ fun BuildUserSettingsScreen(
                                 username = it
                             },
                             label = {
-                                SQText(text = "Name")
+                                SQText(text = stringResource(R.string.name))
                             },
                             placeholder = {
-                                SQText(text = "Your name here")
+                                SQText(text = stringResource(R.string.your_name_here))
                             }
                         )
 
                         SQSlider(
-                            title = "Número de perguntas por categoria",
+                            title = stringResource(id = R.string.number_of_questions_per_category),
                             titleAlignment = Alignment.Start,
                             sliderInitialPosition = state.profileSettings.numberOfQuestions.toFloat()
                         )
@@ -142,7 +146,7 @@ fun BuildUserSettingsScreen(
                         SQSwipeToConfirmButton(
                             modifier = Modifier.fillMaxWidth(),
                             onComplete = { events.invoke(ProfileSettingsEvents.DeleteUserData) },
-                            buttonText = "REMOVE ALL DATA",
+                            buttonText = stringResource(R.string.remove_all_data).toUpperCase(Locale.current),
                             shouldSwipeBack = state.shouldResetSwipe()
                         )
                     }
