@@ -11,9 +11,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.piriurna.common.R
 import com.piriurna.common.theme.primaryGreen
 
 @Composable
@@ -30,7 +32,7 @@ fun SQBadgeText(
     ) {
         Icon(
             imageVector = icon,
-            contentDescription = "Icon",
+            contentDescription = stringResource(R.string.icon),
             tint = foregroundColor
         )
 

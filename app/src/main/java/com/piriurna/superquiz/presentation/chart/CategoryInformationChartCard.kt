@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.piriurna.common.composables.cards.SQCard
@@ -14,13 +15,14 @@ import com.piriurna.common.models.PieChartSection
 import com.piriurna.common.theme.errorColor
 import com.piriurna.common.theme.incompleteGray
 import com.piriurna.common.theme.primaryGreen
+import com.piriurna.superquiz.R
 
 @Composable
 fun CategoryInformationChartCard(
     modifier: Modifier = Modifier,
     sections : List<PieChartSection>,
     incompleteColor : Color = incompleteGray,
-    incompleteText : String = "Not Answered",
+    incompleteText : String = stringResource(R.string.not_answered),
     correctPercentage : Int
 ) {
     SQCard{
@@ -42,7 +44,7 @@ fun CategoryInformationChartCard(
                     pieChartSize = 150.dp,
                     graphThickness = 24f,
                     centerTextTitle = "$correctPercentage%",
-                    centerTextSubTitle = "Correct"
+                    centerTextSubTitle = stringResource(R.string.correct)
                 )
             }
 

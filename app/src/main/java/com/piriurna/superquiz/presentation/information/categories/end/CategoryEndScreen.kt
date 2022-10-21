@@ -15,6 +15,7 @@ import androidx.compose.ui.Alignment.Companion.TopCenter
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
@@ -41,7 +42,6 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun CategoryEndScreen(
-    navBackStackEntry: NavBackStackEntry,
     navController: NavHostController
 ) {
     val viewModel : CategoryEndViewModel = hiltViewModel()
@@ -85,13 +85,10 @@ fun BuildCategoryEndScreen(
         targetValue = state.category?.getPercentageOfCorrectAnswers()?:0
     )
 
-    val statusImage = if(state.category?.isSuccess() == true) R.drawable.ic_checked_correct else R.drawable.ic_unchecked_incorrect
 
-    val statusTitle = if(state.category?.isSuccess() == true) "You got $percentage% Correct!" else "You only got ${percentage}% Correct..."
+    val statusTitle = stringResource(id = state.getTitleResource(), percentage)
 
-    val statusSubTitle = if(state.category?.isSuccess() == true) "Now you can load new questions for the category or go back to the main screen." else "You can get more questions to try again or go back to the main screen."
-
-    val buttonColor = if(state.category?.isSuccess() == true) primaryGreen else errorColor
+    val statusSubTitle = stringResource(state.getSubtitleResource())
 
     LaunchedEffect(Unit) {
         imageVisible = true
@@ -117,7 +114,7 @@ fun BuildCategoryEndScreen(
             Image(
                 modifier = Modifier
                     .size(250.dp),
-                painter = painterResource(id = statusImage),
+                painter = painterResource(id = state.getImageResource()),
                 contentDescription = "Congratulations image"
             )
         }
@@ -147,10 +144,12 @@ fun BuildCategoryEndScreen(
 
 
         SQButton(
-            modifier = Modifier.fillMaxWidth().padding(bottom = 32.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 32.dp),
             onClick = { events?.invoke(CategoryEndEvents.FetchMoreQuestions) },
             buttonText = "Get more quizes",
-            backgroundColor = buttonColor
+            backgroundColor = state.getButtonColor()
         )
 
     }

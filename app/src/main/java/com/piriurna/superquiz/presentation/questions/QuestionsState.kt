@@ -4,6 +4,7 @@ import com.piriurna.common.models.SQError
 import com.piriurna.domain.models.Category
 import com.piriurna.domain.models.Question
 import com.piriurna.domain.models.quotes.Quote
+import com.piriurna.superquiz.R
 
 data class QuestionsState(
     val isLoading : Boolean = true,
@@ -22,5 +23,8 @@ data class QuestionsState(
     fun getNextQuestion() = questionsList[getCurrentQuestionIndex() + 1]
 
     fun isShowingAnswerResult() = destination == QuestionDestination.SHOW_ANSWER_RESULT
+
+
+    fun getButtonStringResource() = if(isShowingAnswerResult()) R.string.next else R.string.send
 
 }

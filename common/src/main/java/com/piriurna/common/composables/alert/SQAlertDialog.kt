@@ -15,11 +15,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import com.piriurna.common.R
 import com.piriurna.common.composables.text.SQText
 import com.piriurna.common.theme.SQStyle
 import com.piriurna.common.theme.primaryText
@@ -61,7 +63,7 @@ fun SQAlertDialog(
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Image(imageVector = Icons.Default.Refresh, contentDescription = "Refresh", modifier = Modifier.size(90.dp), colorFilter = ColorFilter.tint(themeColor.copy(alpha = 0.5f)))
+                    Image(imageVector = Icons.Default.Refresh, contentDescription = stringResource(R.string.refresh), modifier = Modifier.size(90.dp), colorFilter = ColorFilter.tint(themeColor.copy(alpha = 0.5f)))
 
                     title?.let {
                         SQText(text = it, style = SQStyle.TextLato27Bold, color = textColor, textAlign = TextAlign.Center)

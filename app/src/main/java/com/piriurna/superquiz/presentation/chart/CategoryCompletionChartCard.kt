@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.piriurna.common.composables.button.SQButton
@@ -18,6 +19,7 @@ import com.piriurna.common.models.PieChartSection
 import com.piriurna.common.theme.SQStyle.TextLato35Bold
 import com.piriurna.common.theme.SQStyle.TextLatoBold
 import com.piriurna.common.theme.purple
+import com.piriurna.superquiz.R
 
 @Composable
 fun CategoryCompletionChartCard(
@@ -46,7 +48,7 @@ fun CategoryCompletionChartCard(
                 ) {
                     Image(
                         imageVector = Icons.Default.Done,
-                        contentDescription = "Check Mark Icon",
+                        contentDescription = stringResource(R.string.check_mark_icon),
                         colorFilter = ColorFilter.tint(purple)
                     )
 
@@ -55,11 +57,11 @@ fun CategoryCompletionChartCard(
                 }
 
                 val substitle = when {
-                    (numberOfAnsweredQuestions.toFloat() / totalNumberOfQuestions.toFloat()) == 1f -> "Well Done! You can get even more questions."
-                    (numberOfAnsweredQuestions.toFloat() / totalNumberOfQuestions.toFloat()) > 0.6f -> "Almost Finished! Keep it up!"
-                    (numberOfAnsweredQuestions.toFloat() / totalNumberOfQuestions.toFloat()) == 0f -> "You could try this category!"
+                    (numberOfAnsweredQuestions.toFloat() / totalNumberOfQuestions.toFloat()) == 1f -> stringResource(R.string.well_done_you_can_get_even_more_questions)
+                    (numberOfAnsweredQuestions.toFloat() / totalNumberOfQuestions.toFloat()) > 0.6f -> stringResource(R.string.almost_finished_keep_it_up)
+                    (numberOfAnsweredQuestions.toFloat() / totalNumberOfQuestions.toFloat()) == 0f -> stringResource(R.string.you_could_try_this_category)
                     else -> {
-                        "Focus! You can do it"
+                        stringResource(R.string.focus_you_can_do_it)
                     }
                 }
 
@@ -69,7 +71,7 @@ fun CategoryCompletionChartCard(
                     modifier = Modifier.width(130.dp),
                     backgroundColor = purple,
                     onClick = onPrimaryAction,
-                    buttonText = "Questions"
+                    buttonText = stringResource(R.string.questions)
                 )
             }
             Column(
@@ -83,7 +85,7 @@ fun CategoryCompletionChartCard(
                     pieChartSize = 120.dp,
                     graphThickness = 26f,
                     centerTextTitle = "${numberOfAnsweredQuestions * 100 / totalNumberOfQuestions}%",
-                    centerTextSubTitle = "Done"
+                    centerTextSubTitle = stringResource(R.string.done)
                 )
             }
         }
