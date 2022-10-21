@@ -4,11 +4,13 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
+import com.piriurna.data.remote.ErrorType
 import com.piriurna.domain.Resource
 import com.piriurna.domain.usecases.onboarding.CompleteOnboardingUseCase
 import com.piriurna.domain.usecases.onboarding.GetOnboardingPagesUseCase
 import com.piriurna.superquiz.SQBaseEventViewModel
 import com.piriurna.superquiz.mappers.toOnboardingUI
+import com.piriurna.superquiz.mappers.toSQError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -62,7 +64,8 @@ class OnboardingViewModel @Inject constructor(
 
                 is Resource.Error -> {
                     _state.value = _state.value.copy(
-                        isLoading = false
+                        isLoading = false,
+                        error = ErrorType.valueFromCode(result.code).toSQError { OnboardingEvents.FetchOnboardingPages }
                     )
                 }
             }
@@ -88,7 +91,8 @@ class OnboardingViewModel @Inject constructor(
 
                 is Resource.Error -> {
                     _state.value = _state.value.copy(
-                        isLoading = false
+                        isLoading = false,
+                        error = ErrorType.valueFromCode(result.code).toSQError { OnboardingEvents.CompleteOnboarding }
                     )
                 }
             }

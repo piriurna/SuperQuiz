@@ -1,8 +1,10 @@
 package com.piriurna.data.mappers
 
+import android.text.Html
 import com.piriurna.data.database.entities.AnswerEntity
 import com.piriurna.data.database.entities.CategoryEntity
 import com.piriurna.data.database.entities.QuestionEntity
+import com.piriurna.data.database.models.CategoryStats
 import com.piriurna.data.database.models.QuestionWithAnswers
 import com.piriurna.data.remote.dto.CategoryDto
 import com.piriurna.data.remote.dto.QuizDto
@@ -24,6 +26,21 @@ fun CategoryEntity.toCategory() : Category {
     )
 }
 
+fun CategoryStats.toCategory() : Category {
+
+    return Category(
+        id = this.categoryEntity.categoryId,
+        name = this.categoryEntity.name,
+        title = this.title,
+        description = this.subTitle,
+        completionRate = this.completionRate,
+        totalNumberOfQuestions = this.numberOfQuestions,
+        correctAnswers = this.numberOfCorrectAnswers,
+        incorrectAnswers = this.numberOfWrongAnswers,
+        notAnsweredQuestions = this.numberOfNotAnsweredQuestions
+    )
+}
+
 
 fun Category.toCategoryEntity() : CategoryEntity {
     return CategoryEntity(
@@ -39,8 +56,6 @@ fun List<Category>.toCategoryEntity() : List<CategoryEntity> {
 }
 
 
-
-//TODO: REFACTOR
 fun QuizDto.toQuestions(categoryId: Int) : List<Question> {
     return this.questions.mapIndexed { index, questionDto ->
         val allAnswers = questionDto.incorrectAnswers.map { Answer(id = 0, description = it, isCorrectAnswer = false) }.toMutableList()
@@ -53,11 +68,13 @@ fun QuizDto.toQuestions(categoryId: Int) : List<Question> {
             categoryId = categoryId,
             difficulty = DifficultyType.convertFromString(questionDto.difficulty),
             allAnswers = allAnswers,
-            description = questionDto.question,
+            description = Html.fromHtml(questionDto.question, Html.FROM_HTML_MODE_COMPACT).toString(),
             type = QuestionType.convertFromString(questionDto.type)
         )
     }
 }
+
+
 
 
 fun Question.toQuestionEntity() : QuestionEntity {
@@ -84,7 +101,7 @@ fun QuestionWithAnswers.toQuestion() : Question {
         categoryId = this.question.ownerCategoryId,
         difficulty = this.question.difficulty,
         type = this.question.type,
-        description = this.question.description,
+        description = Html.fromHtml(this.question.description, Html.FROM_HTML_MODE_COMPACT).toString(),
         allAnswers = this.answers.toAnswer(),
         chosenAnswer = this.chosenAnswer?.toAnswer()
     )
@@ -100,7 +117,8 @@ fun Answer.toAnswerEntity(questionId: Int) : AnswerEntity {
     return AnswerEntity(
         text = this.description,
         isCorrectAnswer = this.isCorrectAnswer,
-        ownerQuestionId = questionId
+        ownerQuestionId = questionId,
+        isEnabled = this.isEnabled
     )
 }
 
@@ -113,8 +131,9 @@ fun List<Answer>.toAnswerEntity(questionId: Int) : List<AnswerEntity> {
 fun AnswerEntity.toAnswer() : Answer {
     return Answer(
         id = this.answerId,
-        description = this.text,
-        isCorrectAnswer = this.isCorrectAnswer
+        description = Html.fromHtml(this.text, Html.FROM_HTML_MODE_COMPACT).toString(),
+        isCorrectAnswer = this.isCorrectAnswer,
+        isEnabled = this.isEnabled
     )
 }
 

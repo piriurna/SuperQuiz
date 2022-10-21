@@ -17,6 +17,10 @@ data class Question(
         return allAnswers.firstOrNull { it.isCorrectAnswer }
     }
 
+    fun isCorrectAnswer(answer: Answer) : Boolean {
+        return answer == allAnswers.firstOrNull { it.isCorrectAnswer }
+    }
+
     fun getIncorrectAnswers() = allAnswers.filter { !it.isCorrectAnswer }
 
     fun isQuestionAnswered() = chosenAnswer != null
@@ -26,6 +30,10 @@ data class Question(
     fun isQuestionAnsweredCorrectly() = chosenAnswer == getCorrectAnswer()
 
     fun isQuestionAnsweredIncorrectly() = chosenAnswer != null && chosenAnswer != getCorrectAnswer()
+
+    fun getDisabledQuestions() = allAnswers.filter { !it.isEnabled }
+
+    fun isHintAvailable() = isMultipleChoice() && allAnswers.none { !it.isEnabled }
 
     companion object {
         val mockQuestions = listOf(

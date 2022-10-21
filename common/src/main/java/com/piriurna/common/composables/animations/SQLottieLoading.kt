@@ -1,5 +1,6 @@
 package com.piriurna.common.composables.animations
 
+import androidx.annotation.RawRes
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -13,10 +14,11 @@ import com.piriurna.common.R
 
 @Composable
 fun SQLottieLoading(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    @RawRes lottieId: Int = R.raw.loading,
 ) {
     val composition by rememberLottieComposition(
-        spec = LottieCompositionSpec.RawRes(R.raw.loading)
+        spec = LottieCompositionSpec.RawRes(lottieId)
     )
 
     val isPlaying by remember {

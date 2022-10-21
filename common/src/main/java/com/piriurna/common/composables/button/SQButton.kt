@@ -31,7 +31,6 @@ fun SQButton(
         colors = ButtonDefaults.buttonColors(backgroundColor = backgroundColor, contentColor = foregroundColor),
         enabled = enabled,
         modifier = modifier
-            .fillMaxWidth()
             .height(45.dp)
     ) {
         SQText(

@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.piriurna.superquiz.R
@@ -21,10 +22,12 @@ fun AppLogo(
     modifier: Modifier = Modifier,
     shouldAnimate : Boolean = true
 ) {
-    var showingHorse by remember { mutableStateOf(true) }
-    var showingRook by remember { mutableStateOf(false) }
+    var showingHorse by remember { mutableStateOf(false) }
+    var showingRook by remember { mutableStateOf(true) }
     var showingQueen by remember { mutableStateOf(false) }
 
+
+    val drawableSize = 80.dp
 
     var isFirstTime by remember { mutableStateOf(true) }
     var animate by remember { mutableStateOf(false) }
@@ -34,7 +37,7 @@ fun AppLogo(
     var rotationDirection by remember { mutableStateOf(360f) }
 
     val angle by animateFloatAsState(
-        targetValue = if(animate) currentAngle + rotationDirection else 0f,
+        targetValue = if(animate && shouldAnimate) currentAngle + rotationDirection else 0f,
         animationSpec = tween(1500, easing = LinearOutSlowInEasing),
         finishedListener = {
             when {
@@ -78,9 +81,9 @@ fun AppLogo(
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_chess_knight),
-                contentDescription = "Icon",
+                contentDescription = stringResource(R.string.icon),
                 modifier = Modifier
-                    .size(156.dp)
+                    .size(drawableSize)
                     .graphicsLayer {
                         rotationZ = angle
 
@@ -95,9 +98,9 @@ fun AppLogo(
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_chess_rook),
-                contentDescription = "Icon",
+                contentDescription = stringResource(R.string.icon),
                 modifier = Modifier
-                    .size(156.dp)
+                    .size(drawableSize)
                     .graphicsLayer {
                         rotationZ = angle
 
@@ -112,9 +115,9 @@ fun AppLogo(
         ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_chess_queen),
-                contentDescription = "Icon",
+                contentDescription = stringResource(R.string.icon),
                 modifier = Modifier
-                    .size(156.dp)
+                    .size(drawableSize)
                     .graphicsLayer {
                         rotationZ = angle
 
@@ -125,7 +128,7 @@ fun AppLogo(
 
     if(isFirstTime) {
         isFirstTime = false
-        animate = true
+        animate = shouldAnimate
     }
 
 }
@@ -137,6 +140,6 @@ fun AppLogoPreview() {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        AppLogo()
+        AppLogo(shouldAnimate = false)
     }
 }

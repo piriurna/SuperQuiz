@@ -38,7 +38,7 @@ fun SQLoading(
                 .background(MaterialTheme.colors.secondaryBackground.copy(alpha = 0.8f)),
             contentAlignment = Alignment.Center
         ) {
-            SQLottieLoading()
+            SQLottieLoading(lottieId= lottieId)
         }
     }
 

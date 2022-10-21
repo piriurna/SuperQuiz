@@ -19,11 +19,8 @@ class SaveProfileSettingsUseCase @Inject constructor(
         emit(Resource.Loading())
 
         try {
-            val appSettings = appDataStoreRepository.getAppSettings().first()
             profileDataStoreRepository.saveProfileSettings(profileSettings)
-            appDataStoreRepository.saveAppSettings(appSettings.copy(
-                shouldFetchNewCategories = true
-            ))
+            appDataStoreRepository.setShouldFetchNewCategories(0)
             emit(Resource.Success(profileSettings))
         } catch (e : Exception) {
             emit(Resource.Error(message = "Error saving profile settings"))

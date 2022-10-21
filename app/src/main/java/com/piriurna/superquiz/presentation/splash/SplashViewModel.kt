@@ -4,12 +4,14 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
+import com.piriurna.data.remote.ErrorType
 import com.piriurna.domain.Resource
 import com.piriurna.domain.models.LoadTriviaType
 import com.piriurna.domain.models.splash.SplashDestination
 import com.piriurna.domain.usecases.LoadTriviaDataUseCase
 import com.piriurna.domain.usecases.splash.GetSplashNextDestinationUseCase
 import com.piriurna.superquiz.SQBaseEventViewModel
+import com.piriurna.superquiz.mappers.toSQError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -33,6 +35,10 @@ class SplashViewModel @Inject constructor(
             is SplashEvents.LoadTriviaData -> {
                 loadTriviaData()
             }
+
+            is SplashEvents.Retry -> {
+                retry()
+            }
         }
     }
 
@@ -46,6 +52,16 @@ class SplashViewModel @Inject constructor(
                 is Resource.Loading -> {
                     _state.value = _state.value.copy(
                         isLoading = true
+                    )
+                }
+                is Resource.Error -> {
+                    _state.value = _state.value.copy(
+                        isLoading = false,
+                        error = ErrorType.valueFromCode(result.code).toSQError {
+                            onTriggerEvent(
+                                SplashEvents.LoadTriviaData
+                            )
+                        }
                     )
                 }
             }
@@ -68,5 +84,14 @@ class SplashViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+
+    private fun retry() {
+        _state.value = _state.value.copy(
+            error = null
+        )
+
+        loadTriviaData()
     }
 }

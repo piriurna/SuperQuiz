@@ -8,4 +8,8 @@ sealed class ProfileSettingsEvents : SQBaseEvent() {
     object FetchSettings : ProfileSettingsEvents()
 
     class SaveSettings(val profileSettings: ProfileSettings) : ProfileSettingsEvents()
+
+    class SaveUserName(val username : String) : ProfileSettingsEvents()
+
+    object DeleteUserData : ProfileSettingsEvents()
 }

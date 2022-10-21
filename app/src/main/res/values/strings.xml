@@ -1,3 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">SuperQuiz</string>
+    <string name="icon">Icon</string>
+    <string name="you_ran_out_of_questions">You ran out of questions</string>
+    <string name="would_you_like_to_get_more_questions_for_this_category">Would you like to get more questions for this category?</string>
+    <string name="later">Later</string>
+    <string name="get_questions">Get Questions</string>
+    <string name="hints">Hints</string>
+    <string name="next">next</string>
+    <string name="send">send</string>
+    <string name="you_only_got_percentage_correct">You only got %s% Correct…</string>
+    <string name="you_got_percentage_correct">You got %s% Correct!</string>
+    <string name="now_you_can_load_new_questions_for_the_category_or_go_back_to_the_main_screen">Now you can load new questions for the category or go back to the main screen.</string>
+    <string name="you_can_get_more_questions_to_try_again_or_go_back_to_the_main_screen">You can get more questions to try again or go back to the main screen.</string>
+    <string name="number_of_questions_per_category">Number of questions per category</string>
+    <string name="app_settings">App Settings</string>
+    <string name="user">User</string>
+    <string name="name">Name</string>
+    <string name="your_name_here">Your name here</string>
+    <string name="remove_all_data">Remove all data</string>
+    <string name="these_are_your_numbers">These are your numbers</string>
+    <string name="here_you_can_check_your_progress_in_each_category">Here you can check your progress in each category</string>
+    <string name="statistics">Statistics</string>
+    <string name="check_mark_icon">Check Mark Icon</string>
+    <string name="well_done_you_can_get_even_more_questions">Well Done! You can get even more questions.</string>
+    <string name="almost_finished_keep_it_up">Almost Finished! Keep it up!</string>
+    <string name="you_could_try_this_category">You could try this category!</string>
+    <string name="focus_you_can_do_it">Focus! You can do it</string>
+    <string name="questions">Questions</string>
+    <string name="done">Done</string>
+    <string name="not_answered">Not Answered</string>
+    <string name="correct">Correct</string>
+    <string name="page_image">Page Image</string>
+    <string name="user_photo">User photo</string>
+    <string name="profile">Profile</string>
+    <string name="settings">Settings</string>
+    <string name="skip_now">Skip now</string>
+    <string name="get_started">Get Started</string>
 </resources>

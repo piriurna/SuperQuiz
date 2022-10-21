@@ -9,4 +9,5 @@ interface AppDataStoreRepository {
 
     suspend fun getAppSettings(): Flow<AppSettings>
 
+    suspend fun setShouldFetchNewCategories(time : Long)
 }

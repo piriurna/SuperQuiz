@@ -17,6 +17,7 @@ data class AnswerEntity(
     val answerId: Int = 0,
     val text: String,
     val isCorrectAnswer : Boolean = false,
+    val isEnabled : Boolean = true,
     @ColumnInfo(index = true)
     val ownerQuestionId: Int
 )

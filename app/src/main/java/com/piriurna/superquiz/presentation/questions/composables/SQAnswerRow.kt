@@ -20,10 +20,9 @@ fun SQAnswerRow(
     modifier: Modifier = Modifier,
     answer: Answer,
     selected : Boolean,
-    onClick : (Answer) -> Unit,
-    isEnabled : Boolean
+    onClick : (Answer) -> Unit
 ) {
-    val alpha by animateFloatAsState(targetValue = if(isEnabled) 1f else 0.5f)
+    val alpha by animateFloatAsState(targetValue = if(answer.isEnabled) 1f else 0.5f)
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -34,7 +33,7 @@ fun SQAnswerRow(
             onClick = {
                 onClick(answer)
             },
-            enabled = isEnabled,
+            enabled = answer.isEnabled,
         )
 
         SQText(
@@ -48,5 +47,5 @@ fun SQAnswerRow(
 @Preview(showBackground = true)
 @Composable
 private fun SQAnswerRowPreview() {
-    SQAnswerRow(answer = Answer.getFirstQuestionMockAnswers()[0], selected = false, onClick = {}, isEnabled = true)
+    SQAnswerRow(answer = Answer.getFirstQuestionMockAnswers()[0], selected = false, onClick = {})
 }

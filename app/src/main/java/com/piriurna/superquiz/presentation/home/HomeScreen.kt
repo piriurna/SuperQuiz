@@ -7,16 +7,18 @@ import androidx.navigation.compose.rememberNavController
 import com.piriurna.common.composables.scaffold.SQScaffold
 import com.piriurna.common.models.BottomNavigationItem
 import com.piriurna.superquiz.presentation.navigation.HomeNavigationGraph
+import com.piriurna.superquiz.presentation.navigation.models.NavigationOptions
 
 @Composable
 fun HomeScreen(
     navController: NavHostController = rememberNavController()
 ) {
     SQScaffold(
-        bottomBarItems = listOf(BottomNavigationItem.PlayGames, BottomNavigationItem.Profile, BottomNavigationItem.Chart),
+        bottomBarItems = listOf(NavigationOptions.PlayGames, NavigationOptions.Chart, NavigationOptions.Profile),
         onItemSelected = { item ->
             navController.navigate(item.route)
-        }
+        },
+        navController = navController
     ) {
         HomeNavigationGraph(navController = navController)
     }

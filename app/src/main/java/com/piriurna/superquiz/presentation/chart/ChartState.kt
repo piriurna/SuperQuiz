@@ -6,5 +6,5 @@ import com.piriurna.domain.models.Question
 
 data class ChartState(
     val isLoading: Boolean = false,
-    var categoryStatisticsList: List<CategoryStatistics> = emptyList()
+    var categories: List<Category> = emptyList()
 )
