@@ -79,6 +79,7 @@ fun BuildSplashScreen(
                     title = stringResource(id = error.title),
                     subtitle = stringResource(id = error.subtitle),
                     buttonOnClick = { events(SplashEvents.Retry) },
+                    buttonText = stringResource(id = error.retryText),
                     hasButton = error.canRetry
                 )
             }
