@@ -6,10 +6,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.piriurna.common.composables.button.SQButton
 import com.piriurna.common.composables.button.SQRoundButton
 import com.piriurna.common.composables.text.SQText
+import com.piriurna.superquiz.R
 import com.piriurna.superquiz.presentation.onboarding.models.OnboardingUI
 
 @Composable
@@ -51,7 +53,7 @@ fun OnboardingSkipOption(
     ) {
         TextButton(onClick = onSkipClick) {
             SQText(
-                text = "Skip now",
+                text = stringResource(R.string.skip_now),
                 color = Color.Black,
             )
         }
@@ -80,8 +82,9 @@ fun OnboardingStartOption(
     onFinishClick: () -> Unit
 ) {
     SQButton(
+        modifier = Modifier.fillMaxWidth(),
         onClick = onFinishClick,
-        buttonText = "Get Started",
+        buttonText = stringResource(R.string.get_started),
         backgroundColor = onboardingPage.primaryColor,
     )
 }
