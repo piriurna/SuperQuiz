@@ -32,4 +32,7 @@
     <string name="not_answered">Not Answered</string>
     <string name="correct">Correct</string>
     <string name="page_image">Page Image</string>
+    <string name="user_photo">User photo</string>
+    <string name="profile">Profile</string>
+    <string name="settings">Settings</string>
 </resources>

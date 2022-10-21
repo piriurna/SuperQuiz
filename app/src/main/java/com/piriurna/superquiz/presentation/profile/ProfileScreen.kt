@@ -7,6 +7,7 @@ import androidx.compose.material.icons.filled.Face
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -14,6 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import com.piriurna.common.composables.selector.SQMenuRow
 import com.piriurna.common.composables.text.SQText
 import com.piriurna.common.theme.SQStyle.TextLato35
+import com.piriurna.superquiz.R
 import com.piriurna.superquiz.presentation.navigation.HomeDestinationScreen
 import com.piriurna.superquiz.presentation.navigation.SettingsDestinations
 
@@ -31,16 +33,16 @@ fun ProfileScreen(
         ) {
             Image(
                 imageVector = Icons.Default.Face,
-                contentDescription = "User photo",
+                contentDescription = stringResource(R.string.user_photo),
                 modifier = Modifier.size(35.dp)
             )
 
-            SQText(text = "Profile", style = TextLato35)
+            SQText(text = stringResource(R.string.profile), style = TextLato35)
         }
 
         SQMenuRow(
             modifier = Modifier.padding(top = 32.dp),
-            label = "Settings",
+            label = stringResource(R.string.settings),
             onClick = {
                 navController.navigate(SettingsDestinations.UserSettings.route)
             }

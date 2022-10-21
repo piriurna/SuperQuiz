@@ -20,8 +20,13 @@ class GetRandomQuoteListUseCase @Inject constructor(
         quoteResponse.data?.let { quotes ->
             emit(Resource.Success(quotes))
         }?: run {
-            emit(Resource.Error("Error getting a quote"))
+            emit(Resource.Error(ERROR_GETTING_A_QUOTE))
         }
+    }
+
+
+    companion object {
+        const val ERROR_GETTING_A_QUOTE = "Error getting a quote"
     }
 
 }

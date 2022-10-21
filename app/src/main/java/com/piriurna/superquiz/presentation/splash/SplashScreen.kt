@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -75,10 +76,9 @@ fun BuildSplashScreen(
             state.error?.let { error ->
                 SQErrorContainer(
                     imageResource = error.imageResource,
-                    title = error.title,
-                    subtitle = error.subtitle,
+                    title = stringResource(id = error.title),
+                    subtitle = stringResource(id = error.subtitle),
                     buttonOnClick = { events(SplashEvents.Retry) },
-                    buttonText = "RETRY",
                     hasButton = error.canRetry
                 )
             }

@@ -6,4 +6,9 @@
     <string name="hello_dear_username">"\uD83D\uDC4B Hello, Dear %s</string>
     <string name="refresh">Refresh</string>
     <string name="swipe_to_confirm">Swipe to confirm</string>
+    <string name="retry">RETRY</string>
+    <string name="error">Error!</string>
+    <string name="no_internet_connection_available">No Internet Connection Available</string>
+    <string name="the_service_is_currently_unavailable">The service is currently unavailable.</string>
+    <string name="an_error_has_occurred">An error has occurred</string>
 </resources>
