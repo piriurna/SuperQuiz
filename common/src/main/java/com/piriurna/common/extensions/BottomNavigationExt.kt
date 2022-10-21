@@ -1,4 +1,4 @@
-package com.piriurna.common.mappers
+package com.piriurna.common.extensions
 
 import com.piriurna.common.models.BottomNavigationItem
 
